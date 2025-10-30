@@ -10,67 +10,25 @@ using OpenAPI;
 
 namespace HyperFleet;
 
-@route("/{cluster_id}/nodepools")
-@tag("Nodepools")
+@tag("NodePools")
 interface Nodepools {
     /**
-     * Returns the list of nodepools
+     * Returns the list of all nodepools
      */
+    @route("/nodepools")
     @get
     @summary("List all nodepools for cluster")
-    get_nodepools(
-        /** Cluster ID */
-        @format("uuid") @path cluster_id: Identifier,
+    get_all_nodepools(
         ...QueryParams
-    ): Body<{
-        ...Page<Nodepool>;
-    }>;
-
-    /**
-     *
-     */
-    @route("/")
-    @post
-    @summary("Create nodepool")
-    create_nodepool(
-        /** Cluster ID */
-        @format("uuid") @path cluster_id: string,
-
-        @body body: NodepoolCreateRequest,
-    ):
-        | (CreatedResponse & NodepoolCreateResponse)
-        | BadRequestResponse
-        | NotFoundResponse
-        | ConflictResponse;
-
-    /**
-     * Delete nodepool
-     *
-     *
-     */
-    @route("/{nodepool_id}")
-    @delete
-    @summary("Delete nodepool")
-    delete_nodepool(
-        /** Cluster ID */
-        @format("uuid") @path cluster_id: Identifier,
-
-        /** Nodepool ID */
-        @format("uuid") @path nodepool_id: Identifier,
-    ): NoContentResponse | NotFoundResponse;
+    ): Body<Page<Nodepool>>;
 
     /**
      * Returns specific nodepool
      */
-    @route("/{nodepool_id}")
+    @route("/nodepools/{nodepool_id}")
     @get
     @summary("Get nodepool by ID")
     get_nodepool(
-        /**
-         * Cluster ID
-         */
-        @format("uuid") @path cluster_id: Identifier,
-
         /**
          * Nodepool ID
          */
@@ -78,21 +36,31 @@ interface Nodepools {
     ): Nodepool | NotFoundResponse;
 
     /**
-     * Adapter updates its status object.
-     * Service computes lastTransitionTime for conditions when status changes.
-     * Service updates lastUpdated timestamp automatically.
-     *
+     * Returns the list of all nodepools for a cluster
      */
-    @route("/{nodepool_id}")
-    @patch(#{ implicitOptionality: true })
-    @summary("Update nodepool")
-    patch_nodepool(
+    @route("/{cluster_id}/nodepools")
+    @get
+    @summary("List all nodepools for cluster")
+    get_nodepools_by_cluster_id(
         /** Cluster ID */
         @format("uuid") @path cluster_id: Identifier,
+        ...QueryParams
+    ): Body<Page<Nodepool>>;
 
-        /** Nodepool ID */
-        @format("uuid") @path nodepool_id: Identifier,
+    /**
+     * Create a NodePool for a cluster
+     */
+    @route("/{cluster_id}/nodepools")
+    @post
+    @summary("Create nodepool")
+    create_nodepool(
+        /** Cluster ID */
+        @format("uuid") @path cluster_id: string,
+        @body body: NodepoolCreateRequest,
+    ):
+        | (CreatedResponse & NodepoolCreateResponse)
+        | BadRequestResponse
+        | NotFoundResponse
+        | ConflictResponse;
 
-        @body body: NodepoolUpdateRequest,
-    ): Nodepool | BadRequestResponse | NotFoundResponse;
 }

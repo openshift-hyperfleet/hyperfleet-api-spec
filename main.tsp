@@ -10,8 +10,9 @@ using OpenAPI;
 /**
  * HyperFleet API provides simple CRUD operations for managing cluster resources and their status history.
  *
- * **Architecture**: v2 - Simple CRUD only, no business logic, no event creation.
+ * **Architecture**: Simple CRUD only, no business logic, no event creation.
  * Sentinel operator handles all orchestration logic.
+ * Adapters handle the specifics of managing spec
  *
  */
 @service(#{ title: "HyperFleet API" })
@@ -19,7 +20,8 @@ using OpenAPI;
 @server("https://api.hyperfleet.example.com", "Production")
 @server("https://api.hyperfleet.dev.example.com", "Development")
 @tagMetadata("Clusters", #{ description: "Cluster resource CRUD operations" })
-@tagMetadata( "Statuses", #{ description: "Cluster status" })
+@tagMetadata( "NodePools", #{ description: "NodePool resource CRUD operations" })
+@tagMetadata( "Cluster statuses", #{ description: " status " })
 @route("/api/clusters")
 namespace HyperFleet;
 

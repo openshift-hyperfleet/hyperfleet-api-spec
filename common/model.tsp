@@ -1,12 +1,13 @@
 import "@typespec/http";
 using Http;
 
-
 alias Identifier = string;
 
 alias KindCluster = "Cluster";
-alias KindStatus = "Status";
+alias KindClusterStatus = "ClusterStatus";
+alias KindNodePoolStatus = "NodePoolStatus";
 alias KindNodePool = "NodePool";
+
 
 model ID {
     /** Resource identifier */
@@ -20,6 +21,14 @@ model APIResourceReference<Kind> {
 
     /** Resource URI */
     href: string;
+
+    @format("date-time") created_at: string;
+    @format("date-time") updated_at: string;
+}
+
+model Error<Kind> {
+    ...APIResourceReference<Kind>;
+
 }
 model APIResource<Kind> {
     ...APIResourceReference<Kind>;
@@ -49,10 +58,13 @@ model Page<Kind> {
 model QueryParams {
     @query
     search?: string;
+
     @query
     page?: int32 = 1;
+
     @query
     pageSize?: int32 = 20;
+
     @query
     orderBy?: string = "created_at";
 }

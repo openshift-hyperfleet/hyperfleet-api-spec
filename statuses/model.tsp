@@ -34,7 +34,16 @@ model ConditionBase {
    */
   observed_generation: integer;
 
-  created_at: utcDateTime;
+  /** Time when the condition was created 
+   * - In an adapter reporting conditions `updated_at==created_at`
+   * - In the API, `created_at` doesn't change with new updates from adapters
+  */
+  @format("date-time") created_at: string;
+
+  /** Time when the condition was updated
+   */
+  @format("date-time") updated_at: string;
+
 }
 
 /** StatusAvailable is the status condition from an adapter that is used by CLM to compute the phase.
@@ -109,13 +118,13 @@ model AdapterStatusUpdateRequest {
 }
 
 model AdapterStatus {
-  ...APIResource<KindStatus>;
+  ...APIResource<KindClusterStatus|KindNodePoolStatus>;
 
   /** Name of the adapter that generated this status (Validator, DNS...) */
   adapter_name: string;
 
   /** Reference to the cluster to which this adapter status pertains */
-  owner_references: APIResource<KindCluster>;
+  owner_references: APIResource<KindCluster|KindNodePool>;
   /**
    * Which generation for an entity (Clusters, NodePools) was current at the time of creating this status
    */
@@ -142,15 +151,5 @@ model AdapterStatus {
     completed_at?: utcDateTime;
     duration?: string;
   };
-
-  /**
-   * When this status was last updated (computed by service)
-   */
-  last_updated: utcDateTime;
-
-  /**
-   * When adapter first created this status
-   */
-  created_at: utcDateTime;
 
 }

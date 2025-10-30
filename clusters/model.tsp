@@ -34,27 +34,35 @@ model Cluster {
   status: {
     /**
      * Current cluster phase (native database column).
-     * Updated when adapters POST status. Used by Sentinel for queries.
+     * Updated when adapters report status.
      * Note: status.phase provides aggregated view from all adapter conditions.
      */
     phase: "Pending" | "Ready" | "Failed";
 
     /**
+     * When cluster last transitioned (updated by adapters, used by Sentinel for backoff)
+     * Updated when adapters report status if the phase changes
+     */
+    @format("date-time") last_transition_time: string;
+
+    /**
      * Last generation processed by adapters
+     * Updated when adapters report status.
      * This will be the lowest value of each adapter's observed_generation values
+     * The phase value is based on this generation
      */
     observed_generation: integer;
 
-    /**
-     * When cluster last transitioned (updated by adapters, used by Sentinel for backoff)
-     */
-    last_transition_time: utcDateTime;
+    /** Time of the last complete report from adapters
+     * Updated when adapters report status.
+     * Oldest `updated_at` from the adapter conditions 
+    */
+    @format("date-time") updated_at: string;
+
 
     adapters: ConditionAvailable[];
   };
 
-  created_at: utcDateTime;
-  updated_at: utcDateTime;
   created_by: string;
   updated_by: string;
 }

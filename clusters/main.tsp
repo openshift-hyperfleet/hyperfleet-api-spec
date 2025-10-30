@@ -38,26 +38,4 @@ interface Clusters {
   post_cluster(@body body: ClusterCreateRequest): (CreatedResponse &
     Cluster) | BadRequestResponse;
 
-  @route("/{cluster_id}")
-  @delete
-  @summary("Delete cluster")
-  delete_cluster(
-    @format("uuid") @path cluster_id: string,
-  ): NoContentResponse | NotFoundResponse;
-
-  /**
-   * Updates cluster spec and increments generation field.
-   *
-   * **Note**: The `status` object is read-only and CANNOT be modified via this endpoint.
-   * Status is aggregated from adapter status updates via `/clusters/{id}/statuses` endpoints.
-   * Only spec fields (name, region) can be updated here.
-   *
-   */
-  @route("/{cluster_id}")
-  @patch(#{ implicitOptionality: true })
-  @summary("Update cluster")
-  patch_cluster(
-    @format("uuid") @path cluster_id: string,
-    @body body: ClusterUpdateRequest,
-  ): Cluster | NotFoundResponse;
 }
