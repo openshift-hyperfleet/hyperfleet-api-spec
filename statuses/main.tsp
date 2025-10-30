@@ -14,33 +14,35 @@ interface ClusterStatuses{
   /**
    * Returns current status object for each adapter that has reported status
    */
-  @route("/")
+  @route("")
   @get
   @summary("List all adapter statuses for cluster")
-  get_statuses(
+  @operationId("getClusterStatuses")
+  getClusterStatuses(
     /**
      * Cluster ID
      */
-    @format("uuid") @path cluster_id: string,
+     @path cluster_id: string,
     ...QueryParams
   ): Body< Page<AdapterStatus>> | NotFoundResponse;
 
   /**
    * Adapter creates its initial status object for this cluster.
-   * Returns 409 if adapter already has a status object for this cluster (use PATCH to update).
+   * Returns 409 if adapter already has a status object for this cluster 
    *
-   * Response includes the status UUID and href for future PATCH operations.
+   * Response includes the status id and href for future operations.
    * Adapter should store the returned id/href to update its status later.
    *
    */
-  @route("/")
+  @route("")
   @post
   @summary("Create adapter status")
-  post_statuses(
+  @operationId("postClusterStatuses")
+  postClusterStatuses(
     /**
      * Cluster ID
      */
-    @format("uuid") @path cluster_id: string,
+     @path cluster_id: string,
 
     @body body: AdapterStatusCreateRequest,
   ):
@@ -50,34 +52,22 @@ interface ClusterStatuses{
     | ConflictResponse;
 
   /**
-   * Delete adapter status resource.
-   *
-   * This removes the adapter's status from the cluster and updates the cluster's
-   * status.adapters array. Use when:
-   * - Adapter is being removed/disabled
-   * - Cleaning up test data
-   * - Recovering from errors (delete then POST new status)
-   *
-   * **Note**: Deleting adapter status does NOT delete the cluster.
-   *
-   */
-
-  /**
    * Returns specific adapter status resource
    */
   @route("/{status_id}")
   @get
   @summary("Get adapter status by ID")
-  get_status_by_id(
+  @operationId("getClusterStatusById")
+  getClusterStatusById(
     /**
      * Cluster ID
      */
-    @format("uuid") @path cluster_id: string,
+     @path cluster_id: string,
 
     /**
      * Status ID
      */
-    @format("uuid") @path status_id: string,
+     @path status_id: string,
   ): AdapterStatus | NotFoundResponse;
 
 }
@@ -88,15 +78,16 @@ interface NodePoolStatuses{
   /**
    * Returns current status object for each adapter that has reported status
    */
-  @route("/")
+  @route("")
   @get
   @summary("List all adapter statuses for nodepools")
-  get_statuses(
+  @operationId("getNodePoolsStatuses")
+  getNodePoolsStatuses(
     /**
      * Cluster ID
      */
-    @format("uuid") @path cluster_id: string,
-    @format("uuid") @path nodepool_id: string,
+     @path cluster_id: string,
+     @path nodepool_id: string,
     ...QueryParams
   ): Body< Page<AdapterStatus>> | NotFoundResponse;
 
@@ -104,19 +95,20 @@ interface NodePoolStatuses{
    * Adapter creates its initial status object for this cluster.
    * Returns 409 if adapter already has a status object for this cluster (use PATCH to update).
    *
-   * Response includes the status UUID and href for future PATCH operations.
+   * Response includes the status id and href for future operations.
    * Adapter should store the returned id/href to update its status later.
    *
    */
-  @route("/")
+  @route("")
   @post
   @summary("Create adapter status")
-  post_statuses(
+  @operationId("postNodePoolStatuses")
+  postNodePoolStatuses(
     /**
      * Cluster ID
      */
-    @format("uuid") @path cluster_id: string,
-    @format("uuid") @path nodepool_id: string,
+     @path cluster_id: string,
+     @path nodepool_id: string,
 
     @body body: AdapterStatusCreateRequest,
   ):
@@ -131,17 +123,18 @@ interface NodePoolStatuses{
   @route("/{status_id}")
   @get
   @summary("Get adapter status by ID")
-  get_status_by_id(
+  @operationId("getNodePoolStatusById")
+  getNodePoolStatusById(
     /**
      * Cluster ID
      */
-    @format("uuid") @path cluster_id: string,
-    @format("uuid") @path nodepool_id: string,
+     @path cluster_id: string,
+     @path nodepool_id: string,
 
     /**
      * Status ID
      */
-    @format("uuid") @path status_id: string,
+     @path status_id: string,
   ): AdapterStatus | NotFoundResponse;
 
 }

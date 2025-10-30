@@ -11,16 +11,15 @@ using OpenAPI;
 namespace HyperFleet;
 
 @tag("NodePools")
-interface Nodepools {
+interface NodePools {
     /**
      * Returns the list of all nodepools
      */
     @route("/nodepools")
     @get
     @summary("List all nodepools for cluster")
-    get_all_nodepools(
-        ...QueryParams
-    ): Body<Page<Nodepool>>;
+    @operationId("getNodePools")
+    getNodePools(...QueryParams): Body<Page<NodePool>>;
 
     /**
      * Returns specific nodepool
@@ -28,12 +27,13 @@ interface Nodepools {
     @route("/nodepools/{nodepool_id}")
     @get
     @summary("Get nodepool by ID")
-    get_nodepool(
+    @operationId("getNodePoolById")
+    getNodePoolById(
         /**
-         * Nodepool ID
+         * NodePool ID
          */
-        @format("uuid") @path nodepool_id: Identifier,
-    ): Nodepool | NotFoundResponse;
+        @path nodepool_id: Identifier,
+    ): NodePool | NotFoundResponse;
 
     /**
      * Returns the list of all nodepools for a cluster
@@ -41,11 +41,13 @@ interface Nodepools {
     @route("/{cluster_id}/nodepools")
     @get
     @summary("List all nodepools for cluster")
-    get_nodepools_by_cluster_id(
+    @operationId("getNodePoolsByClusterId")
+    getNodePoolsByClusterId(
         /** Cluster ID */
-        @format("uuid") @path cluster_id: Identifier,
-        ...QueryParams
-    ): Body<Page<Nodepool>>;
+         @path cluster_id: Identifier,
+
+        ...QueryParams,
+    ): Body<Page<NodePool>>;
 
     /**
      * Create a NodePool for a cluster
@@ -53,14 +55,15 @@ interface Nodepools {
     @route("/{cluster_id}/nodepools")
     @post
     @summary("Create nodepool")
-    create_nodepool(
+    @operationId("createNodePool")
+    createNodePool(
         /** Cluster ID */
-        @format("uuid") @path cluster_id: string,
-        @body body: NodepoolCreateRequest,
+         @path cluster_id: string,
+
+        @body body: NodePoollCreateRequest,
     ):
-        | (CreatedResponse & NodepoolCreateResponse)
+        | (CreatedResponse & NodePoolCreateResponse)
         | BadRequestResponse
         | NotFoundResponse
         | ConflictResponse;
-
 }

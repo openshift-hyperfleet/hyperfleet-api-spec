@@ -7,6 +7,7 @@ import "./statuses/";
 import "./nodepools/";
 using Http;
 using OpenAPI;
+
 /**
  * HyperFleet API provides simple CRUD operations for managing cluster resources and their status history.
  *
@@ -21,8 +22,7 @@ using OpenAPI;
 @server("https://api.hyperfleet.dev.example.com", "Development")
 @tagMetadata("Clusters", #{ description: "Cluster resource CRUD operations" })
 @tagMetadata( "NodePools", #{ description: "NodePool resource CRUD operations" })
-@tagMetadata( "Cluster statuses", #{ description: " status " })
+@tagMetadata( "Cluster statuses", #{ description: "Status for Clusters" })
+@tagMetadata( "NodePool statuses", #{ description: "Status for NodePools" })
 @route("/api/clusters")
 namespace HyperFleet;
-
-interface All{}

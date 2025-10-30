@@ -20,7 +20,7 @@ model Cluster {
   /**
    * Generation field is updated on customer updates, reflecting the version of the "intent" of the customer
    */
-  generation: integer;
+  generation: int32;
 
   /**
    * Cluster status aggregation from all adapters.
@@ -51,7 +51,7 @@ model Cluster {
      * This will be the lowest value of each adapter's observed_generation values
      * The phase value is based on this generation
      */
-    observed_generation: integer;
+    observed_generation: int32;
 
     /** Time of the last complete report from adapters
      * Updated when adapters report status.

@@ -10,18 +10,20 @@ using Http;
 using OpenAPI;
 
 namespace HyperFleet;
-@route("/")
 @tag("Clusters")
 interface Clusters {
   @get
+  @route("")
   @summary("List clusters")
-  get_clusters(...QueryParams): Body<Page<Cluster>>;
+  @operationId("getClusters")
+  getClusters(...QueryParams): Body<Page<Cluster>>;
 
   @route("/{cluster_id}")
   @get
   @summary("Get cluster by ID")
-  get_cluster_by_id(
-    @format("uuid") @path cluster_id: string,
+  @operationId("getClusterById")
+  getClusterById(
+    @path cluster_id: string,
   ): Cluster | NotFoundResponse;
 
   /**
@@ -32,10 +34,11 @@ interface Clusters {
    * status.adapters will be empty until adapters POST their status.
    *
    */
-  @route("/")
+  @route("")
   @post
   @summary("Create cluster")
-  post_cluster(@body body: ClusterCreateRequest): (CreatedResponse &
+  @operationId("postCluster")
+  postCluster(@body body: ClusterCreateRequest): (CreatedResponse &
     Cluster) | BadRequestResponse;
 
 }

@@ -11,7 +11,7 @@ alias KindNodePool = "NodePool";
 
 model ID {
     /** Resource identifier */
-    @format("uuid") id: Identifier;
+    id: Identifier;
 }
 model APIResourceReference<Kind> {
     ...ID;
@@ -37,21 +37,10 @@ model APIResource<Kind> {
     labels: Record<string>;
 }
 
-model PageDataRequest {
-    page?: integer = 1;
-    size?: integer = 20;
-}
-
-model PageData {
-    page: integer;
-    size: integer;
-    total: integer;
-}
-
 model Page<Kind> {
-    page: integer;
-    size: integer;
-    total: integer;
+    page: int32;
+    size: int32;
+    total: int32;
     items: Kind[];
 }
 

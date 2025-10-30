@@ -32,7 +32,7 @@ model ConditionBase {
   /*
    * Generation of the spec that triggered the adapter work
    */
-  observed_generation: integer;
+  observed_generation: int32;
 
   /** Time when the condition was created 
    * - In an adapter reporting conditions `updated_at==created_at`
@@ -75,7 +75,7 @@ model AdapterStatusCreateRequest {
   /**
    * Which cluster generation this status reflects
    */
-  observed_generation: integer;
+  observed_generation: int32;
 
   conditions: Condition[];
 
@@ -94,7 +94,7 @@ model AdapterStatusUpdateRequest {
   /**
    * Update observed generation
    */
-  observed_generation?: integer;
+  observed_generation?: int32;
 
   /**
    * Update conditions (service computes lastTransitionTime)
@@ -128,7 +128,7 @@ model AdapterStatus {
   /**
    * Which generation for an entity (Clusters, NodePools) was current at the time of creating this status
    */
-  observed_generation: integer;
+  observed_generation: int32;
 
   /**
    * Kubernetes-style conditions tracking adapter state
@@ -146,7 +146,7 @@ model AdapterStatus {
   metadata?: {
     job_name?: string;
     job_namespace?: string;
-    attempt?: integer;
+    attempt?: int32;
     started_at?: utcDateTime;
     completed_at?: utcDateTime;
     duration?: string;

@@ -1,19 +1,11 @@
 import "../common/model.tsp";
 import "../statuses/model.tsp";
-model NodePoolSpec {
-    provider: string;
-}
 
-model ProviderNodePoolSpec {
-    schema: string;
-    data: unknown;
-}
-
-model Nodepool {
+model NodePool {
     ...APIResource<KindNodePool>;
     owner_references: APIResourceReference<KindCluster>;
 
-    /** Name of the nodepool */
+    /** Name of the NodePool */
     name: string;
 
     /** NodePool specification */
@@ -33,7 +25,7 @@ model Nodepool {
          * This will be the lowest value of each adapter's observed_generation values
          * The phase value is based on this generation
          */
-        observed_generation: integer;
+        observed_generation: int32;
 
         /**
          * When NodePool last transitioned (updated by adapters, used by Sentinel for backoff)
@@ -50,8 +42,8 @@ model Nodepool {
     };
 }
 
-model NodepoolCreateRequest {}
+model NodePoollCreateRequest {}
 
-model NodepoolCreateResponse {}
+model NodePoolCreateResponse {}
 
-model NodepoolUpdateRequest {}
+model NodePoolUpdateRequest {}
