@@ -5,6 +5,7 @@ import "@typespec/openapi3";
 import "./clusters/";
 import "./statuses/";
 import "./nodepools/";
+import "./compatibility/";
 using Http;
 using OpenAPI;
 
@@ -18,11 +19,10 @@ using OpenAPI;
  */
 @service(#{ title: "HyperFleet API" })
 @info(#{ version: "1.0.0", contact: #{ name: "HyperFleet Team" } })
-@server("https://api.hyperfleet.example.com", "Production")
-@server("https://api.hyperfleet.dev.example.com", "Development")
+@server("http://localhost:8000", "Development")
 @tagMetadata("Clusters", #{ description: "Cluster resource CRUD operations" })
 @tagMetadata( "NodePools", #{ description: "NodePool resource CRUD operations" })
 @tagMetadata( "Cluster statuses", #{ description: "Status for Clusters" })
 @tagMetadata( "NodePool statuses", #{ description: "Status for NodePools" })
-@route("/api/clusters")
+@route("/api/hyperfleet/v1")
 namespace HyperFleet;

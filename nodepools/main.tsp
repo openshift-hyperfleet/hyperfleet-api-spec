@@ -10,7 +10,7 @@ using OpenAPI;
 
 namespace HyperFleet;
 
-@tag("NodePools")
+//@tag("NodePools")
 interface NodePools {
     /**
      * Returns the list of all nodepools
@@ -33,18 +33,25 @@ interface NodePools {
          * NodePool ID
          */
         @path nodepool_id: Identifier,
-    ): NodePool | NotFoundResponse;
+    ): {
+        @statusCode statusCode: 200;
+        @body nodePool: NodePool
+    }
+    |{
+        @statusCode statusCode: 404;
+        @body error: Error;
+    };
 
     /**
      * Returns the list of all nodepools for a cluster
      */
-    @route("/{cluster_id}/nodepools")
+    @route("/clusters/{cluster_id}/nodepools")
     @get
     @summary("List all nodepools for cluster")
     @operationId("getNodePoolsByClusterId")
     getNodePoolsByClusterId(
         /** Cluster ID */
-         @path cluster_id: Identifier,
+        @path cluster_id: Identifier,
 
         ...QueryParams,
     ): Body<Page<NodePool>>;
@@ -52,18 +59,15 @@ interface NodePools {
     /**
      * Create a NodePool for a cluster
      */
-    @route("/{cluster_id}/nodepools")
+    @route("/clusters/{cluster_id}/nodepools")
     @post
     @summary("Create nodepool")
     @operationId("createNodePool")
     createNodePool(
         /** Cluster ID */
-         @path cluster_id: string,
+        @path cluster_id: string,
 
-        @body body: NodePoollCreateRequest,
+        @body body: NodePoolCreateRequest,
     ):
-        | (CreatedResponse & NodePoolCreateResponse)
-        | BadRequestResponse
-        | NotFoundResponse
-        | ConflictResponse;
+        | (CreatedResponse & NodePoolCreateResponse);
 }

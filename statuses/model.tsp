@@ -5,11 +5,6 @@ import "../common/model.tsp";
  */
 model ConditionBase {
   /*
-   * Adapter name
-   */
-  adapter: string;
-
-  /*
    * Condition type
    */
   type: string;
@@ -118,13 +113,13 @@ model AdapterStatusUpdateRequest {
 }
 
 model AdapterStatus {
-  ...APIResource<KindClusterStatus|KindNodePoolStatus>;
+  ...APIResource;
 
   /** Name of the adapter that generated this status (Validator, DNS...) */
   adapter_name: string;
 
   /** Reference to the cluster to which this adapter status pertains */
-  owner_references: APIResource<KindCluster|KindNodePool>;
+  owner_references: ObjectReference;
   /**
    * Which generation for an entity (Clusters, NodePools) was current at the time of creating this status
    */

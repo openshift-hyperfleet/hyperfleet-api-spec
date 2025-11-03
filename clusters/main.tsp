@@ -10,13 +10,14 @@ using Http;
 using OpenAPI;
 
 namespace HyperFleet;
-@tag("Clusters")
+//@tag("Clusters")
+@route("/clusters")
 interface Clusters {
   @get
   @route("")
   @summary("List clusters")
   @operationId("getClusters")
-  getClusters(...QueryParams): Body<Page<Cluster>>;
+  getClusters(...QueryParams): Body<ClusterList>;
 
   @route("/{cluster_id}")
   @get
@@ -24,13 +25,13 @@ interface Clusters {
   @operationId("getClusterById")
   getClusterById(
     @path cluster_id: string,
-  ): Cluster | NotFoundResponse;
+  ): Cluster | Error;
 
   /**
    * Create a new cluster resource.
    *
    * **Note**: The `status` object in the response is read-only and computed by the service.
-   * It is NOT part of the request body. Initially, status.phase will be "Pending" and
+   * It is NOT part of the request body. Initially, status.phase will be "NotReady" and
    * status.adapters will be empty until adapters POST their status.
    *
    */
@@ -39,6 +40,6 @@ interface Clusters {
   @summary("Create cluster")
   @operationId("postCluster")
   postCluster(@body body: ClusterCreateRequest): (CreatedResponse &
-    Cluster) | BadRequestResponse;
+    Cluster) | Error;
 
 }

@@ -8,8 +8,8 @@ using Http;
 using OpenAPI;
 
 namespace HyperFleet;
-@route("/{cluster_id}/statuses")
-@tag("Cluster statuses")
+@route("/clusters/{cluster_id}/statuses")
+//@tag("Cluster statuses")
 interface ClusterStatuses{
   /**
    * Returns current status object for each adapter that has reported status
@@ -72,8 +72,8 @@ interface ClusterStatuses{
 
 }
 
-@tag("NodePool statuses")
-@route("/{cluster_id}/nodepools/{nodepool_id}/statuses")
+//@tag("NodePool statuses")
+@route("/clusters/{cluster_id}/nodepools/{nodepool_id}/statuses")
 interface NodePoolStatuses{
   /**
    * Returns current status object for each adapter that has reported status
@@ -93,7 +93,7 @@ interface NodePoolStatuses{
 
   /**
    * Adapter creates its initial status object for this cluster.
-   * Returns 409 if adapter already has a status object for this cluster (use PATCH to update).
+   * Returns 409 if adapter already has a status object for this cluster 
    *
    * Response includes the status id and href for future operations.
    * Adapter should store the returned id/href to update its status later.

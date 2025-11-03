@@ -20,7 +20,7 @@ tags:
   - name: Clusters
     description: Cluster resource CRUD operations
 paths:
-  /api/clusters:
+  /api/hyperfleet/v1/clusters:
     get:
       operationId: getClusters
       summary: List clusters
@@ -29,34 +29,14 @@ paths:
         - $ref: '#/components/parameters/QueryParams.page'
         - $ref: '#/components/parameters/QueryParams.pageSize'
         - $ref: '#/components/parameters/QueryParams.orderBy'
+        - $ref: '#/components/parameters/QueryParams.order'
       responses:
         '200':
           description: The request has succeeded.
           content:
             application/json:
               schema:
-                type: object
-                required:
-                  - page
-                  - size
-                  - total
-                  - items
-                properties:
-                  page:
-                    type: integer
-                    format: int32
-                  size:
-                    type: integer
-                    format: int32
-                  total:
-                    type: integer
-                    format: int32
-                  items:
-                    type: array
-                    items:
-                      $ref: '#/components/schemas/Cluster'
-      tags:
-        - Clusters
+                $ref: '#/components/schemas/ClusterList'
     post:
       operationId: postCluster
       summary: Create cluster
@@ -64,88 +44,29 @@ paths:
         Create a new cluster resource.
 
         **Note**: The `status` object in the response is read-only and computed by the service.
-        It is NOT part of the request body. Initially, status.phase will be "Pending" and
+        It is NOT part of the request body. Initially, status.phase will be "NotReady" and
         status.adapters will be empty until adapters POST their status.
       parameters: []
       responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
         '201':
           description: The request has succeeded and a new resource has been created as a result.
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Cluster'
-        '400':
-          description: The server could not understand the request due to invalid syntax.
-      tags:
-        - Clusters
       requestBody:
         required: true
         content:
           application/json:
             schema:
               $ref: '#/components/schemas/ClusterCreateRequest'
-  /api/clusters/nodepools:
-    get:
-      operationId: getNodePools
-      summary: List all nodepools for cluster
-      description: Returns the list of all nodepools
-      parameters:
-        - $ref: '#/components/parameters/QueryParams.search'
-        - $ref: '#/components/parameters/QueryParams.page'
-        - $ref: '#/components/parameters/QueryParams.pageSize'
-        - $ref: '#/components/parameters/QueryParams.orderBy'
-      responses:
-        '200':
-          description: The request has succeeded.
-          content:
-            application/json:
-              schema:
-                type: object
-                required:
-                  - page
-                  - size
-                  - total
-                  - items
-                properties:
-                  page:
-                    type: integer
-                    format: int32
-                  size:
-                    type: integer
-                    format: int32
-                  total:
-                    type: integer
-                    format: int32
-                  items:
-                    type: array
-                    items:
-                      $ref: '#/components/schemas/NodePool'
-      tags:
-        - NodePools
-  /api/clusters/nodepools/{nodepool_id}:
-    get:
-      operationId: getNodePoolById
-      summary: Get nodepool by ID
-      description: Returns specific nodepool
-      parameters:
-        - name: nodepool_id
-          in: path
-          required: true
-          description: NodePool ID
-          schema:
-            type: string
-      responses:
-        '200':
-          description: The request has succeeded.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/NodePool'
-        '404':
-          description: The server cannot find the requested resource.
-      tags:
-        - NodePools
-  /api/clusters/{cluster_id}:
+  /api/hyperfleet/v1/clusters/{cluster_id}:
     get:
       operationId: getClusterById
       summary: Get cluster by ID
@@ -161,12 +82,10 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Cluster'
-        '404':
-          description: The server cannot find the requested resource.
-      tags:
-        - Clusters
-  /api/clusters/{cluster_id}/nodepools:
+                anyOf:
+                  - $ref: '#/components/schemas/Cluster'
+                  - $ref: '#/components/schemas/Error'
+  /api/hyperfleet/v1/clusters/{cluster_id}/nodepools:
     get:
       operationId: getNodePoolsByClusterId
       summary: List all nodepools for cluster
@@ -182,6 +101,7 @@ paths:
         - $ref: '#/components/parameters/QueryParams.page'
         - $ref: '#/components/parameters/QueryParams.pageSize'
         - $ref: '#/components/parameters/QueryParams.orderBy'
+        - $ref: '#/components/parameters/QueryParams.order'
       responses:
         '200':
           description: The request has succeeded.
@@ -208,8 +128,6 @@ paths:
                     type: array
                     items:
                       $ref: '#/components/schemas/NodePool'
-      tags:
-        - NodePools
     post:
       operationId: createNodePool
       summary: Create nodepool
@@ -224,21 +142,17 @@ paths:
       responses:
         '201':
           description: The request has succeeded and a new resource has been created as a result.
-        '400':
-          description: The server could not understand the request due to invalid syntax.
-        '404':
-          description: The server cannot find the requested resource.
-        '409':
-          description: The request conflicts with the current state of the server.
-      tags:
-        - NodePools
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NodePoolCreateResponse'
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/NodePoollCreateRequest'
-  /api/clusters/{cluster_id}/nodepools/{nodepool_id}/statuses:
+              $ref: '#/components/schemas/NodePoolCreateRequest'
+  /api/hyperfleet/v1/clusters/{cluster_id}/nodepools/{nodepool_id}/statuses:
     get:
       operationId: getNodePoolsStatuses
       summary: List all adapter statuses for nodepools
@@ -259,6 +173,7 @@ paths:
         - $ref: '#/components/parameters/QueryParams.page'
         - $ref: '#/components/parameters/QueryParams.pageSize'
         - $ref: '#/components/parameters/QueryParams.orderBy'
+        - $ref: '#/components/parameters/QueryParams.order'
       responses:
         '200':
           description: The request has succeeded.
@@ -287,14 +202,12 @@ paths:
                       $ref: '#/components/schemas/AdapterStatus'
         '404':
           description: The server cannot find the requested resource.
-      tags:
-        - NodePool statuses
     post:
       operationId: postNodePoolStatuses
       summary: Create adapter status
       description: |-
         Adapter creates its initial status object for this cluster.
-        Returns 409 if adapter already has a status object for this cluster (use PATCH to update).
+        Returns 409 if adapter already has a status object for this cluster 
 
         Response includes the status id and href for future operations.
         Adapter should store the returned id/href to update its status later.
@@ -323,15 +236,13 @@ paths:
           description: The server cannot find the requested resource.
         '409':
           description: The request conflicts with the current state of the server.
-      tags:
-        - NodePool statuses
       requestBody:
         required: true
         content:
           application/json:
             schema:
               $ref: '#/components/schemas/AdapterStatusCreateRequest'
-  /api/clusters/{cluster_id}/nodepools/{nodepool_id}/statuses/{status_id}:
+  /api/hyperfleet/v1/clusters/{cluster_id}/nodepools/{nodepool_id}/statuses/{status_id}:
     get:
       operationId: getNodePoolStatusById
       summary: Get adapter status by ID
@@ -363,9 +274,7 @@ paths:
                 $ref: '#/components/schemas/AdapterStatus'
         '404':
           description: The server cannot find the requested resource.
-      tags:
-        - NodePool statuses
-  /api/clusters/{cluster_id}/statuses:
+  /api/hyperfleet/v1/clusters/{cluster_id}/statuses:
     get:
       operationId: getClusterStatuses
       summary: List all adapter statuses for cluster
@@ -381,6 +290,7 @@ paths:
         - $ref: '#/components/parameters/QueryParams.page'
         - $ref: '#/components/parameters/QueryParams.pageSize'
         - $ref: '#/components/parameters/QueryParams.orderBy'
+        - $ref: '#/components/parameters/QueryParams.order'
       responses:
         '200':
           description: The request has succeeded.
@@ -409,8 +319,6 @@ paths:
                       $ref: '#/components/schemas/AdapterStatus'
         '404':
           description: The server cannot find the requested resource.
-      tags:
-        - Cluster statuses
     post:
       operationId: postClusterStatuses
       summary: Create adapter status
@@ -440,15 +348,13 @@ paths:
           description: The server cannot find the requested resource.
         '409':
           description: The request conflicts with the current state of the server.
-      tags:
-        - Cluster statuses
       requestBody:
         required: true
         content:
           application/json:
             schema:
               $ref: '#/components/schemas/AdapterStatusCreateRequest'
-  /api/clusters/{cluster_id}/statuses/{status_id}:
+  /api/hyperfleet/v1/clusters/{cluster_id}/statuses/{status_id}:
     get:
       operationId: getClusterStatusById
       summary: Get adapter status by ID
@@ -475,10 +381,97 @@ paths:
                 $ref: '#/components/schemas/AdapterStatus'
         '404':
           description: The server cannot find the requested resource.
-      tags:
-        - Cluster statuses
+  /api/hyperfleet/v1/compatibility:
+    get:
+      operationId: getCompatibility
+      description: Returns the list of all nodepools
+      parameters:
+        - $ref: '#/components/parameters/QueryParams.search'
+        - $ref: '#/components/parameters/QueryParams.page'
+        - $ref: '#/components/parameters/QueryParams.pageSize'
+        - $ref: '#/components/parameters/QueryParams.orderBy'
+        - $ref: '#/components/parameters/QueryParams.order'
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            text/plain:
+              schema:
+                type: string
+      security:
+        - BearerAuth: []
+  /api/hyperfleet/v1/nodepools:
+    get:
+      operationId: getNodePools
+      summary: List all nodepools for cluster
+      description: Returns the list of all nodepools
+      parameters:
+        - $ref: '#/components/parameters/QueryParams.search'
+        - $ref: '#/components/parameters/QueryParams.page'
+        - $ref: '#/components/parameters/QueryParams.pageSize'
+        - $ref: '#/components/parameters/QueryParams.orderBy'
+        - $ref: '#/components/parameters/QueryParams.order'
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - page
+                  - size
+                  - total
+                  - items
+                properties:
+                  page:
+                    type: integer
+                    format: int32
+                  size:
+                    type: integer
+                    format: int32
+                  total:
+                    type: integer
+                    format: int32
+                  items:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/NodePool'
+  /api/hyperfleet/v1/nodepools/{nodepool_id}:
+    get:
+      operationId: getNodePoolById
+      summary: Get nodepool by ID
+      description: Returns specific nodepool
+      parameters:
+        - name: nodepool_id
+          in: path
+          required: true
+          description: NodePool ID
+          schema:
+            type: string
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NodePool'
+        '404':
+          description: The server cannot find the requested resource.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
 components:
   parameters:
+    QueryParams.order:
+      name: order
+      in: query
+      required: false
+      schema:
+        $ref: '#/components/schemas/OrderDirection'
+        default: desc
+      explode: false
     QueryParams.orderBy:
       name: orderBy
       in: query
@@ -516,12 +509,9 @@ components:
     AdapterStatus:
       type: object
       required:
-        - id
-        - kind
-        - href
+        - labels
         - created_at
         - updated_at
-        - labels
         - adapter_name
         - owner_references
         - observed_generation
@@ -532,60 +522,27 @@ components:
           description: Resource identifier
         kind:
           type: string
-          enum:
-            - ClusterStatus
-            - NodePoolStatus
           description: Resource kind
         href:
           type: string
           description: Resource URI
+        labels:
+          type: object
+          additionalProperties:
+            type: string
+          description: labels for the API resource as pairs of name:value strings
         created_at:
           type: string
           format: date-time
         updated_at:
           type: string
           format: date-time
-        labels:
-          type: object
-          additionalProperties:
-            type: string
-          description: labels for the API resource as pairs of name:value strings
         adapter_name:
           type: string
           description: Name of the adapter that generated this status (Validator, DNS...)
         owner_references:
-          type: object
-          required:
-            - id
-            - kind
-            - href
-            - created_at
-            - updated_at
-            - labels
-          properties:
-            id:
-              type: string
-              description: Resource identifier
-            kind:
-              type: string
-              enum:
-                - Cluster
-                - NodePool
-              description: Resource kind
-            href:
-              type: string
-              description: Resource URI
-            created_at:
-              type: string
-              format: date-time
-            updated_at:
-              type: string
-              format: date-time
-            labels:
-              type: object
-              additionalProperties:
-                type: string
-              description: labels for the API resource as pairs of name:value strings
+          allOf:
+            - $ref: '#/components/schemas/ObjectReference'
           description: Reference to the cluster to which this adapter status pertains
         observed_generation:
           type: integer
@@ -648,41 +605,20 @@ components:
     Cluster:
       type: object
       required:
-        - id
         - kind
-        - href
-        - created_at
-        - updated_at
-        - labels
         - name
         - spec
+        - labels
+        - created_at
+        - updated_at
         - generation
         - status
         - created_by
         - updated_by
       properties:
-        id:
-          type: string
-          description: Resource identifier
         kind:
           type: string
-          enum:
-            - Cluster
-          description: Resource kind
-        href:
-          type: string
-          description: Resource URI
-        created_at:
-          type: string
-          format: date-time
-        updated_at:
-          type: string
-          format: date-time
-        labels:
-          type: object
-          additionalProperties:
-            type: string
-          description: labels for the API resource as pairs of name:value strings
+          default: Cluster
         name:
           type: string
           description: Cluster name (unique)
@@ -693,6 +629,23 @@ components:
             Cluster specification
             CLM doesn't know how to unmarshall the spec, it only stores and forwards to adapters to do their job
             But CLM will validate the schema before accepting the request
+        id:
+          type: string
+          description: Resource identifier
+        href:
+          type: string
+          description: Resource URI
+        labels:
+          type: object
+          additionalProperties:
+            type: string
+          description: labels for the API resource as pairs of name:value strings
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
         generation:
           type: integer
           format: int32
@@ -703,7 +656,7 @@ components:
             phase:
               type: string
               enum:
-                - Pending
+                - NotReady
                 - Ready
                 - Failed
               description: |-
@@ -755,37 +708,16 @@ components:
     ClusterCreateRequest:
       type: object
       required:
-        - id
         - kind
-        - href
-        - created_at
-        - updated_at
-        - labels
         - name
         - spec
+        - labels
+        - created_at
+        - updated_at
       properties:
-        id:
-          type: string
-          description: Resource identifier
         kind:
           type: string
-          enum:
-            - Cluster
-          description: Resource kind
-        href:
-          type: string
-          description: Resource URI
-        created_at:
-          type: string
-          format: date-time
-        updated_at:
-          type: string
-          format: date-time
-        labels:
-          type: object
-          additionalProperties:
-            type: string
-          description: labels for the API resource as pairs of name:value strings
+          default: Cluster
         name:
           type: string
           description: Cluster name (unique)
@@ -796,18 +728,43 @@ components:
             Cluster specification
             CLM doesn't know how to unmarshall the spec, it only stores and forwards to adapters to do their job
             But CLM will validate the schema before accepting the request
+        id:
+          type: string
+          description: Resource identifier
+        href:
+          type: string
+          description: Resource URI
+        labels:
+          type: object
+          additionalProperties:
+            type: string
+          description: labels for the API resource as pairs of name:value strings
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+    ClusterList:
+      type: object
+      required:
+        - items
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/Cluster'
+      allOf:
+        - $ref: '#/components/schemas/List'
     Condition:
       type: object
       required:
-        - adapter
         - type
         - status
         - observed_generation
         - created_at
         - updated_at
       properties:
-        adapter:
-          type: string
         type:
           type: string
         status:
@@ -858,15 +815,12 @@ components:
     ConditionBase:
       type: object
       required:
-        - adapter
         - type
         - status
         - observed_generation
         - created_at
         - updated_at
       properties:
-        adapter:
-          type: string
         type:
           type: string
         status:
@@ -900,18 +854,55 @@ components:
         Common data for status objects, part of:
         - Status entity (stored in DB)
         - Request payload
+    Error:
+      type: object
+      properties:
+        id:
+          type: string
+        kind:
+          type: string
+          description: Resource kind
+        href:
+          type: string
+          description: Resource URI
+        code:
+          type: string
+        reason:
+          type: string
+        operation_id:
+          type: string
+    List:
+      type: object
+      required:
+        - kind
+        - page
+        - size
+        - total
+        - items
+      properties:
+        kind:
+          type: string
+        page:
+          type: integer
+          format: int32
+        size:
+          type: integer
+          format: int32
+        total:
+          type: integer
+          format: int32
+        items:
+          type: array
+          items: {}
     NodePool:
       type: object
       required:
-        - id
-        - kind
-        - href
+        - labels
         - created_at
         - updated_at
-        - labels
-        - owner_references
         - name
         - spec
+        - owner_references
         - status
       properties:
         id:
@@ -919,63 +910,40 @@ components:
           description: Resource identifier
         kind:
           type: string
-          enum:
-            - NodePool
           description: Resource kind
         href:
           type: string
           description: Resource URI
+        labels:
+          type: object
+          additionalProperties:
+            type: string
+          description: labels for the API resource as pairs of name:value strings
         created_at:
           type: string
           format: date-time
         updated_at:
           type: string
           format: date-time
-        labels:
-          type: object
-          additionalProperties:
-            type: string
-          description: labels for the API resource as pairs of name:value strings
-        owner_references:
-          type: object
-          required:
-            - id
-            - kind
-            - href
-            - created_at
-            - updated_at
-          properties:
-            id:
-              type: string
-              description: Resource identifier
-            kind:
-              type: string
-              enum:
-                - Cluster
-              description: Resource kind
-            href:
-              type: string
-              description: Resource URI
-            created_at:
-              type: string
-              format: date-time
-            updated_at:
-              type: string
-              format: date-time
         name:
           type: string
-          description: Name of the NodePool
+          description: NodePool name (unique in a cluster)
         spec:
           type: object
           additionalProperties: {}
-          description: NodePool specification
+          description: |-
+            Cluster specification
+            CLM doesn't know how to unmarshall the spec, it only stores and forwards to adapters to do their job
+            But CLM will validate the schema before accepting the request
+        owner_references:
+          $ref: '#/components/schemas/ObjectReference'
         status:
           type: object
           properties:
             phase:
               type: string
               enum:
-                - Pending
+                - NotReady
                 - Ready
                 - Failed
               description: |-
@@ -1011,12 +979,152 @@ components:
             - last_transition_time
             - updated_at
             - adapters
-    NodePoollCreateRequest:
+    NodePoolCreateRequest:
       type: object
+      required:
+        - labels
+        - created_at
+        - updated_at
+        - name
+        - spec
+      properties:
+        id:
+          type: string
+          description: Resource identifier
+        kind:
+          type: string
+          description: Resource kind
+        href:
+          type: string
+          description: Resource URI
+        labels:
+          type: object
+          additionalProperties:
+            type: string
+          description: labels for the API resource as pairs of name:value strings
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+        name:
+          type: string
+          description: NodePool name (unique in a cluster)
+        spec:
+          type: object
+          additionalProperties: {}
+          description: |-
+            Cluster specification
+            CLM doesn't know how to unmarshall the spec, it only stores and forwards to adapters to do their job
+            But CLM will validate the schema before accepting the request
+    NodePoolCreateResponse:
+      type: object
+      required:
+        - labels
+        - created_at
+        - updated_at
+        - name
+        - spec
+        - owner_references
+        - status
+      properties:
+        id:
+          type: string
+          description: Resource identifier
+        kind:
+          type: string
+          description: Resource kind
+        href:
+          type: string
+          description: Resource URI
+        labels:
+          type: object
+          additionalProperties:
+            type: string
+          description: labels for the API resource as pairs of name:value strings
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+        name:
+          type: string
+          description: NodePool name (unique in a cluster)
+        spec:
+          type: object
+          additionalProperties: {}
+          description: |-
+            Cluster specification
+            CLM doesn't know how to unmarshall the spec, it only stores and forwards to adapters to do their job
+            But CLM will validate the schema before accepting the request
+        owner_references:
+          $ref: '#/components/schemas/ObjectReference'
+        status:
+          type: object
+          properties:
+            phase:
+              type: string
+              enum:
+                - NotReady
+                - Ready
+                - Failed
+              description: |-
+                Current NodePool phase (native database column).
+                Updated when adapters report status.
+                Note: status.phase provides aggregated view from all adapter conditions.
+            observed_generation:
+              type: integer
+              format: int32
+              description: |-
+                Last generation processed by adapters
+                Updated when adapters report status.
+                This will be the lowest value of each adapter's observed_generation values
+                The phase value is based on this generation
+            last_transition_time:
+              type: string
+              format: date-time
+              description: When NodePool last transitioned (updated by adapters, used by Sentinel for backoff)
+            updated_at:
+              type: string
+              format: date-time
+              description: |-
+                Time of the last complete report from adapters
+                Updated when adapters report status.
+                Oldest `updated_at` from the adapter conditions
+            adapters:
+              type: array
+              items:
+                $ref: '#/components/schemas/ConditionAvailable'
+          required:
+            - phase
+            - observed_generation
+            - last_transition_time
+            - updated_at
+            - adapters
+    ObjectReference:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Resource identifier
+        kind:
+          type: string
+          description: Resource kind
+        href:
+          type: string
+          description: Resource URI
+    OrderDirection:
+      type: string
+      enum:
+        - asc
+        - desc
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: Bearer
 servers:
-  - url: https://api.hyperfleet.dev.example.com
+  - url: http://localhost:8000
     description: Development
-    variables: {}
-  - url: https://api.hyperfleet.example.com
-    description: Production
     variables: {}

@@ -11,9 +11,19 @@ alias KindNodePool = "NodePool";
 
 model ID {
     /** Resource identifier */
-    id: Identifier;
+    id?: Identifier;
 }
-model APIResourceReference<Kind> {
+model ObjectReference {
+    ...ID;
+
+    /** Resource kind */
+    kind?: string;
+
+    /** Resource URI */
+    href?: string;
+
+}
+model ObjectReference2<Kind> {
     ...ID;
 
     /** Resource kind */
@@ -22,19 +32,43 @@ model APIResourceReference<Kind> {
     /** Resource URI */
     href: string;
 
-    @format("date-time") created_at: string;
-    @format("date-time") updated_at: string;
 }
 
-model Error<Kind> {
-    ...APIResourceReference<Kind>;
+enum ErrorCode {
+    _400:"400",
+    _403:"403",
+    _404:"404",
+    _500:"500"
+}
+
+model Error {
+    id?: string;
+
+    /** Resource kind */
+    kind?: string;
+
+    /** Resource URI */
+    href?: string;
+
+    code?: string;
+    reason?: string;
+    operation_id?: string;
 
 }
-model APIResource<Kind> {
-    ...APIResourceReference<Kind>;
+
+model ErrorResponse<Kind, ErrorCode> {
+    kind: Kind;
+    @statusCode statusCode:ErrorCode;
+    @body error: Error;
+}
+model APIResource {
+    ...ObjectReference;
 
     /** labels for the API resource as pairs of name:value strings */
     labels: Record<string>;
+
+    @format("date-time") created_at: string;
+    @format("date-time") updated_at: string;
 }
 
 model Page<Kind> {
@@ -43,6 +77,11 @@ model Page<Kind> {
     total: int32;
     items: Kind[];
 }
+
+enum OrderDirection {
+      asc,
+      desc,
+    }
 
 model QueryParams {
     @query
@@ -56,4 +95,15 @@ model QueryParams {
 
     @query
     orderBy?: string = "created_at";
+
+    @query
+    order?: OrderDirection = OrderDirection.desc;
+}
+
+model List {
+    kind: string;
+    page: int32;
+    size: int32;
+    total: int32;
+    items: unknown[];
 }

@@ -1,15 +1,22 @@
 import "../common/model.tsp";
 import "../statuses/model.tsp";
 
+model NodePoolBase {
+  ...APIResource;
+  /**
+   * NodePool name (unique in a cluster)
+   */
+  name: string;
+
+  /** Cluster specification
+   * CLM doesn't know how to unmarshall the spec, it only stores and forwards to adapters to do their job
+   * But CLM will validate the schema before accepting the request
+   */
+  spec: Record<unknown>;
+}
 model NodePool {
-    ...APIResource<KindNodePool>;
-    owner_references: APIResourceReference<KindCluster>;
-
-    /** Name of the NodePool */
-    name: string;
-
-    /** NodePool specification */
-    spec: Record<unknown>;
+    ...NodePoolBase;
+    owner_references: ObjectReference;
 
     status: {
         /**
@@ -17,7 +24,7 @@ model NodePool {
          * Updated when adapters report status.
          * Note: status.phase provides aggregated view from all adapter conditions.
          */
-        phase: "Pending" | "Ready" | "Failed";
+        phase: "NotReady" | "Ready" | "Failed";
 
         /**
          * Last generation processed by adapters
@@ -42,8 +49,10 @@ model NodePool {
     };
 }
 
-model NodePoollCreateRequest {}
+model NodePoolCreateRequest {
+    ...NodePoolBase;
+}
 
-model NodePoolCreateResponse {}
-
-model NodePoolUpdateRequest {}
+model NodePoolCreateResponse {
+    ...NodePool
+}

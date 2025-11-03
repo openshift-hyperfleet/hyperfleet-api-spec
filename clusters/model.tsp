@@ -1,8 +1,8 @@
 import "../common/model.tsp";
 import "../statuses/model.tsp";
 
-model ClusterBase {
-  ...APIResource<KindCluster>;
+model ClusterBase extends APIResource{
+  kind: string = "Cluster";
   /**
    * Cluster name (unique)
    */
@@ -31,13 +31,13 @@ model Cluster {
    * Provides quick overview of which adapters have reported and aggregated phase.
    *
    */
-  status: {
+   status: {
     /**
      * Current cluster phase (native database column).
      * Updated when adapters report status.
      * Note: status.phase provides aggregated view from all adapter conditions.
      */
-    phase: "Pending" | "Ready" | "Failed";
+    phase: "NotReady" | "Ready" | "Failed";
 
     /**
      * When cluster last transitioned (updated by adapters, used by Sentinel for backoff)
@@ -73,4 +73,9 @@ model ClusterUpdateRequest {
 
 model ClusterCreateRequest {
   ...ClusterBase;
+}
+
+
+model ClusterList extends List{
+  items: Cluster[];
 }
