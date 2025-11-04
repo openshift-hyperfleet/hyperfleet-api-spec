@@ -6,7 +6,7 @@ const exampleCluster: Cluster = #{
   id: "cluster-123",
   href: "https://api.hyperfleet.com/v1/clusters/cluster-123",
   name: "cluster-123",
-  labels: #{ labelName1: "labelValue1", labelName2: "labelValue2" },
+  labels: #{ environment: "production", team: "platform" },
   spec: #{
     gcpProperty1: "providerValue1",
     gcpProperty2: "providerValue2",

@@ -162,3 +162,17 @@ To add a new service (e.g., with additional endpoints):
 - `@typespec/http` - HTTP protocol support
 - `@typespec/openapi` - OpenAPI decorators
 - `@typespec/openapi3` - OpenAPI 3.0 emitter
+
+
+## Deloping with the Visual Studio Typespec extension
+
+The repository works with different contracts (core and GCP) but a single Typespec `main.tsp`.
+This is accomplished by maintaining an `aliases.tsp` file that holds the "active" concrete types to use (core or GCP).
+- When working on the core API, the `aliases.tsp` points to `aliases-core.tsp`
+- When working on the GCP API, the `aliases.tsp` points to `aliases-gcp.tsp`
+
+The downside of this is that it confuses the Typespec extension:
+- For the "non-active" type files, the plugin may show errors as not defined types
+- Since we duplicate aliases, the plugin may display an error of a type being duplicated
+
+But, both the `build-schema.sh` script using the `tsp` CLI command as the plugin option to "Emit from Typespec" work fine.

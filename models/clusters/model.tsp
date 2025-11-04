@@ -70,6 +70,7 @@ model Cluster {
   updated_by: string;
 }
 
+@example(exampleClusterCreateRequest)
 model ClusterCreateRequest extends ClusterBase {}
 
 model ClusterList extends List {
