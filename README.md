@@ -2,6 +2,11 @@
 
 This project hosts the TypeSpec files to generate the HyperFleet OpenAPI specifications. The repository is organized to support multiple service variants (core, GCP, etc.) while sharing common models and interfaces.
 
+Access directly to the latest generated contract:
+- core: https://openshift-hyperfleet.github.io/hyperfleet-api-spec/
+- GCP: https://openshift-hyperfleet.github.io/hyperfleet-api-spec/gcp.html
+
+
 ## Repository Structure
 
 The repository is organized with root-level configuration files and three main directories:
