@@ -1,7 +1,7 @@
 openapi: 3.0.0
 info:
   title: HyperFleet API
-  version: 1.0.3
+  version: 1.0.4
   contact:
     name: HyperFleet Team
   license:
@@ -49,8 +49,8 @@ paths:
         Create a new cluster resource.
 
         **Note**: The `status` object in the response is read-only and computed by the service.
-        It is NOT part of the request body. Initially, status.phase will be "NotReady" and
-        status.conditions will be empty until status conditions are POSTed.
+        It is NOT part of the request body. Initially,
+        status.conditions will include mandatory "Available" and "Ready" conditions (usually with status `Unknown`).
       parameters: []
       responses:
         '201':
@@ -419,7 +419,7 @@ components:
       required: false
       description: |-
         Filter results using TSL (Tree Search Language) query syntax.
-        Examples: `status.phase='NotReady'`, `name in ('c1','c2')`, `labels.region='us-east'`
+        Examples: `status.conditions.Ready='True'`, `name in ('c1','c2')`, `labels.region='us-east'`
       schema:
         type: string
       explode: false
@@ -758,11 +758,23 @@ components:
         updated_time: '2021-01-01T00:00:00Z'
         generation: 1
         status:
-          phase: Ready
-          last_transition_time: '2021-01-01T00:00:00Z'
-          observed_generation: 1
-          last_updated_time: '2021-01-01T00:00:00Z'
           conditions:
+            - type: Available
+              status: 'True'
+              reason: ResourceAvailable
+              message: Cluster is accessible
+              observed_generation: 1
+              created_time: '2021-01-01T10:00:00Z'
+              last_updated_time: '2021-01-01T10:00:00Z'
+              last_transition_time: '2021-01-01T10:00:00Z'
+            - type: Ready
+              status: 'True'
+              reason: ResourceReady
+              message: Cluster is ready
+              observed_generation: 1
+              created_time: '2021-01-01T10:00:00Z'
+              last_updated_time: '2021-01-01T10:00:00Z'
+              last_transition_time: '2021-01-01T10:00:00Z'
             - type: ValidationSuccessful
               status: 'True'
               reason: All validations passed
@@ -849,47 +861,28 @@ components:
     ClusterStatus:
       type: object
       required:
-        - phase
-        - last_transition_time
-        - observed_generation
-        - last_updated_time
         - conditions
       properties:
-        phase:
-          $ref: '#/components/schemas/ResourcePhase'
-        last_transition_time:
-          type: string
-          format: date-time
-          description: |-
-            When cluster last transitioned (used by Sentinel for backoff)
-            Updated when conditions are reported if the phase changes
-        observed_generation:
-          type: integer
-          format: int32
-          description: |-
-            Last generation processed
-            Updated when conditions are reported.
-            This will be the lowest value of each condition's observed_generation values
-            The phase value is based on this generation
-        last_updated_time:
-          type: string
-          format: date-time
-          description: |-
-            Time of the last update
-            Updated when conditions are reported.
-            Computed as min(conditions[].last_updated_time) to detect stale adapters.
-            Uses earliest (not latest) timestamp to ensure Sentinel can detect if any adapter has stopped reporting.
         conditions:
           type: array
           items:
             $ref: '#/components/schemas/ResourceCondition'
+          minItems: 2
+          description: |-
+            List of status conditions for the cluster.
+
+            **Mandatory conditions**: 
+            - `type: "Available"`: indicates if the cluster is accessible and functional.
+            - `type: "Ready"`: indicates if the cluster has reached its desired state.
+
+            These conditions are present immediately upon resource creation (usually with status `Unknown`).
       description: |-
         Cluster status computed from all status conditions.
 
         This object is computed by the service and CANNOT be modified directly.
         It is aggregated from condition updates posted to `/clusters/{id}/statuses`.
 
-        Provides quick overview of all reported conditions and aggregated phase.
+        Provides quick overview of all reported conditions.
     ConditionRequest:
       type: object
       required:
@@ -1037,11 +1030,23 @@ components:
           kind: Cluster
           href: https://api.hyperfleet.com/v1/clusters/cluster-123
         status:
-          phase: Ready
-          last_transition_time: '2021-01-01T10:00:00Z'
-          observed_generation: 1
-          last_updated_time: '2021-01-01T10:02:00Z'
           conditions:
+            - type: Available
+              status: 'True'
+              reason: ResourceAvailable
+              message: NodePool is accessible
+              observed_generation: 1
+              created_time: '2021-01-01T10:00:00Z'
+              last_updated_time: '2021-01-01T10:00:00Z'
+              last_transition_time: '2021-01-01T10:00:00Z'
+            - type: Ready
+              status: 'True'
+              reason: ResourceReady
+              message: NodePool is ready
+              observed_generation: 1
+              created_time: '2021-01-01T10:00:00Z'
+              last_updated_time: '2021-01-01T10:00:00Z'
+              last_transition_time: '2021-01-01T10:00:00Z'
             - type: ValidationSuccessful
               status: 'True'
               reason: All validations passed
@@ -1181,39 +1186,21 @@ components:
     NodePoolStatus:
       type: object
       required:
-        - phase
-        - observed_generation
-        - last_transition_time
-        - last_updated_time
         - conditions
       properties:
-        phase:
-          $ref: '#/components/schemas/ResourcePhase'
-        observed_generation:
-          type: integer
-          format: int32
-          minimum: 1
-          description: |-
-            Last generation processed
-            Updated when conditions are reported.
-            This will be the lowest value of each condition's observed_generation values
-            The phase value is based on this generation
-        last_transition_time:
-          type: string
-          format: date-time
-          description: When NodePool last transitioned (used by Sentinel for backoff)
-        last_updated_time:
-          type: string
-          format: date-time
-          description: |-
-            Time of the last update
-            Updated when conditions are reported.
-            Computed as min(conditions[].last_updated_time) to detect stale adapters.
-            Uses earliest (not latest) timestamp to ensure Sentinel can detect if any adapter has stopped reporting.
         conditions:
           type: array
           items:
             $ref: '#/components/schemas/ResourceCondition'
+          minItems: 2
+          description: |-
+            List of status conditions for the nodepool.
+
+            **Mandatory conditions**: 
+            - `type: "Available"`: indicates if the nodepool is accessible and functional.
+            - `type: "Ready"`: indicates if the nodepool has reached its desired state.
+
+            These conditions are present immediately upon resource creation (usually with status `Unknown`).
       description: |-
         NodePool status computed from all status conditions.
 
@@ -1281,13 +1268,6 @@ components:
         Condition in Cluster/NodePool status
         Used for semantic condition types: "ValidationSuccessful", "DNSSuccessful", "NodePoolSuccessful", etc.
         Includes observed_generation and last_updated_time to track adapter-specific state
-    ResourcePhase:
-      type: string
-      enum:
-        - NotReady
-        - Ready
-        - Failed
-      description: Phase of a resource (Cluster or NodePool)
     ValidationError:
       type: object
       required:

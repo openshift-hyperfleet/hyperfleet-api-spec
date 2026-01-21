@@ -10,15 +10,6 @@ alias KindClusterStatus = "ClusterStatus";
 alias KindNodePoolStatus = "NodePoolStatus";
 alias KindNodePool = "NodePool";
 
-/**
- * Phase of a resource (Cluster or NodePool)
- */
-enum ResourcePhase {
-    NotReady,
-    Ready,
-    Failed,
-}
-
 model ID {
     /** Resource identifier */
     id?: Identifier;
@@ -140,7 +131,7 @@ enum OrderDirection {
 
 model SearchParams {
     /** Filter results using TSL (Tree Search Language) query syntax.
-     * Examples: `status.phase='NotReady'`, `name in ('c1','c2')`, `labels.region='us-east'` */
+     * Examples: `status.conditions.Ready='True'`, `name in ('c1','c2')`, `labels.region='us-east'` */
     @query
     search?: string;
 }

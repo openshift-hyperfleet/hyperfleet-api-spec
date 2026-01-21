@@ -16,7 +16,7 @@ info:
     name: Apache 2.0
     url: 'https://www.apache.org/licenses/LICENSE-2.0'
   title: HyperFleet API
-  version: 1.0.3
+  version: 1.0.4
 host: hyperfleet.redhat.com
 basePath: /
 schemes:
@@ -31,7 +31,7 @@ paths:
         - description: >-
             Filter results using TSL (Tree Search Language) query syntax.
 
-            Examples: `status.phase='NotReady'`, `name in ('c1','c2')`,
+            Examples: `status.conditions.Ready='True'`, `name in ('c1','c2')`,
             `labels.region='us-east'`
           in: query
           name: search
@@ -110,10 +110,10 @@ paths:
         **Note**: The `status` object in the response is read-only and computed
         by the service.
 
-        It is NOT part of the request body. Initially, status.phase will be
-        "NotReady" and
+        It is NOT part of the request body. Initially,
 
-        status.conditions will be empty until status conditions are POSTed.
+        status.conditions will include mandatory "Available" and "Ready"
+        conditions (usually with status `Unknown`).
       operationId: postCluster
       summary: Create cluster
   '/api/hyperfleet/v1/clusters/{cluster_id}':
@@ -125,7 +125,7 @@ paths:
         - description: >-
             Filter results using TSL (Tree Search Language) query syntax.
 
-            Examples: `status.phase='NotReady'`, `name in ('c1','c2')`,
+            Examples: `status.conditions.Ready='True'`, `name in ('c1','c2')`,
             `labels.region='us-east'`
           in: query
           name: search
@@ -164,7 +164,7 @@ paths:
         - description: >-
             Filter results using TSL (Tree Search Language) query syntax.
 
-            Examples: `status.phase='NotReady'`, `name in ('c1','c2')`,
+            Examples: `status.conditions.Ready='True'`, `name in ('c1','c2')`,
             `labels.region='us-east'`
           in: query
           name: search
@@ -295,7 +295,7 @@ paths:
         - description: >-
             Filter results using TSL (Tree Search Language) query syntax.
 
-            Examples: `status.phase='NotReady'`, `name in ('c1','c2')`,
+            Examples: `status.conditions.Ready='True'`, `name in ('c1','c2')`,
             `labels.region='us-east'`
           in: query
           name: search
@@ -352,7 +352,7 @@ paths:
         - description: >-
             Filter results using TSL (Tree Search Language) query syntax.
 
-            Examples: `status.phase='NotReady'`, `name in ('c1','c2')`,
+            Examples: `status.conditions.Ready='True'`, `name in ('c1','c2')`,
             `labels.region='us-east'`
           in: query
           name: search
@@ -405,7 +405,7 @@ paths:
         - description: >-
             Filter results using TSL (Tree Search Language) query syntax.
 
-            Examples: `status.phase='NotReady'`, `name in ('c1','c2')`,
+            Examples: `status.conditions.Ready='True'`, `name in ('c1','c2')`,
             `labels.region='us-east'`
           in: query
           name: search
@@ -723,6 +723,22 @@ definitions:
           - created_time: '2021-01-01T10:00:00Z'
             last_transition_time: '2021-01-01T10:00:00Z'
             last_updated_time: '2021-01-01T10:00:00Z'
+            message: Cluster is accessible
+            observed_generation: 1
+            reason: ResourceAvailable
+            status: 'True'
+            type: Available
+          - created_time: '2021-01-01T10:00:00Z'
+            last_transition_time: '2021-01-01T10:00:00Z'
+            last_updated_time: '2021-01-01T10:00:00Z'
+            message: Cluster is ready
+            observed_generation: 1
+            reason: ResourceReady
+            status: 'True'
+            type: Ready
+          - created_time: '2021-01-01T10:00:00Z'
+            last_transition_time: '2021-01-01T10:00:00Z'
+            last_updated_time: '2021-01-01T10:00:00Z'
             message: All 30 validation tests passed
             observed_generation: 1
             reason: All validations passed
@@ -736,10 +752,6 @@ definitions:
             reason: DNS configured
             status: 'True'
             type: DNSSuccessful
-        last_transition_time: '2021-01-01T00:00:00Z'
-        last_updated_time: '2021-01-01T00:00:00Z'
-        observed_generation: 1
-        phase: Ready
       updated_by: user-123@example.com
       updated_time: '2021-01-01T00:00:00Z'
     properties:
@@ -932,50 +944,29 @@ definitions:
       `/clusters/{id}/statuses`.
 
 
-      Provides quick overview of all reported conditions and aggregated phase.
+      Provides quick overview of all reported conditions.
     properties:
       conditions:
+        description: >-
+          List of status conditions for the cluster.
+
+
+          **Mandatory conditions**: 
+
+          - `type: "Available"`: indicates if the cluster is accessible and
+          functional.
+
+          - `type: "Ready"`: indicates if the cluster has reached its desired
+          state.
+
+
+          These conditions are present immediately upon resource creation
+          (usually with status `Unknown`).
         items:
           $ref: '#/definitions/ResourceCondition'
+        minItems: 2
         type: array
-      last_transition_time:
-        description: |-
-          When cluster last transitioned (used by Sentinel for backoff)
-          Updated when conditions are reported if the phase changes
-        format: date-time
-        type: string
-      last_updated_time:
-        description: >-
-          Time of the last update
-
-          Updated when conditions are reported.
-
-          Computed as min(conditions[].last_updated_time) to detect stale
-          adapters.
-
-          Uses earliest (not latest) timestamp to ensure Sentinel can detect if
-          any adapter has stopped reporting.
-        format: date-time
-        type: string
-      observed_generation:
-        description: >-
-          Last generation processed
-
-          Updated when conditions are reported.
-
-          This will be the lowest value of each condition's observed_generation
-          values
-
-          The phase value is based on this generation
-        format: int32
-        type: integer
-      phase:
-        $ref: '#/definitions/ResourcePhase'
     required:
-      - phase
-      - last_transition_time
-      - observed_generation
-      - last_updated_time
       - conditions
     type: object
   ConditionStatus:
@@ -1090,6 +1081,22 @@ definitions:
           - created_time: '2021-01-01T10:00:00Z'
             last_transition_time: '2021-01-01T10:00:00Z'
             last_updated_time: '2021-01-01T10:00:00Z'
+            message: NodePool is accessible
+            observed_generation: 1
+            reason: ResourceAvailable
+            status: 'True'
+            type: Available
+          - created_time: '2021-01-01T10:00:00Z'
+            last_transition_time: '2021-01-01T10:00:00Z'
+            last_updated_time: '2021-01-01T10:00:00Z'
+            message: NodePool is ready
+            observed_generation: 1
+            reason: ResourceReady
+            status: 'True'
+            type: Ready
+          - created_time: '2021-01-01T10:00:00Z'
+            last_transition_time: '2021-01-01T10:00:00Z'
+            last_updated_time: '2021-01-01T10:00:00Z'
             message: NodePool validation passed
             observed_generation: 1
             reason: All validations passed
@@ -1103,10 +1110,6 @@ definitions:
             reason: NodePool provisioned successfully
             status: 'True'
             type: NodePoolSuccessful
-        last_transition_time: '2021-01-01T10:00:00Z'
-        last_updated_time: '2021-01-01T10:02:00Z'
-        observed_generation: 1
-        phase: Ready
       updated_by: user-123@example.com
       updated_time: '2021-01-01T00:00:00Z'
     properties:
@@ -1364,46 +1367,26 @@ definitions:
       This object is computed by the service and CANNOT be modified directly.
     properties:
       conditions:
+        description: >-
+          List of status conditions for the nodepool.
+
+
+          **Mandatory conditions**: 
+
+          - `type: "Available"`: indicates if the nodepool is accessible and
+          functional.
+
+          - `type: "Ready"`: indicates if the nodepool has reached its desired
+          state.
+
+
+          These conditions are present immediately upon resource creation
+          (usually with status `Unknown`).
         items:
           $ref: '#/definitions/ResourceCondition'
+        minItems: 2
         type: array
-      last_transition_time:
-        description: When NodePool last transitioned (used by Sentinel for backoff)
-        format: date-time
-        type: string
-      last_updated_time:
-        description: >-
-          Time of the last update
-
-          Updated when conditions are reported.
-
-          Computed as min(conditions[].last_updated_time) to detect stale
-          adapters.
-
-          Uses earliest (not latest) timestamp to ensure Sentinel can detect if
-          any adapter has stopped reporting.
-        format: date-time
-        type: string
-      observed_generation:
-        description: >-
-          Last generation processed
-
-          Updated when conditions are reported.
-
-          This will be the lowest value of each condition's observed_generation
-          values
-
-          The phase value is based on this generation
-        format: int32
-        minimum: 1
-        type: integer
-      phase:
-        $ref: '#/definitions/ResourcePhase'
     required:
-      - phase
-      - observed_generation
-      - last_transition_time
-      - last_updated_time
       - conditions
     type: object
   ObjectReference:
@@ -1485,13 +1468,6 @@ definitions:
       - created_time
       - last_updated_time
     type: object
-  ResourcePhase:
-    description: Phase of a resource (Cluster or NodePool)
-    enum:
-      - NotReady
-      - Ready
-      - Failed
-    type: string
   TaintSpec:
     properties:
       effect:
@@ -1579,7 +1555,7 @@ x-components:
       description: >-
         Filter results using TSL (Tree Search Language) query syntax.
 
-        Examples: `status.phase='NotReady'`, `name in ('c1','c2')`,
+        Examples: `status.conditions.Ready='True'`, `name in ('c1','c2')`,
         `labels.region='us-east'`
       in: query
       name: search

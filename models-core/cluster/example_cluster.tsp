@@ -12,11 +12,27 @@ const exampleCluster: Cluster = #{
   updated_time: "2021-01-01T00:00:00Z",
   generation: 1,
   status: #{
-    phase: ResourcePhase.Ready,
-    last_transition_time: "2021-01-01T00:00:00Z",
-    observed_generation: 1,
-    last_updated_time: "2021-01-01T00:00:00Z",
     conditions: #[
+      #{
+        type: "Available",
+        status: ConditionStatus.True,
+        reason: "ResourceAvailable",
+        message: "Cluster is accessible",
+        observed_generation: 1,
+        created_time: "2021-01-01T10:00:00Z",
+        last_updated_time: "2021-01-01T10:00:00Z",
+        last_transition_time: "2021-01-01T10:00:00Z",
+      },
+      #{
+        type: "Ready",
+        status: ConditionStatus.True,
+        reason: "ResourceReady",
+        message: "Cluster is ready",
+        observed_generation: 1,
+        created_time: "2021-01-01T10:00:00Z",
+        last_updated_time: "2021-01-01T10:00:00Z",
+        last_transition_time: "2021-01-01T10:00:00Z",
+      },
       #{
         type: "ValidationSuccessful",
         status: ConditionStatus.True,
