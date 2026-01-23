@@ -33,7 +33,7 @@ model ConditionBase {
 
   /**
    * When this condition last transitioned status (API-managed)
-   * Only updated when status changes (True/False/Unknown), not when reason/message changes
+   * Only updated when status changes (True/False), not when reason/message changes
    */
   @format("date-time") last_transition_time: string;
 }

@@ -30,7 +30,7 @@ model NodePoolStatus {
    * - `type: "Available"`: indicates if the nodepool is accessible and functional.
    * - `type: "Ready"`: indicates if the nodepool has reached its desired state.
    * 
-   * These conditions are present immediately upon resource creation (usually with status `Unknown`).
+   * These conditions are present immediately upon resource creation.
    */
   @minItems(2)
   conditions: ResourceCondition[];

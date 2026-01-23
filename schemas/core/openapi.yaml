@@ -50,7 +50,7 @@ paths:
 
         **Note**: The `status` object in the response is read-only and computed by the service.
         It is NOT part of the request body. Initially,
-        status.conditions will include mandatory "Available" and "Ready" conditions (usually with status `Unknown`).
+        status.conditions will include mandatory "Available" and "Ready" conditions.
       parameters: []
       responses:
         '201':
@@ -759,18 +759,18 @@ components:
         generation: 1
         status:
           conditions:
-            - type: Available
+            - type: Ready
               status: 'True'
-              reason: ResourceAvailable
-              message: Cluster is accessible
+              reason: ResourceReady
+              message: All conditions successful for current spec generation
               observed_generation: 1
               created_time: '2021-01-01T10:00:00Z'
               last_updated_time: '2021-01-01T10:00:00Z'
               last_transition_time: '2021-01-01T10:00:00Z'
-            - type: Ready
+            - type: Available
               status: 'True'
-              reason: ResourceReady
-              message: Cluster is ready
+              reason: ResourceAvailable
+              message: All conditions successful for observed_generation
               observed_generation: 1
               created_time: '2021-01-01T10:00:00Z'
               last_updated_time: '2021-01-01T10:00:00Z'
@@ -875,7 +875,7 @@ components:
             - `type: "Available"`: indicates if the cluster is accessible and functional.
             - `type: "Ready"`: indicates if the cluster has reached its desired state.
 
-            These conditions are present immediately upon resource creation (usually with status `Unknown`).
+            These conditions are present immediately upon resource creation.
       description: |-
         Cluster status computed from all status conditions.
 
@@ -1031,18 +1031,18 @@ components:
           href: https://api.hyperfleet.com/v1/clusters/cluster-123
         status:
           conditions:
-            - type: Available
+            - type: Ready
               status: 'True'
-              reason: ResourceAvailable
-              message: NodePool is accessible
+              reason: ResourceReady
+              message: All conditions successful for observed_generation
               observed_generation: 1
               created_time: '2021-01-01T10:00:00Z'
               last_updated_time: '2021-01-01T10:00:00Z'
               last_transition_time: '2021-01-01T10:00:00Z'
-            - type: Ready
+            - type: Available
               status: 'True'
-              reason: ResourceReady
-              message: NodePool is ready
+              reason: ResourceAvailable
+              message: All conditions successful for current spec generation
               observed_generation: 1
               created_time: '2021-01-01T10:00:00Z'
               last_updated_time: '2021-01-01T10:00:00Z'
@@ -1200,7 +1200,7 @@ components:
             - `type: "Available"`: indicates if the nodepool is accessible and functional.
             - `type: "Ready"`: indicates if the nodepool has reached its desired state.
 
-            These conditions are present immediately upon resource creation (usually with status `Unknown`).
+            These conditions are present immediately upon resource creation.
       description: |-
         NodePool status computed from all status conditions.
 

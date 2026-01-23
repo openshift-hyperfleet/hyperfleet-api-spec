@@ -36,20 +36,20 @@ const exampleCluster: Cluster = #{
   status: #{
     conditions: #[
       #{
-        type: ConditionType.Available,
+        type: "Ready",
         status: ConditionStatus.True,
-        reason: "ResourceAvailable",
-        message: "Cluster is accessible",
+        reason: "ResourceReady",
+        message: "All conditions successful for current spec generation",
         observed_generation: 1,
         created_time: "2021-01-01T10:00:00Z",
         last_updated_time: "2021-01-01T10:00:00Z",
         last_transition_time: "2021-01-01T10:00:00Z",
       },
       #{
-        type: "Ready",
+        type: ConditionType.Available,
         status: ConditionStatus.True,
-        reason: "ResourceReady",
-        message: "Cluster is ready",
+        reason: "ResourceAvailable",
+        message: "All conditions successful for observed_generation",
         observed_generation: 1,
         created_time: "2021-01-01T10:00:00Z",
         last_updated_time: "2021-01-01T10:00:00Z",

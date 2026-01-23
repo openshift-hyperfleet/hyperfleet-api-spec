@@ -113,7 +113,7 @@ paths:
         It is NOT part of the request body. Initially,
 
         status.conditions will include mandatory "Available" and "Ready"
-        conditions (usually with status `Unknown`).
+        conditions.
       operationId: postCluster
       summary: Create cluster
   '/api/hyperfleet/v1/clusters/{cluster_id}':
@@ -723,19 +723,19 @@ definitions:
           - created_time: '2021-01-01T10:00:00Z'
             last_transition_time: '2021-01-01T10:00:00Z'
             last_updated_time: '2021-01-01T10:00:00Z'
-            message: Cluster is accessible
-            observed_generation: 1
-            reason: ResourceAvailable
-            status: 'True'
-            type: Available
-          - created_time: '2021-01-01T10:00:00Z'
-            last_transition_time: '2021-01-01T10:00:00Z'
-            last_updated_time: '2021-01-01T10:00:00Z'
-            message: Cluster is ready
+            message: All conditions successful for current spec generation
             observed_generation: 1
             reason: ResourceReady
             status: 'True'
             type: Ready
+          - created_time: '2021-01-01T10:00:00Z'
+            last_transition_time: '2021-01-01T10:00:00Z'
+            last_updated_time: '2021-01-01T10:00:00Z'
+            message: All conditions successful for observed_generation
+            observed_generation: 1
+            reason: ResourceAvailable
+            status: 'True'
+            type: Available
           - created_time: '2021-01-01T10:00:00Z'
             last_transition_time: '2021-01-01T10:00:00Z'
             last_updated_time: '2021-01-01T10:00:00Z'
@@ -960,8 +960,7 @@ definitions:
           state.
 
 
-          These conditions are present immediately upon resource creation
-          (usually with status `Unknown`).
+          These conditions are present immediately upon resource creation.
         items:
           $ref: '#/definitions/ResourceCondition'
         minItems: 2
@@ -1081,19 +1080,19 @@ definitions:
           - created_time: '2021-01-01T10:00:00Z'
             last_transition_time: '2021-01-01T10:00:00Z'
             last_updated_time: '2021-01-01T10:00:00Z'
-            message: NodePool is accessible
-            observed_generation: 1
-            reason: ResourceAvailable
-            status: 'True'
-            type: Available
-          - created_time: '2021-01-01T10:00:00Z'
-            last_transition_time: '2021-01-01T10:00:00Z'
-            last_updated_time: '2021-01-01T10:00:00Z'
-            message: NodePool is ready
+            message: All conditions successful for current spec generation
             observed_generation: 1
             reason: ResourceReady
             status: 'True'
             type: Ready
+          - created_time: '2021-01-01T10:00:00Z'
+            last_transition_time: '2021-01-01T10:00:00Z'
+            last_updated_time: '2021-01-01T10:00:00Z'
+            message: All conditions successful for observed_generation
+            observed_generation: 1
+            reason: ResourceAvailable
+            status: 'True'
+            type: Available
           - created_time: '2021-01-01T10:00:00Z'
             last_transition_time: '2021-01-01T10:00:00Z'
             last_updated_time: '2021-01-01T10:00:00Z'
@@ -1380,8 +1379,7 @@ definitions:
           state.
 
 
-          These conditions are present immediately upon resource creation
-          (usually with status `Unknown`).
+          These conditions are present immediately upon resource creation.
         items:
           $ref: '#/definitions/ResourceCondition'
         minItems: 2

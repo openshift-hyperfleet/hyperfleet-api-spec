@@ -33,7 +33,7 @@ model ClusterStatus {
    * - `type: "Available"`: indicates if the cluster is accessible and functional.
    * - `type: "Ready"`: indicates if the cluster has reached its desired state.
    * 
-   * These conditions are present immediately upon resource creation (usually with status `Unknown`).
+   * These conditions are present immediately upon resource creation.
    */
   @minItems(2)
   conditions: ResourceCondition[];
