@@ -37,8 +37,8 @@ interface Clusters {
    * Create a new cluster resource.
    *
    * **Note**: The `status` object in the response is read-only and computed by the service.
-   * It is NOT part of the request body. Initially, status.phase will be "NotReady" and
-   * status.conditions will be empty until status conditions are POSTed.
+   * It is NOT part of the request body. Initially,
+   * status.conditions will include mandatory "Available" and "Ready" conditions.
    *
    */
   @route("")

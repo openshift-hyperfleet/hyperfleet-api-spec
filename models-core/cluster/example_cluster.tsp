@@ -1,5 +1,6 @@
 import "../../aliases-core.tsp";
 import "../../models/clusters/model.tsp";
+import "../../models/common/model.tsp";
 
 const exampleCluster: Cluster = #{
   kind: "Cluster",
@@ -12,26 +13,42 @@ const exampleCluster: Cluster = #{
   updated_time: "2021-01-01T00:00:00Z",
   generation: 1,
   status: #{
-    phase: ResourcePhase.Ready,
-    last_transition_time: "2021-01-01T00:00:00Z",
-    observed_generation: 1,
-    last_updated_time: "2021-01-01T00:00:00Z",
     conditions: #[
       #{
-        type: "ValidationSuccessful",
-        status: ConditionStatus.True,
-        reason: "All validations passed",
-        message: "All 30 validation tests passed",
+        type: ConditionType.Ready,
+        status: ResourceConditionStatus.True,
+        reason: ExampleReadyReason,
+        message: ExampleReadyMessage,
         observed_generation: 1,
         created_time: "2021-01-01T10:00:00Z",
         last_updated_time: "2021-01-01T10:00:00Z",
         last_transition_time: "2021-01-01T10:00:00Z",
       },
       #{
-        type: "DNSSuccessful",
-        status: ConditionStatus.True,
-        reason: "DNS configured",
-        message: "DNS records created for custom.domain.com",
+        type: ConditionType.Available,
+        status: ResourceConditionStatus.True,
+        reason: ExampleAvailableReason,
+        message: ExampleAvailableMessage,
+        observed_generation: 1,
+        created_time: "2021-01-01T10:00:00Z",
+        last_updated_time: "2021-01-01T10:00:00Z",
+        last_transition_time: "2021-01-01T10:00:00Z",
+      },
+      #{
+        type: "Adapter1Successful",
+        status: ResourceConditionStatus.True,
+        reason: ExampleAdapter1AvaliableReason,
+        message: ExampleAdapter1AvaliableMessage,
+        observed_generation: 1,
+        created_time: "2021-01-01T10:00:00Z",
+        last_updated_time: "2021-01-01T10:00:00Z",
+        last_transition_time: "2021-01-01T10:00:00Z",
+      },
+      #{
+        type: "Adapter2Successful",
+        status: ResourceConditionStatus.True,
+        reason: ExampleAdapter2AvaliableReason,
+        message: ExampleAdapter2AvaliableMessage,
         observed_generation: 1,
         created_time: "2021-01-01T10:01:00Z",
         last_updated_time: "2021-01-01T10:01:00Z",

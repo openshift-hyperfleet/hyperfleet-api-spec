@@ -22,29 +22,17 @@ model NodePoolBase {
  * This object is computed by the service and CANNOT be modified directly.
  */
 model NodePoolStatus {
-  phase: ResourcePhase;
 
   /**
-   * Last generation processed
-   * Updated when conditions are reported.
-   * This will be the lowest value of each condition's observed_generation values
-   * The phase value is based on this generation
+   * List of status conditions for the nodepool.
+   * 
+   * **Mandatory conditions**: 
+   * - `type: "Ready"`: Whether all adapters report successfully at the current generation.
+   * - `type: "Available"`: Aggregated adapter result for a common observed_generation.   
+   * 
+   * These conditions are present immediately upon resource creation.
    */
-  @minValue(1)
-  observed_generation: int32;
-
-  /**
-   * When NodePool last transitioned (used by Sentinel for backoff)
-   */
-  @format("date-time") last_transition_time: string;
-
-  /** Time of the last update
-   * Updated when conditions are reported.
-   * Computed as min(conditions[].last_updated_time) to detect stale adapters.
-   * Uses earliest (not latest) timestamp to ensure Sentinel can detect if any adapter has stopped reporting.
-   */
-  @format("date-time") last_updated_time: string;
-
+  @minItems(2)
   conditions: ResourceCondition[];
 }
 

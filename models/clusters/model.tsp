@@ -22,32 +22,20 @@ model ClusterBase {
  * This object is computed by the service and CANNOT be modified directly.
  * It is aggregated from condition updates posted to `/clusters/{id}/statuses`.
  *
- * Provides quick overview of all reported conditions and aggregated phase.
+ * Provides quick overview of all reported conditions.
  */
 model ClusterStatus {
-  phase: ResourcePhase;
 
   /**
-   * When cluster last transitioned (used by Sentinel for backoff)
-   * Updated when conditions are reported if the phase changes
+   * List of status conditions for the cluster.
+   * 
+   * **Mandatory conditions**: 
+   * - `type: "Ready"`: Whether all adapters report successfully at the current generation.
+   * - `type: "Available"`: Aggregated adapter result for a common observed_generation.   
+   * 
+   * These conditions are present immediately upon resource creation.
    */
-  @format("date-time") last_transition_time: string;
-
-  /**
-   * Last generation processed
-   * Updated when conditions are reported.
-   * This will be the lowest value of each condition's observed_generation values
-   * The phase value is based on this generation
-   */
-  observed_generation: int32;
-
-  /** Time of the last update
-   * Updated when conditions are reported.
-   * Computed as min(conditions[].last_updated_time) to detect stale adapters.
-   * Uses earliest (not latest) timestamp to ensure Sentinel can detect if any adapter has stopped reporting.
-   */
-  @format("date-time") last_updated_time: string;
-
+  @minItems(2)
   conditions: ResourceCondition[];
 }
 

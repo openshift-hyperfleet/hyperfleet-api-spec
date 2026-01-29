@@ -1,5 +1,6 @@
 import "../../aliases-core.tsp";
 import "../../models/nodepools/model.tsp";
+import "../../models/common/model.tsp";
 
 const exampleNodePool: NodePool = #{
   kind: "NodePool",
@@ -19,26 +20,42 @@ const exampleNodePool: NodePool = #{
     href: "https://api.hyperfleet.com/v1/clusters/cluster-123",
   },
   status: #{
-    phase: ResourcePhase.Ready,
-    last_transition_time: "2021-01-01T10:00:00Z",
-    observed_generation: 1,
-    last_updated_time: "2021-01-01T10:02:00Z",
     conditions: #[
       #{
-        type: "ValidationSuccessful",
-        status: ConditionStatus.True,
-        reason: "All validations passed",
-        message: "NodePool validation passed",
+        type: ConditionType.Ready,
+        status: ResourceConditionStatus.True,
+        reason: ExampleReadyReason,
+        message: ExampleReadyMessage,
         observed_generation: 1,
         created_time: "2021-01-01T10:00:00Z",
         last_updated_time: "2021-01-01T10:00:00Z",
         last_transition_time: "2021-01-01T10:00:00Z",
       },
       #{
-        type: "NodePoolSuccessful",
-        status: ConditionStatus.True,
-        reason: "NodePool provisioned successfully",
-        message: "NodePool has been scaled to desired count",
+        type: ConditionType.Available,
+        status: ResourceConditionStatus.True,
+        reason: ExampleAvailableReason,
+        message: ExampleAvailableMessage,
+        observed_generation: 1,
+        created_time: "2021-01-01T10:00:00Z",
+        last_updated_time: "2021-01-01T10:00:00Z",
+        last_transition_time: "2021-01-01T10:00:00Z",
+      },
+      #{
+        type: "Adapter1Successful",
+        status: ResourceConditionStatus.True,
+        reason: ExampleAdapter1AvaliableReason,
+        message: ExampleAdapter1AvaliableMessage,
+        observed_generation: 1,
+        created_time: "2021-01-01T10:00:00Z",
+        last_updated_time: "2021-01-01T10:00:00Z",
+        last_transition_time: "2021-01-01T10:00:00Z",
+      },
+      #{
+        type: "Adapter2Successful",
+        status: ResourceConditionStatus.True,
+        reason: ExampleAdapter2AvaliableReason,
+        message: ExampleAdapter2AvaliableMessage,
         observed_generation: 1,
         created_time: "2021-01-01T10:01:00Z",
         last_updated_time: "2021-01-01T10:01:00Z",
