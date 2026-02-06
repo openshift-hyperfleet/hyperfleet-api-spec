@@ -9,7 +9,7 @@ model ClusterBase {
    * Cluster name (unique)
    */
   @minLength(3)
-  @maxLength(63)
+  @maxLength(53)
   @pattern("^[a-z0-9]([-a-z0-9]*[a-z0-9])?$")
   name: string;
 

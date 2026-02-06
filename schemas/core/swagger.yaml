@@ -339,6 +339,51 @@ paths:
       description: Returns adapter status reports for this nodepool
       operationId: getNodePoolsStatuses
       summary: List all adapter statuses for nodepools
+    post:
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - description: Cluster ID
+          in: path
+          name: cluster_id
+          required: true
+          type: string
+        - in: path
+          name: nodepool_id
+          required: true
+          type: string
+        - in: body
+          name: body
+          required: true
+          schema:
+            $ref: '#/definitions/AdapterStatusCreateRequest'
+      responses:
+        '201':
+          description: >-
+            The request has succeeded and a new resource has been created as a
+            result.
+          schema:
+            $ref: '#/definitions/AdapterStatus'
+        '400':
+          description: The server could not understand the request due to invalid syntax.
+        '404':
+          description: The server cannot find the requested resource.
+        '409':
+          description: The request conflicts with the current state of the server.
+      description: >-
+        Adapter creates or updates its status report for this nodepool.
+
+        If adapter already has a status, it will be updated (upsert by adapter
+        name).
+
+
+        Response includes the full adapter status with all conditions.
+
+        Adapter should call this endpoint every time it evaluates the nodepool.
+      operationId: postNodePoolStatuses
+      summary: Create or update adapter status
   '/api/hyperfleet/v1/clusters/{cluster_id}/statuses':
     get:
       produces:
@@ -396,6 +441,49 @@ paths:
       description: Returns adapter status reports for this cluster
       operationId: getClusterStatuses
       summary: List all adapter statuses for cluster
+    post:
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - description: Cluster ID
+          in: path
+          name: cluster_id
+          required: true
+          type: string
+        - in: body
+          name: body
+          required: true
+          schema:
+            $ref: '#/definitions/AdapterStatusCreateRequest'
+      responses:
+        '201':
+          description: >-
+            The request has succeeded and a new resource has been created as a
+            result.
+          schema:
+            $ref: '#/definitions/AdapterStatus'
+        '400':
+          description: The server could not understand the request due to invalid syntax.
+        '404':
+          description: The server cannot find the requested resource.
+        '409':
+          description: The request conflicts with the current state of the server.
+      security:
+        - BearerAuth: []
+      description: >-
+        Adapter creates or updates its status report for this cluster.
+
+        If adapter already has a status, it will be updated (upsert by adapter
+        name).
+
+
+        Response includes the full adapter status with all conditions.
+
+        Adapter should call this endpoint every time it evaluates the cluster.
+      operationId: postClusterStatuses
+      summary: Create or update adapter status
   /api/hyperfleet/v1/nodepools:
     get:
       produces:
@@ -452,17 +540,6 @@ paths:
       operationId: getNodePools
       summary: List all nodepools for cluster
 definitions:
-  AcceleratorSpec:
-    properties:
-      count:
-        minimum: 1
-        type: integer
-      type:
-        type: string
-    required:
-      - type
-      - count
-    type: object
   AdapterCondition:
     description: >-
       Condition in AdapterStatus
@@ -602,6 +679,84 @@ definitions:
       - created_time
       - last_report_time
     type: object
+  AdapterStatusCreateRequest:
+    description: Request payload for creating/updating adapter status
+    example:
+      adapter: validator
+      conditions:
+        - message: This adapter1 is available
+          reason: This adapter1 is available
+          status: 'True'
+          type: Available
+        - message: Adapter1 validation job applied successfully
+          reason: Validation job applied
+          status: 'True'
+          type: Applied
+        - message: All adapter1 runtime operations completed successfully
+          reason: All adapter1 operations completed successfully
+          status: 'True'
+          type: Health
+      data:
+        validation_results:
+          failed: 0
+          passed: 30
+          total_tests: 30
+      metadata:
+        attempt: 1
+        completed_time: '2021-01-01T10:02:00Z'
+        duration: 2m
+        job_name: validator-job-abc123
+        job_namespace: hyperfleet-system
+        started_time: '2021-01-01T10:00:00Z'
+      observed_generation: 1
+      observed_time: '2021-01-01T10:00:00Z'
+    properties:
+      adapter:
+        description: 'Adapter name (e.g., "validator", "dns", "provisioner")'
+        type: string
+      conditions:
+        items:
+          $ref: '#/definitions/ConditionRequest'
+        type: array
+      data:
+        additionalProperties: {}
+        description: Adapter-specific data (structure varies by adapter type)
+        type: object
+      metadata:
+        description: Job execution metadata
+        properties:
+          attempt:
+            format: int32
+            type: integer
+          completed_time:
+            format: date-time
+            type: string
+          duration:
+            type: string
+          job_name:
+            type: string
+          job_namespace:
+            type: string
+          started_time:
+            format: date-time
+            type: string
+        type: object
+      observed_generation:
+        description: Which generation of the resource this status reflects
+        format: int32
+        type: integer
+      observed_time:
+        description: |-
+          When the adapter observed this resource state
+          API will use this to set AdapterStatus.last_report_time
+        format: date-time
+        type: string
+    required:
+      - adapter
+      - observed_generation
+      - observed_time
+      - conditions
+    type: object
   AdapterStatusList:
     description: List of adapter statuses with pagination metadata
     example:
@@ -656,29 +811,6 @@ definitions:
       - total
       - items
     type: object
-  AutoscalingSpec:
-    properties:
-      enabled:
-        type: boolean
-      maxNodes:
-        minimum: 1
-        type: integer
-      minNodes:
-        minimum: 0
-        type: integer
-      scaleDownDelay:
-        type: string
-      scaleUpDelay:
-        type: string
-      targetCPUUtilization:
-        maximum: 100
-        minimum: 1
-        type: integer
-      targetMemoryUtilization:
-        maximum: 100
-        minimum: 1
-        type: integer
-    type: object
   BearerAuth:
     properties:
       scheme:
@@ -705,26 +837,7 @@ definitions:
         environment: production
         team: platform
       name: cluster-123
-      spec:
-        dns:
-          baseDomain: example.com
-        networking:
-          clusterNetwork:
-            - cidr: 10.10.0.0/16
-              hostPrefix: 24
-          serviceNetwork:
-            - 10.96.0.0/12
-        platform:
-          gcp:
-            network: network-123
-            projectID: project-123
-            region: us-central1
-            subnet: subnet-123
-            zone: us-central1-a
-          type: gcp
-        release:
-          image: 'registry.redhat.io/openshift4/ose-cluster-version-operator:v4.14.0'
-          version: 4.14.0
+      spec: {}
       status:
         conditions:
           - created_time: '2021-01-01T10:00:00Z'
@@ -822,26 +935,7 @@ definitions:
         environment: production
         team: platform
       name: cluster-123
-      spec:
-        dns:
-          baseDomain: example.com
-        networking:
-          clusterNetwork:
-            - cidr: 10.10.0.0/16
-              hostPrefix: 24
-          serviceNetwork:
-            - 10.96.0.0/12
-        platform:
-          gcp:
-            network: network-123
-            projectID: project-123
-            region: us-central1
-            subnet: subnet-123
-            zone: us-central1-a
-          type: gcp
-        release:
-          image: 'registry.redhat.io/openshift4/ose-cluster-version-operator:v4.14.0'
-          version: 4.14.0
+      spec: {}
     properties:
       href:
         description: Resource URI
@@ -893,52 +987,11 @@ definitions:
       - total
       - items
     type: object
-  ClusterNetworkEntry:
-    properties:
-      cidr:
-        type: string
-      hostPrefix:
-        type: integer
-    type: object
-  ClusterPlatform:
-    properties:
-      network:
-        type: string
-      projectID:
-        type: string
-      region:
-        type: string
-      subnet:
-        type: string
-      zone:
-        type: string
-    type: object
-  ClusterPlatformSpec:
-    properties:
-      gcp:
-        $ref: '#/definitions/ClusterPlatform'
-      type:
-        enum:
-          - gcp
-        type: string
-    required:
-      - type
-      - gcp
-    type: object
   ClusterSpec:
-    properties:
-      dns:
-        $ref: '#/definitions/DNSSpec'
-      infraID:
-        type: string
-      networking:
-        $ref: '#/definitions/NetworkingSpec'
-      platform:
-        $ref: '#/definitions/ClusterPlatformSpec'
-      release:
-        $ref: '#/definitions/ReleaseSpec'
-    required:
-      - platform
+    description: |-
+      Core cluster specification.
+      Accepts any properties as the spec is provider-agnostic.
+      This is represented as a simple object to allow flexibility.
     type: object
   ClusterStatus:
     description: >-
@@ -975,10 +1028,24 @@ definitions:
     required:
       - conditions
     type: object
-  DNSSpec:
+  ConditionRequest:
+    description: >-
+      Condition data for create/update requests (from adapters)
+
+      observed_generation and observed_time are now at
+      AdapterStatusCreateRequest level
     properties:
-      baseDomain:
+      message:
         type: string
+      reason:
+        type: string
+      status:
+        $ref: '#/definitions/AdapterConditionStatus'
+      type:
+        type: string
+    required:
+      - type
+      - status
     type: object
   Error:
     description: RFC 9457 Problem Details error format with HyperFleet extensions
@@ -1028,17 +1095,6 @@ definitions:
       - title
       - status
     type: object
-  NetworkingSpec:
-    properties:
-      clusterNetwork:
-        items:
-          $ref: '#/definitions/ClusterNetworkEntry'
-        type: array
-      serviceNetwork:
-        items:
-          type: string
-        type: array
-    type: object
   NodePool:
     example:
       created_by: user-123@example.com
@@ -1055,60 +1111,41 @@ definitions:
         href: 'https://api.hyperfleet.com/v1/clusters/cluster-123'
         id: cluster-123
         kind: Cluster
-      spec:
-        autoscaling:
-          enabled: true
-          maxNodes: 10
-          minNodes: 1
-          targetCPUUtilization: 80
-        nodeCount: 3
-        platform:
-          gcp:
-            diskSize: 100
-            diskType: pd-standard
-            labels:
-              managedby: hyperfleet
-              team: platform
-            machineType: n1-standard-4
-            preemptible: false
-            zones:
-              - us-central1-a
-              - us-central1-b
-          type: gcp
+      spec: {}
       status:
         conditions:
           - created_time: '2021-01-01T10:00:00Z'
             last_transition_time: '2021-01-01T10:00:00Z'
             last_updated_time: '2021-01-01T10:00:00Z'
-            message: All conditions successful for current spec generation
+            message: All adapters reported Ready True for the current generation
             observed_generation: 1
-            reason: ResourceReady
+            reason: All adapters reported Ready True for the current generation
             status: 'True'
             type: Ready
           - created_time: '2021-01-01T10:00:00Z'
             last_transition_time: '2021-01-01T10:00:00Z'
             last_updated_time: '2021-01-01T10:00:00Z'
-            message: All conditions successful for observed_generation
+            message: All adapters reported Available True for the same generation
             observed_generation: 1
-            reason: ResourceAvailable
+            reason: All adapters reported Available True for the same generation
             status: 'True'
             type: Available
           - created_time: '2021-01-01T10:00:00Z'
             last_transition_time: '2021-01-01T10:00:00Z'
             last_updated_time: '2021-01-01T10:00:00Z'
-            message: NodePool validation passed
+            message: This adapter1 is available
             observed_generation: 1
-            reason: All validations passed
+            reason: This adapter1 is available
             status: 'True'
-            type: ValidationSuccessful
+            type: Adapter1Successful
           - created_time: '2021-01-01T10:01:00Z'
             last_transition_time: '2021-01-01T10:01:00Z'
             last_updated_time: '2021-01-01T10:01:00Z'
-            message: NodePool has 3 nodes running
+            message: This adapter2 is available
             observed_generation: 1
-            reason: NodePool provisioned successfully
+            reason: This adapter2 is available
             status: 'True'
-            type: NodePoolSuccessful
+            type: Adapter2Successful
       updated_by: user-123@example.com
       updated_time: '2021-01-01T00:00:00Z'
     properties:
@@ -1174,26 +1211,7 @@ definitions:
         environment: production
         pooltype: worker
       name: worker-pool-1
-      spec:
-        autoscaling:
-          enabled: true
-          maxNodes: 10
-          minNodes: 1
-          targetCPUUtilization: 80
-        nodeCount: 3
-        platform:
-          gcp:
-            diskSize: 100
-            diskType: pd-standard
-            labels:
-              managedby: hyperfleet
-              team: platform
-            machineType: n1-standard-4
-            preemptible: false
-            zones:
-              - us-central1-a
-              - us-central1-b
-          type: gcp
+      spec: {}
     properties:
       href:
         description: Resource URI
@@ -1303,61 +1321,11 @@ definitions:
       - total
       - items
     type: object
-  NodePoolPlatform:
-    properties:
-      accelerators:
-        items:
-          $ref: '#/definitions/AcceleratorSpec'
-        type: array
-      diskSize:
-        minimum: 10
-        type: integer
-      diskType:
-        enum:
-          - pd-standard
-          - pd-ssd
-          - pd-balanced
-        type: string
-      labels:
-        additionalProperties:
-          type: string
-        type: object
-      machineType:
-        type: string
-      preemptible:
-        type: boolean
-      taints:
-        items:
-          $ref: '#/definitions/TaintSpec'
-        type: array
-      zones:
-        items:
-          type: string
-        type: array
-    type: object
-  NodePoolPlatformSpec:
-    properties:
-      gcp:
-        $ref: '#/definitions/NodePoolPlatform'
-      type:
-        enum:
-          - gcp
-        type: string
-    required:
-      - type
-      - gcp
-    type: object
   NodePoolSpec:
-    properties:
-      autoscaling:
-        $ref: '#/definitions/AutoscalingSpec'
-      nodeCount:
-        minimum: 0
-        type: integer
-      platform:
-        $ref: '#/definitions/NodePoolPlatformSpec'
-    required:
-      - platform
+    description: |-
+      Core nodepool specification.
+      Accepts any properties as the spec is provider-agnostic.
+      This is represented as a simple object to allow flexibility.
     type: object
   NodePoolStatus:
     description: |-
@@ -1404,13 +1372,6 @@ definitions:
       - asc
       - desc
     type: string
-  ReleaseSpec:
-    properties:
-      image:
-        type: string
-      version:
-        type: string
-    type: object
   ResourceCondition:
     description: >-
       Condition in Cluster/NodePool status
@@ -1472,22 +1433,6 @@ definitions:
       - 'True'
       - 'False'
     type: string
-  TaintSpec:
-    properties:
-      effect:
-        enum:
-          - NoSchedule
-          - PreferNoSchedule
-          - NoExecute
-        type: string
-      key:
-        type: string
-      value:
-        type: string
-    required:
-      - key
-      - effect
-    type: object
   ValidationError:
     description: Field-level validation error detail
     properties:
