@@ -607,7 +607,7 @@ components:
         name:
           type: string
           minLength: 3
-          maxLength: 63
+          maxLength: 53
           pattern: ^[a-z0-9]([-a-z0-9]*[a-z0-9])?$
           description: Cluster name (unique)
         spec:
@@ -721,7 +721,7 @@ components:
         name:
           type: string
           minLength: 3
-          maxLength: 63
+          maxLength: 53
           pattern: ^[a-z0-9]([-a-z0-9]*[a-z0-9])?$
           description: Cluster name (unique)
         spec:
@@ -942,7 +942,7 @@ components:
         name:
           type: string
           minLength: 3
-          maxLength: 63
+          maxLength: 15
           pattern: ^[a-z0-9]([-a-z0-9]*[a-z0-9])?$
           description: NodePool name (unique in a cluster)
         spec:
@@ -1062,7 +1062,7 @@ components:
         name:
           type: string
           minLength: 3
-          maxLength: 63
+          maxLength: 15
           pattern: ^[a-z0-9]([-a-z0-9]*[a-z0-9])?$
           description: NodePool name (unique in a cluster)
         spec:
@@ -1122,7 +1122,7 @@ components:
         name:
           type: string
           minLength: 3
-          maxLength: 63
+          maxLength: 15
           pattern: ^[a-z0-9]([-a-z0-9]*[a-z0-9])?$
           description: NodePool name (unique in a cluster)
         spec:
