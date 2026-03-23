@@ -42,6 +42,15 @@ model NodePool {
   ...APICreatedResource;
 
   /**
+   * RFC4122 UUID identifier for the nodepool (immutable, assigned at creation).
+   * This provides a stable, standards-compliant identifier for platform integrations
+   * that require UUID format.
+   */
+  @format("uuid")
+  @example("7c9e6679-7425-40de-944b-e07fc1f90ae7")
+  uuid?: string;
+
+  /**
    * Generation field is updated on customer updates, reflecting the version of the "intent" of the customer
    */
   @minValue(1)
