@@ -6,6 +6,15 @@ model ClusterBase {
   ...APIResource;
 
   /**
+   * RFC4122 UUID identifier for the cluster (immutable, assigned at creation).
+   * This provides a stable, standards-compliant identifier for platform integrations
+   * that require UUID format (e.g., Hypershift spec.clusterID).
+   */
+  @format("uuid")
+  @example("550e8400-e29b-41d4-a716-446655440000")
+  uuid?: string;
+
+  /**
    * Cluster name (unique)
    */
   @minLength(3)
