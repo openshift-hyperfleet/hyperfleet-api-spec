@@ -972,18 +972,6 @@ definitions:
         type: string
       spec:
         $ref: '#/definitions/ClusterSpec'
-      uuid:
-        description: >-
-          RFC4122 UUID identifier for the cluster (immutable, assigned at
-          creation).
-
-          This provides a stable, standards-compliant identifier for platform
-          integrations
-
-          that require UUID format (e.g., Hypershift spec.clusterID).
-        example: 550e8400-e29b-41d4-a716-446655440000
-        format: uuid
-        type: string
     required:
       - name
       - spec
@@ -1273,18 +1261,6 @@ definitions:
         type: string
       spec:
         $ref: '#/definitions/NodePoolSpec'
-      uuid:
-        description: >-
-          RFC4122 UUID identifier for the nodepool (immutable, assigned at
-          creation).
-
-          This provides a stable, standards-compliant identifier for platform
-          integrations
-
-          that require UUID format.
-        example: 7c9e6679-7425-40de-944b-e07fc1f90ae7
-        format: uuid
-        type: string
     required:
       - name
       - spec
