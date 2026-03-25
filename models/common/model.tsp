@@ -3,6 +3,7 @@ import "@typespec/openapi";
 using Http;
 using OpenAPI;
 
+/** Resource identifier in RFC4122 UUID v7 format (time-ordered, e.g., "019466a0-8f8e-7abc-9def-0123456789ab") */
 alias Identifier = string;
 
 alias KindCluster = "Cluster";

@@ -4,8 +4,8 @@ import "../../models/common/model.tsp";
 
 const exampleNodePool: NodePool = #{
   kind: "NodePool",
-  id: "nodepool-123",
-  href: "https://api.hyperfleet.com/v1/nodepools/nodepool-123",
+  id: "019466a1-2b3c-7def-8abc-456789abcdef",
+  href: "https://api.hyperfleet.com/v1/nodepools/019466a1-2b3c-7def-8abc-456789abcdef",
   name: "worker-pool-1",
   labels: #{ environment: "production", pooltype: "worker" },
   spec: #{},
@@ -15,9 +15,9 @@ const exampleNodePool: NodePool = #{
   created_by: "user-123@example.com",
   updated_by: "user-123@example.com",
   owner_references: #{
-    id: "cluster-123",
+    id: "019466a0-8f8e-7abc-9def-0123456789ab",
     kind: "Cluster",
-    href: "https://api.hyperfleet.com/v1/clusters/cluster-123",
+    href: "https://api.hyperfleet.com/v1/clusters/019466a0-8f8e-7abc-9def-0123456789ab",
   },
   status: #{
     conditions: #[
