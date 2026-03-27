@@ -14,22 +14,26 @@ Thank you for your interest in contributing to the HyperFleet API specification!
 ### Initial Setup
 
 1. Clone the repository:
+
    ```bash
    git clone https://github.com/openshift-hyperfleet/hyperfleet-api-spec.git
    cd hyperfleet-api-spec
    ```
 
 2. Install TypeSpec compiler globally:
+
    ```bash
    npm install -g @typespec/compiler
    ```
 
 3. Install project dependencies:
+
    ```bash
    npm install
    ```
 
 4. Verify your setup by building the schemas:
+
    ```bash
    npm run build:core
    npm run build:gcp
@@ -97,15 +101,19 @@ cat schemas/core/openapi.yaml
 ### Visual Studio Code Extension
 
 If using VS Code with the TypeSpec extension:
+
 - The extension may show errors for non-active provider types (this is expected)
 - Use "Emit from TypeSpec" command to compile
 - The `build-schema.sh` script always works regardless of extension errors
+
+The VSCode extension has a nice feature when doing right click on the main.tsp and selecting "Preview API Documentation", it will display the Swagger rendered from the spec in a side panel.
 
 ## Common Tasks
 
 ### Adding a New Model
 
 1. Create the model file in the appropriate directory:
+
    ```typescript
    // models/newresource/model.tsp
    import "@typespec/http";
@@ -123,6 +131,7 @@ If using VS Code with the TypeSpec extension:
 ### Adding a New Service Endpoint
 
 1. Create or edit a service file in `services/`:
+
    ```typescript
    // services/newservice.tsp
    import "@typespec/http";
@@ -138,6 +147,7 @@ If using VS Code with the TypeSpec extension:
    ```
 
 2. Import in `main.tsp`:
+
    ```typescript
    import "./services/newservice.tsp";
    ```
@@ -147,11 +157,13 @@ If using VS Code with the TypeSpec extension:
 ### Adding a New Provider
 
 1. Create provider model directory:
+
    ```bash
    mkdir -p models-aws/cluster
    ```
 
 2. Define provider-specific models:
+
    ```typescript
    // models-aws/cluster/model.tsp
    model AWSClusterSpec {
@@ -161,6 +173,7 @@ If using VS Code with the TypeSpec extension:
    ```
 
 3. Create provider aliases file:
+
    ```typescript
    // aliases-aws.tsp
    import "./models-aws/cluster/model.tsp";
@@ -186,16 +199,10 @@ The VS Code extension uses whichever provider `aliases.tsp` points to.
 
 ## Commit Standards
 
-We follow the [Conventional Commits](https://www.conventionalcommits.org/) specification:
-
-- `feat:` - New feature or endpoint
-- `fix:` - Bug fix
-- `docs:` - Documentation changes
-- `refactor:` - Code refactoring without functionality change
-- `test:` - Adding or updating tests
-- `chore:` - Build process or tooling changes
+Please refer to the architecture repo [commit standard](https://github.com/openshift-hyperfleet/architecture/blob/main/hyperfleet/standards/commit-standard.md)
 
 **Examples:**
+
 ```
 feat: add NodePool autoscaling fields to GCP spec
 fix: correct required fields in ClusterStatus model
@@ -208,6 +215,7 @@ refactor: consolidate common status fields
 See [RELEASING.md](RELEASING.md) for detailed release instructions.
 
 **Quick summary:**
+
 1. Build schemas: `npm run build:all`
 2. Commit changes
 3. Create tag: `git tag -a vX.Y.Z -m "Release vX.Y.Z"`
