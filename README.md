@@ -252,6 +252,8 @@ The HyperFleet API provides simple CRUD operations for managing cluster resource
 - **Simple CRUD only**: No business logic, no event creation
 - **Separation of concerns**: API layer focuses on data persistence; orchestration logic is handled by external components
 
+For broader HyperFleet architecture context and documentation standards, see the [HyperFleet Architecture Repository](https://github.com/openshift-hyperfleet/architecture).
+
 ## Adding a New Provider
 
 To add a new provider (e.g., AWS):
@@ -307,6 +309,14 @@ To add a new service (e.g., with additional endpoints):
 - `@typespec/openapi3` - OpenAPI 3.0 emitter
 - `api-spec-converter` - Converts OpenAPI 3.0 to OpenAPI 2.0 (Swagger)
 
+## Contributing
+
+We welcome contributions! Please see [CONTRIBUTING.md](CONTRIBUTING.md) for:
+- Development setup and workflow
+- Repository structure details
+- Testing guidelines
+- Commit standards
+- Pull request process
 
 ## Developing with the Visual Studio Typespec extension
 
