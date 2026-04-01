@@ -6,6 +6,7 @@ const exampleNodePool: NodePool = #{
   kind: "NodePool",
   id: "nodepool-123",
   href: "https://api.hyperfleet.com/v1/nodepools/nodepool-123",
+  uuid: "7c9e6679-7425-40de-944b-e07fc1f90ae7",
   name: "worker-pool-1",
   labels: #{ environment: "production", pooltype: "worker" },
   spec: #{},
