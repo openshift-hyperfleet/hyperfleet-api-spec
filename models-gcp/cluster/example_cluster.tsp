@@ -4,8 +4,8 @@ import "../../models/common/model.tsp";
 
 const exampleCluster: Cluster = #{
   kind: "Cluster",
-  id: "cluster-123",
-  href: "https://api.hyperfleet.com/v1/clusters/cluster-123",
+  id: "019466a0-8f8e-7abc-9def-0123456789ab",
+  href: "https://api.hyperfleet.com/v1/clusters/019466a0-8f8e-7abc-9def-0123456789ab",
   name: "cluster-123",
   labels: #{ environment: "production", team: "platform" },
   spec: #{
