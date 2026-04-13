@@ -31,8 +31,6 @@ const exampleCluster: Cluster = #{
       baseDomain: "example.com",
     },
   },
-  created_time: "2021-01-01T00:00:00Z",
-  updated_time: "2021-01-01T00:00:00Z",
   generation: 1,
   status: #{
     conditions: #[
@@ -78,6 +76,10 @@ const exampleCluster: Cluster = #{
       }
     ],
   },
+  created_time: "2021-01-01T00:00:00Z",
+  updated_time: "2021-01-01T00:00:00Z",
+  deleted_time: "2021-01-01T00:00:00Z",
   created_by: "user-123@example.com",
   updated_by: "user-123@example.com",
+  deleted_by: "user-123@example.com",
 };

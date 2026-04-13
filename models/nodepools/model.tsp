@@ -39,14 +39,14 @@ model NodePoolStatus {
 @example(exampleNodePool)
 model NodePool {
   ...NodePoolBase;
-  ...APICreatedResource;
+  ...APIMetadata;
 
   /**
    * Generation field is updated on customer updates, reflecting the version of the "intent" of the customer
    */
   @minValue(1)
   generation: int32;
-
+  
   owner_references: ObjectReference;
   status: NodePoolStatus;
 }

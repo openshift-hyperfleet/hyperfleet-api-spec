@@ -52,4 +52,22 @@ interface Clusters {
   } | Error 
     | BadRequestResponse;
 
+  /**
+   * Marks the cluster for deletion by setting deleted_time to the current time, cascades to its nodepools.
+   * The cluster remains in the database until adapters confirm cleanup.
+   * Returns the updated cluster with deleted_time set.
+   */
+  @route("/{cluster_id}")
+  @delete
+  @summary("Request cluster deletion")
+  @operationId("deleteClusterById")
+  deleteClusterById(
+    @path cluster_id: string,
+  ): {
+    @statusCode statusCode: 202;
+    @body cluster: Cluster;
+  } | NotFoundResponse
+    | Error
+    | BadRequestResponse;
+
 }

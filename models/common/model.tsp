@@ -111,11 +111,13 @@ model APIResource {
     /** labels for the API resource as pairs of name:value strings */
     labels?: Record<string>;
 }
-model APICreatedResource {
+model APIMetadata {
     @format("date-time") created_time: string;
     @format("date-time") updated_time: string;
+    @format("date-time") deleted_time?: string;
     @format("email") created_by: string;
     @format("email") updated_by: string;
+    @format("email") deleted_by?: string;
 }
 
 model Page<Kind> {

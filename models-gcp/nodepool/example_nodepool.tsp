@@ -31,10 +31,6 @@ const exampleNodePool: NodePool = #{
       targetCPUUtilization: 80,
     },
   },
-  created_time: "2021-01-01T00:00:00Z",
-  updated_time: "2021-01-01T00:00:00Z",
-  created_by: "user-123@example.com",
-  updated_by: "user-123@example.com",
   owner_references: #{
     id: "019466a0-8f8e-7abc-9def-0123456789ab",
     kind: "Cluster",
@@ -84,4 +80,10 @@ const exampleNodePool: NodePool = #{
       },
     ],
   },
+  created_time: "2021-01-01T00:00:00Z",
+  updated_time: "2021-01-01T00:00:00Z",
+  deleted_time: "2021-01-01T00:00:00Z",
+  created_by: "user-123@example.com",
+  updated_by: "user-123@example.com",
+  deleted_by: "user-123@example.com",
 };

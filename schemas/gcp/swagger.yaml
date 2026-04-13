@@ -16,7 +16,7 @@ info:
     name: Apache 2.0
     url: 'https://www.apache.org/licenses/LICENSE-2.0'
   title: HyperFleet API
-  version: 1.0.5
+  version: 1.0.6
 host: hyperfleet.redhat.com
 basePath: /
 schemes:
@@ -117,6 +117,41 @@ paths:
       operationId: postCluster
       summary: Create cluster
   '/api/hyperfleet/v1/clusters/{cluster_id}':
+    delete:
+      produces:
+        - application/json
+        - application/problem+json
+      parameters:
+        - in: path
+          name: cluster_id
+          required: true
+          type: string
+      responses:
+        '202':
+          description: >-
+            The request has been accepted for processing, but processing has not
+            yet completed.
+          schema:
+            $ref: '#/definitions/Cluster'
+        '400':
+          description: The server could not understand the request due to invalid syntax.
+        '404':
+          description: The server cannot find the requested resource.
+        default:
+          description: An unexpected error response.
+          schema:
+            $ref: '#/definitions/Error'
+      security:
+        - BearerAuth: []
+      description: >-
+        Marks the cluster for deletion by setting deleted_time to the current
+        time, cascades to its nodepools.
+
+        The cluster remains in the database until adapters confirm cleanup.
+
+        Returns the updated cluster with deleted_time set.
+      operationId: deleteClusterById
+      summary: Request cluster deletion
     get:
       produces:
         - application/json
@@ -246,6 +281,48 @@ paths:
       operationId: createNodePool
       summary: Create nodepool
   '/api/hyperfleet/v1/clusters/{cluster_id}/nodepools/{nodepool_id}':
+    delete:
+      produces:
+        - application/json
+        - application/problem+json
+      parameters:
+        - description: Cluster ID
+          in: path
+          name: cluster_id
+          required: true
+          type: string
+        - description: NodePool ID
+          in: path
+          name: nodepool_id
+          required: true
+          type: string
+      responses:
+        '202':
+          description: >-
+            The request has been accepted for processing, but processing has not
+            yet completed.
+          schema:
+            $ref: '#/definitions/NodePool'
+        '400':
+          description: The server could not understand the request due to invalid syntax.
+        '404':
+          description: The server cannot find the requested resource.
+        default:
+          description: An unexpected error response.
+          schema:
+            $ref: '#/definitions/Error'
+      security:
+        - BearerAuth: []
+      description: >-
+        Marks the nodepool for deletion by setting deleted_time to the current
+        time
+
+        and cascades to its adapter_statuses. Does not affect the parent
+        cluster.
+
+        Returns the updated nodepool with deleted_time set.
+      operationId: deleteNodePoolById
+      summary: Request nodepool deletion
     get:
       produces:
         - application/json
@@ -697,6 +774,8 @@ definitions:
     example:
       created_by: user-123@example.com
       created_time: '2021-01-01T00:00:00Z'
+      deleted_by: user-123@example.com
+      deleted_time: '2021-01-01T00:00:00Z'
       generation: 1
       href: >-
         https://api.hyperfleet.com/v1/clusters/019466a0-8f8e-7abc-9def-0123456789ab
@@ -767,6 +846,12 @@ definitions:
         format: email
         type: string
       created_time:
+        format: date-time
+        type: string
+      deleted_by:
+        format: email
+        type: string
+      deleted_time:
         format: date-time
         type: string
       generation:
@@ -1044,6 +1129,8 @@ definitions:
     example:
       created_by: user-123@example.com
       created_time: '2021-01-01T00:00:00Z'
+      deleted_by: user-123@example.com
+      deleted_time: '2021-01-01T00:00:00Z'
       generation: 1
       href: >-
         https://api.hyperfleet.com/v1/nodepools/019466a1-2b3c-7def-8abc-456789abcdef
@@ -1119,6 +1206,12 @@ definitions:
         format: email
         type: string
       created_time:
+        format: date-time
+        type: string
+      deleted_by:
+        format: email
+        type: string
+      deleted_time:
         format: date-time
         type: string
       generation:
@@ -1230,6 +1323,12 @@ definitions:
         format: email
         type: string
       created_time:
+        format: date-time
+        type: string
+      deleted_by:
+        format: email
+        type: string
+      deleted_time:
         format: date-time
         type: string
       generation:
