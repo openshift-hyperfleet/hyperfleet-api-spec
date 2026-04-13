@@ -46,7 +46,11 @@ model NodePool {
    */
   @minValue(1)
   generation: int32;
-  
+
+  @doc("Timestamp when deletion was requested; null if not marked for deletion")
+  @format("date-time") deleted_time?: string;
+  @format("email") deleted_by?: string;
+
   owner_references: ObjectReference;
   status: NodePoolStatus;
 }

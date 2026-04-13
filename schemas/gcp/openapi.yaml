@@ -689,16 +689,10 @@ components:
         updated_time:
           type: string
           format: date-time
-        deleted_time:
-          type: string
-          format: date-time
         created_by:
           type: string
           format: email
         updated_by:
-          type: string
-          format: email
-        deleted_by:
           type: string
           format: email
         generation:
@@ -706,6 +700,14 @@ components:
           format: int32
           minimum: 1
           description: Generation field is updated on customer updates, reflecting the version of the "intent" of the customer
+        deleted_time:
+          type: string
+          format: date-time
+          description: Timestamp when deletion was requested; null if not marked for deletion
+        deleted_by:
+          type: string
+          format: email
+          description: Identity that requested deletion
         status:
           $ref: '#/components/schemas/ClusterStatus'
       example:
@@ -1032,16 +1034,10 @@ components:
         updated_time:
           type: string
           format: date-time
-        deleted_time:
-          type: string
-          format: date-time
         created_by:
           type: string
           format: email
         updated_by:
-          type: string
-          format: email
-        deleted_by:
           type: string
           format: email
         generation:
@@ -1049,6 +1045,13 @@ components:
           format: int32
           minimum: 1
           description: Generation field is updated on customer updates, reflecting the version of the "intent" of the customer
+        deleted_time:
+          type: string
+          format: date-time
+          description: Timestamp when deletion was requested; null if not marked for deletion
+        deleted_by:
+          type: string
+          format: email
         owner_references:
           $ref: '#/components/schemas/ObjectReference'
         status:
@@ -1220,16 +1223,10 @@ components:
         updated_time:
           type: string
           format: date-time
-        deleted_time:
-          type: string
-          format: date-time
         created_by:
           type: string
           format: email
         updated_by:
-          type: string
-          format: email
-        deleted_by:
           type: string
           format: email
         generation:
@@ -1237,6 +1234,13 @@ components:
           format: int32
           minimum: 1
           description: Generation field is updated on customer updates, reflecting the version of the "intent" of the customer
+        deleted_time:
+          type: string
+          format: date-time
+          description: Timestamp when deletion was requested; null if not marked for deletion
+        deleted_by:
+          type: string
+          format: email
         owner_references:
           $ref: '#/components/schemas/ObjectReference'
         status:

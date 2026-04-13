@@ -849,9 +849,11 @@ definitions:
         format: date-time
         type: string
       deleted_by:
+        description: Identity that requested deletion
         format: email
         type: string
       deleted_time:
+        description: Timestamp when deletion was requested; null if not marked for deletion
         format: date-time
         type: string
       generation:
@@ -1212,6 +1214,7 @@ definitions:
         format: email
         type: string
       deleted_time:
+        description: Timestamp when deletion was requested; null if not marked for deletion
         format: date-time
         type: string
       generation:
@@ -1329,6 +1332,7 @@ definitions:
         format: email
         type: string
       deleted_time:
+        description: Timestamp when deletion was requested; null if not marked for deletion
         format: date-time
         type: string
       generation:

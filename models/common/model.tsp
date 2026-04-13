@@ -114,10 +114,8 @@ model APIResource {
 model APIMetadata {
     @format("date-time") created_time: string;
     @format("date-time") updated_time: string;
-    @format("date-time") deleted_time?: string;
     @format("email") created_by: string;
     @format("email") updated_by: string;
-    @format("email") deleted_by?: string;
 }
 
 model Page<Kind> {
