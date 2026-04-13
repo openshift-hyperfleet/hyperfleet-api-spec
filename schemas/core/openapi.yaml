@@ -838,8 +838,6 @@ components:
           environment: production
           team: platform
         spec: {}
-        created_time: '2021-01-01T00:00:00Z'
-        updated_time: '2021-01-01T00:00:00Z'
         generation: 1
         status:
           conditions:
@@ -875,7 +873,9 @@ components:
               created_time: '2021-01-01T10:01:00Z'
               last_updated_time: '2021-01-01T10:01:00Z'
               last_transition_time: '2021-01-01T10:01:00Z'
-        deleted_time: '2021-01-01T00:00:00Z'
+        created_time: '2021-01-01T00:00:00Z'
+        updated_time: '2021-01-01T10:02:00Z'
+        deleted_time: '2021-01-01T10:05:00Z'
         created_by: user-123@example.com
         updated_by: user-123@example.com
         deleted_by: user-123@example.com
@@ -1145,8 +1145,8 @@ components:
               last_updated_time: '2021-01-01T10:01:00Z'
               last_transition_time: '2021-01-01T10:01:00Z'
         created_time: '2021-01-01T00:00:00Z'
-        updated_time: '2021-01-01T00:00:00Z'
-        deleted_time: '2021-01-01T00:00:00Z'
+        updated_time: '2021-01-01T10:02:00Z'
+        deleted_time: '2021-01-01T10:05:00Z'
         created_by: user-123@example.com
         updated_by: user-123@example.com
         deleted_by: user-123@example.com

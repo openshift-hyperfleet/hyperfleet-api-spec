@@ -775,7 +775,7 @@ definitions:
       created_by: user-123@example.com
       created_time: '2021-01-01T00:00:00Z'
       deleted_by: user-123@example.com
-      deleted_time: '2021-01-01T00:00:00Z'
+      deleted_time: '2021-01-01T10:05:00Z'
       generation: 1
       href: >-
         https://api.hyperfleet.com/v1/clusters/019466a0-8f8e-7abc-9def-0123456789ab
@@ -840,7 +840,7 @@ definitions:
             status: 'True'
             type: Adapter2Successful
       updated_by: user-123@example.com
-      updated_time: '2021-01-01T00:00:00Z'
+      updated_time: '2021-01-01T10:02:00Z'
     properties:
       created_by:
         format: email
@@ -1130,7 +1130,7 @@ definitions:
       created_by: user-123@example.com
       created_time: '2021-01-01T00:00:00Z'
       deleted_by: user-123@example.com
-      deleted_time: '2021-01-01T00:00:00Z'
+      deleted_time: '2021-01-01T10:05:00Z'
       generation: 1
       href: >-
         https://api.hyperfleet.com/v1/nodepools/019466a1-2b3c-7def-8abc-456789abcdef
@@ -1200,7 +1200,7 @@ definitions:
             status: 'True'
             type: NodePoolSuccessful
       updated_by: user-123@example.com
-      updated_time: '2021-01-01T00:00:00Z'
+      updated_time: '2021-01-01T10:02:00Z'
     properties:
       created_by:
         format: email
