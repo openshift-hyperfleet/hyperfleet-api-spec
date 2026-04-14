@@ -45,11 +45,27 @@ interface Clusters {
   @post
   @summary("Create cluster")
   @operationId("postCluster")
-  postCluster(@body body: ClusterCreateRequest): 
+  postCluster(@body body: ClusterCreateRequest):
   {
     @statusCode statusCode: 201;
     @body cluster: Cluster;
-  } | Error 
+  } | Error
+    | BadRequestResponse;
+
+  /**
+   * Patch a specific cluster by ID
+   */
+  @route("/{cluster_id}")
+  @patch(#{implicitOptionality: true})
+  @summary("Patch cluster by ID")
+  @operationId("patchClusterById")
+  patchClusterById(
+    /** Cluster ID */
+    @path cluster_id: string,
+    @body body: ClusterPatchRequest,
+  ): Cluster
+    | Error
+    | NotFoundResponse
     | BadRequestResponse;
 
   /**

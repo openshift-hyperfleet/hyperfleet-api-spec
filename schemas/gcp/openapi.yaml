@@ -1,7 +1,7 @@
 openapi: 3.0.0
 info:
   title: HyperFleet API
-  version: 1.0.6
+  version: 1.0.7
   contact:
     name: HyperFleet Team
   license:
@@ -101,6 +101,42 @@ paths:
             application/problem+json:
               schema:
                 $ref: '#/components/schemas/Error'
+      security:
+        - BearerAuth: []
+    patch:
+      operationId: patchClusterById
+      summary: Patch cluster by ID
+      description: Patch a specific cluster by ID
+      parameters:
+        - name: cluster_id
+          in: path
+          required: true
+          description: Cluster ID
+          schema:
+            type: string
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Cluster'
+        '400':
+          description: The server could not understand the request due to invalid syntax.
+        '404':
+          description: The server cannot find the requested resource.
+        default:
+          description: An unexpected error response.
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ClusterPatchRequest'
       security:
         - BearerAuth: []
     delete:
@@ -416,6 +452,48 @@ paths:
             application/problem+json:
               schema:
                 $ref: '#/components/schemas/Error'
+      security:
+        - BearerAuth: []
+    patch:
+      operationId: patchNodePoolById
+      summary: Patch nodepool by ID
+      description: Patch a specific nodepool within a cluster
+      parameters:
+        - name: cluster_id
+          in: path
+          required: true
+          description: Cluster ID
+          schema:
+            type: string
+        - name: nodepool_id
+          in: path
+          required: true
+          description: NodePool ID
+          schema:
+            type: string
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NodePool'
+        '400':
+          description: The server could not understand the request due to invalid syntax.
+        '404':
+          description: The server cannot find the requested resource.
+        default:
+          description: An unexpected error response.
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NodePoolPatchRequest'
       security:
         - BearerAuth: []
   /api/hyperfleet/v1/clusters/{cluster_id}/nodepools/{nodepool_id}/statuses:
@@ -1007,6 +1085,33 @@ components:
           type: string
         hostPrefix:
           type: integer
+    ClusterPatchRequest:
+      type: object
+      properties:
+        spec:
+          $ref: '#/components/schemas/ClusterSpecUpdate'
+      example:
+        spec:
+          platform:
+            type: gcp
+            gcp:
+              projectID: project-123
+              region: us-central1
+              zone: us-central1-a
+              network: network-123
+              subnet: subnet-123
+          release:
+            image: registry.redhat.io/openshift4/ose-cluster-version-operator:v4.14.0
+            version: 4.14.0
+          networking:
+            clusterNetwork:
+              - cidr: 10.10.0.0/16
+                hostPrefix: 24
+            serviceNetwork:
+              - 10.96.0.0/12
+          dns:
+            baseDomain: example.com
+      minProperties: 1
     ClusterPlatform:
       type: object
       properties:
@@ -1032,6 +1137,15 @@ components:
             - gcp
         gcp:
           $ref: '#/components/schemas/ClusterPlatform'
+    ClusterPlatformSpecUpdate:
+      type: object
+      properties:
+        type:
+          type: string
+          enum:
+            - gcp
+        gcp:
+          $ref: '#/components/schemas/ClusterPlatform'
     ClusterSpec:
       type: object
       required:
@@ -1041,6 +1155,19 @@ components:
           type: string
         platform:
           $ref: '#/components/schemas/ClusterPlatformSpec'
+        release:
+          $ref: '#/components/schemas/ReleaseSpec'
+        networking:
+          $ref: '#/components/schemas/NetworkingSpec'
+        dns:
+          $ref: '#/components/schemas/DNSSpec'
+    ClusterSpecUpdate:
+      type: object
+      properties:
+        infraID:
+          type: string
+        platform:
+          $ref: '#/components/schemas/ClusterPlatformSpecUpdate'
         release:
           $ref: '#/components/schemas/ReleaseSpec'
         networking:
@@ -1420,6 +1547,33 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/NodePool'
+    NodePoolPatchRequest:
+      type: object
+      properties:
+        spec:
+          $ref: '#/components/schemas/NodePoolSpecUpdate'
+      example:
+        spec:
+          platform:
+            type: gcp
+            gcp:
+              machineType: n1-standard-4
+              diskSize: 100
+              diskType: pd-standard
+              zones:
+                - us-central1-a
+                - us-central1-b
+              preemptible: false
+              labels:
+                team: platform
+                managedby: hyperfleet
+          nodeCount: 3
+          autoscaling:
+            enabled: true
+            minNodes: 1
+            maxNodes: 10
+            targetCPUUtilization: 80
+      minProperties: 1
     NodePoolPlatform:
       type: object
       properties:
@@ -1464,6 +1618,15 @@ components:
             - gcp
         gcp:
           $ref: '#/components/schemas/NodePoolPlatform'
+    NodePoolPlatformSpecUpdate:
+      type: object
+      properties:
+        type:
+          type: string
+          enum:
+            - gcp
+        gcp:
+          $ref: '#/components/schemas/NodePoolPlatform'
     NodePoolSpec:
       type: object
       required:
@@ -1471,6 +1634,16 @@ components:
       properties:
         platform:
           $ref: '#/components/schemas/NodePoolPlatformSpec'
+        nodeCount:
+          type: integer
+          minimum: 0
+        autoscaling:
+          $ref: '#/components/schemas/AutoscalingSpec'
+    NodePoolSpecUpdate:
+      type: object
+      properties:
+        platform:
+          $ref: '#/components/schemas/NodePoolPlatformSpecUpdate'
         nodeCount:
           type: integer
           minimum: 0
