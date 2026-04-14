@@ -54,8 +54,8 @@ interface Clusters {
 
   /**
    * Marks the cluster for deletion by setting deleted_time to the current time, cascades to its nodepools.
-   * The cluster remains in the database until adapters confirm cleanup.
-   * Returns the updated cluster with deleted_time set.
+   * The cluster remains in the database until it is fully deleted.
+   * Returns the updated cluster with generation incremented.
    */
   @opExample(#{ returnType: #{ statusCode: 202, cluster: exampleDeletedCluster } })
   @route("/{cluster_id}")
