@@ -74,9 +74,8 @@ interface NodePools {
       | BadRequestResponse;
 
     /**
-     * Marks the nodepool for deletion by setting deleted_time to the current time
-     * and cascades to its adapter_statuses. Does not affect the parent cluster.
-     * Returns the updated nodepool with deleted_time set.
+     * Marks the nodepool for deletion by setting deleted_time and deleted_by. Does not affect the parent cluster.
+     * Returns the updated nodepool with generation incremented.
      */
     @opExample(#{ returnType: #{ statusCode: 202, nodepool: exampleDeletedNodePool } })
     @route("/clusters/{cluster_id}/nodepools/{nodepool_id}")

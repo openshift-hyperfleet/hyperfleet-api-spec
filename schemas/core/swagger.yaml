@@ -137,7 +137,7 @@ paths:
               created_time: '2021-01-01T00:00:00Z'
               deleted_by: user-123@example.com
               deleted_time: '2021-01-01T10:05:00Z'
-              generation: 1
+              generation: 2
               href: >-
                 https://api.hyperfleet.com/v1/clusters/019466a0-8f8e-7abc-9def-0123456789ab
               id: 019466a0-8f8e-7abc-9def-0123456789ab
@@ -173,6 +173,22 @@ paths:
                       generation
                     status: 'True'
                     type: Available
+                  - created_time: '2021-01-01T10:00:00Z'
+                    last_transition_time: '2021-01-01T10:00:00Z'
+                    last_updated_time: '2021-01-01T10:00:00Z'
+                    message: This adapter1 is available
+                    observed_generation: 1
+                    reason: This adapter1 is available
+                    status: 'True'
+                    type: Adapter1Successful
+                  - created_time: '2021-01-01T10:01:00Z'
+                    last_transition_time: '2021-01-01T10:01:00Z'
+                    last_updated_time: '2021-01-01T10:01:00Z'
+                    message: This adapter2 is available
+                    observed_generation: 1
+                    reason: This adapter2 is available
+                    status: 'True'
+                    type: Adapter2Successful
               updated_by: user-123@example.com
               updated_time: '2021-01-01T10:02:00Z'
           schema:
@@ -351,7 +367,7 @@ paths:
               created_time: '2021-01-01T00:00:00Z'
               deleted_by: user-123@example.com
               deleted_time: '2021-01-01T10:05:00Z'
-              generation: 1
+              generation: 2
               href: >-
                 https://api.hyperfleet.com/v1/nodepools/019466a1-2b3c-7def-8abc-456789abcdef
               id: 019466a1-2b3c-7def-8abc-456789abcdef
@@ -392,6 +408,22 @@ paths:
                       generation
                     status: 'True'
                     type: Available
+                  - created_time: '2021-01-01T10:00:00Z'
+                    last_transition_time: '2021-01-01T10:00:00Z'
+                    last_updated_time: '2021-01-01T10:00:00Z'
+                    message: This adapter1 is available
+                    observed_generation: 1
+                    reason: This adapter1 is available
+                    status: 'True'
+                    type: Adapter1Successful
+                  - created_time: '2021-01-01T10:01:00Z'
+                    last_transition_time: '2021-01-01T10:01:00Z'
+                    last_updated_time: '2021-01-01T10:01:00Z'
+                    message: This adapter2 is available
+                    observed_generation: 1
+                    reason: This adapter2 is available
+                    status: 'True'
+                    type: Adapter2Successful
               updated_by: user-123@example.com
               updated_time: '2021-01-01T10:02:00Z'
           schema:
@@ -1053,6 +1085,7 @@ definitions:
         format: date-time
         type: string
       deleted_by:
+        description: Identity that requested deletion
         format: email
         type: string
       deleted_time:
@@ -1336,6 +1369,7 @@ definitions:
         format: date-time
         type: string
       deleted_by:
+        description: Identity that requested deletion
         format: email
         type: string
       deleted_time:
@@ -1435,6 +1469,7 @@ definitions:
         format: date-time
         type: string
       deleted_by:
+        description: Identity that requested deletion
         format: email
         type: string
       deleted_time:

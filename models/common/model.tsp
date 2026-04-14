@@ -116,6 +116,12 @@ model APIMetadata {
     @format("date-time") updated_time: string;
     @format("email") created_by: string;
     @format("email") updated_by: string;
+
+    @doc("Timestamp when deletion was requested; omitted if not marked for deletion")
+    @format("date-time") deleted_time?: string;
+    
+    @doc("Identity that requested deletion; omitted if not marked for deletion")
+    @format("email") deleted_by?: string;
 }
 
 model Page<Kind> {

@@ -470,13 +470,10 @@ paths:
       security:
         - BearerAuth: []
       description: >-
-        Marks the nodepool for deletion by setting deleted_time to the current
-        time
+        Marks the nodepool for deletion by setting deleted_time and deleted_by.
+        Does not affect the parent cluster.
 
-        and cascades to its adapter_statuses. Does not affect the parent
-        cluster.
-
-        Returns the updated nodepool with deleted_time set.
+        Returns the updated nodepool with generation incremented.
       operationId: deleteNodePoolById
       summary: Request nodepool deletion
     get:
@@ -1003,10 +1000,13 @@ definitions:
         format: date-time
         type: string
       deleted_by:
+        description: Identity that requested deletion; omitted if not marked for deletion
         format: email
         type: string
       deleted_time:
-        description: Timestamp when deletion was requested; null if not marked for deletion
+        description: >-
+          Timestamp when deletion was requested; omitted if not marked for
+          deletion
         format: date-time
         type: string
       generation:
@@ -1362,10 +1362,13 @@ definitions:
         format: date-time
         type: string
       deleted_by:
+        description: Identity that requested deletion; omitted if not marked for deletion
         format: email
         type: string
       deleted_time:
-        description: Timestamp when deletion was requested; null if not marked for deletion
+        description: >-
+          Timestamp when deletion was requested; omitted if not marked for
+          deletion
         format: date-time
         type: string
       generation:
@@ -1480,10 +1483,13 @@ definitions:
         format: date-time
         type: string
       deleted_by:
+        description: Identity that requested deletion; omitted if not marked for deletion
         format: email
         type: string
       deleted_time:
-        description: Timestamp when deletion was requested; null if not marked for deletion
+        description: >-
+          Timestamp when deletion was requested; omitted if not marked for
+          deletion
         format: date-time
         type: string
       generation:
