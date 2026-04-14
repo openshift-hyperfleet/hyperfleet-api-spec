@@ -108,8 +108,8 @@ paths:
       summary: Request cluster deletion
       description: |-
         Marks the cluster for deletion by setting deleted_time to the current time, cascades to its nodepools.
-        The cluster remains in the database until adapters confirm cleanup.
-        Returns the updated cluster with deleted_time set.
+        The cluster remains in the database until it is fully deleted.
+        Returns the updated cluster with generation incremented.
       parameters:
         - name: cluster_id
           in: path
