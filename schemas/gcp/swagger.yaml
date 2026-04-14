@@ -131,6 +131,86 @@ paths:
           description: >-
             The request has been accepted for processing, but processing has not
             yet completed.
+          examples:
+            application/json:
+              created_by: user-123@example.com
+              created_time: '2021-01-01T00:00:00Z'
+              deleted_by: user-123@example.com
+              deleted_time: '2021-01-01T10:05:00Z'
+              generation: 2
+              href: >-
+                https://api.hyperfleet.com/v1/clusters/019466a0-8f8e-7abc-9def-0123456789ab
+              id: 019466a0-8f8e-7abc-9def-0123456789ab
+              kind: Cluster
+              labels:
+                environment: production
+                team: platform
+              name: cluster-123
+              spec:
+                dns:
+                  baseDomain: example.com
+                networking:
+                  clusterNetwork:
+                    - cidr: 10.10.0.0/16
+                      hostPrefix: 24
+                  serviceNetwork:
+                    - 10.96.0.0/12
+                platform:
+                  gcp:
+                    network: network-123
+                    projectID: project-123
+                    region: us-central1
+                    subnet: subnet-123
+                    zone: us-central1-a
+                  type: gcp
+                release:
+                  image: >-
+                    registry.redhat.io/openshift4/ose-cluster-version-operator:v4.14.0
+                  version: 4.14.0
+              status:
+                conditions:
+                  - created_time: '2021-01-01T10:00:00Z'
+                    last_transition_time: '2021-01-01T10:00:00Z'
+                    last_updated_time: '2021-01-01T10:00:00Z'
+                    message: >-
+                      All adapters reported Ready True for the current
+                      generation
+                    observed_generation: 1
+                    reason: >-
+                      All adapters reported Ready True for the current
+                      generation
+                    status: 'True'
+                    type: Ready
+                  - created_time: '2021-01-01T10:00:00Z'
+                    last_transition_time: '2021-01-01T10:00:00Z'
+                    last_updated_time: '2021-01-01T10:00:00Z'
+                    message: >-
+                      All adapters reported Available True for the same
+                      generation
+                    observed_generation: 1
+                    reason: >-
+                      All adapters reported Available True for the same
+                      generation
+                    status: 'True'
+                    type: Available
+                  - created_time: '2021-01-01T10:00:00Z'
+                    last_transition_time: '2021-01-01T10:00:00Z'
+                    last_updated_time: '2021-01-01T10:00:00Z'
+                    message: This adapter1 is available
+                    observed_generation: 1
+                    reason: This adapter1 is available
+                    status: 'True'
+                    type: Adapter1Successful
+                  - created_time: '2021-01-01T10:01:00Z'
+                    last_transition_time: '2021-01-01T10:01:00Z'
+                    last_updated_time: '2021-01-01T10:01:00Z'
+                    message: This adapter2 is available
+                    observed_generation: 1
+                    reason: This adapter2 is available
+                    status: 'True'
+                    type: Adapter2Successful
+              updated_by: user-123@example.com
+              updated_time: '2021-01-01T10:02:00Z'
           schema:
             $ref: '#/definitions/Cluster'
         '400':
@@ -301,6 +381,82 @@ paths:
           description: >-
             The request has been accepted for processing, but processing has not
             yet completed.
+          examples:
+            application/json:
+              created_by: user-123@example.com
+              created_time: '2021-01-01T00:00:00Z'
+              deleted_by: user-123@example.com
+              deleted_time: '2021-01-01T10:05:00Z'
+              generation: 2
+              href: >-
+                https://api.hyperfleet.com/v1/nodepools/019466a1-2b3c-7def-8abc-456789abcdef
+              id: 019466a1-2b3c-7def-8abc-456789abcdef
+              kind: NodePool
+              labels:
+                environment: production
+                pooltype: worker
+              name: worker-pool-1
+              owner_references:
+                href: >-
+                  https://api.hyperfleet.com/v1/clusters/019466a0-8f8e-7abc-9def-0123456789ab
+                id: 019466a0-8f8e-7abc-9def-0123456789ab
+                kind: Cluster
+              spec:
+                autoscaling:
+                  enabled: true
+                  maxNodes: 10
+                  minNodes: 1
+                  targetCPUUtilization: 80
+                nodeCount: 3
+                platform:
+                  gcp:
+                    diskSize: 100
+                    diskType: pd-standard
+                    labels:
+                      managedby: hyperfleet
+                      team: platform
+                    machineType: n1-standard-4
+                    preemptible: false
+                    zones:
+                      - us-central1-a
+                      - us-central1-b
+                  type: gcp
+              status:
+                conditions:
+                  - created_time: '2021-01-01T10:00:00Z'
+                    last_transition_time: '2021-01-01T10:00:00Z'
+                    last_updated_time: '2021-01-01T10:00:00Z'
+                    message: All conditions successful for current spec generation
+                    observed_generation: 1
+                    reason: ResourceReady
+                    status: 'True'
+                    type: Ready
+                  - created_time: '2021-01-01T10:00:00Z'
+                    last_transition_time: '2021-01-01T10:00:00Z'
+                    last_updated_time: '2021-01-01T10:00:00Z'
+                    message: All conditions successful for observed_generation
+                    observed_generation: 1
+                    reason: ResourceAvailable
+                    status: 'True'
+                    type: Available
+                  - created_time: '2021-01-01T10:00:00Z'
+                    last_transition_time: '2021-01-01T10:00:00Z'
+                    last_updated_time: '2021-01-01T10:00:00Z'
+                    message: NodePool validation passed
+                    observed_generation: 1
+                    reason: All validations passed
+                    status: 'True'
+                    type: ValidationSuccessful
+                  - created_time: '2021-01-01T10:01:00Z'
+                    last_transition_time: '2021-01-01T10:01:00Z'
+                    last_updated_time: '2021-01-01T10:01:00Z'
+                    message: NodePool has 3 nodes running
+                    observed_generation: 1
+                    reason: NodePool provisioned successfully
+                    status: 'True'
+                    type: NodePoolSuccessful
+              updated_by: user-123@example.com
+              updated_time: '2021-01-01T10:02:00Z'
           schema:
             $ref: '#/definitions/NodePool'
         '400':
@@ -774,8 +930,6 @@ definitions:
     example:
       created_by: user-123@example.com
       created_time: '2021-01-01T00:00:00Z'
-      deleted_by: user-123@example.com
-      deleted_time: '2021-01-01T10:05:00Z'
       generation: 1
       href: >-
         https://api.hyperfleet.com/v1/clusters/019466a0-8f8e-7abc-9def-0123456789ab
@@ -849,7 +1003,6 @@ definitions:
         format: date-time
         type: string
       deleted_by:
-        description: Identity that requested deletion
         format: email
         type: string
       deleted_time:
@@ -1131,8 +1284,6 @@ definitions:
     example:
       created_by: user-123@example.com
       created_time: '2021-01-01T00:00:00Z'
-      deleted_by: user-123@example.com
-      deleted_time: '2021-01-01T10:05:00Z'
       generation: 1
       href: >-
         https://api.hyperfleet.com/v1/nodepools/019466a1-2b3c-7def-8abc-456789abcdef

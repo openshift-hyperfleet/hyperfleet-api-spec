@@ -78,6 +78,7 @@ interface NodePools {
      * and cascades to its adapter_statuses. Does not affect the parent cluster.
      * Returns the updated nodepool with deleted_time set.
      */
+    @opExample(#{ returnType: #{ statusCode: 202, nodepool: exampleDeletedNodePool } })
     @route("/clusters/{cluster_id}/nodepools/{nodepool_id}")
     @delete
     @summary("Request nodepool deletion")
