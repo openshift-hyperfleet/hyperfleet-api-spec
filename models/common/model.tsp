@@ -112,14 +112,21 @@ model APIResource {
     labels?: Record<string>;
 }
 model APIMetadata {
+    @doc("Timestamp when the resource was created")
     @format("date-time") created_time: string;
+
+    @doc("Timestamp when the resource was last updated")
     @format("date-time") updated_time: string;
+
+    @doc("Identity that created the resource")
     @format("email") created_by: string;
+
+    @doc("Identity that last updated the resource")
     @format("email") updated_by: string;
 
     @doc("Timestamp when deletion was requested; omitted if not marked for deletion")
     @format("date-time") deleted_time?: string;
-    
+
     @doc("Identity that requested deletion; omitted if not marked for deletion")
     @format("email") deleted_by?: string;
 }

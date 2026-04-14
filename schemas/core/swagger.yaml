@@ -1076,9 +1076,11 @@ definitions:
       updated_time: '2021-01-01T10:02:00Z'
     properties:
       created_by:
+        description: Identity that created the resource
         format: email
         type: string
       created_time:
+        description: Timestamp when the resource was created
         format: date-time
         type: string
       deleted_by:
@@ -1123,9 +1125,11 @@ definitions:
       status:
         $ref: '#/definitions/ClusterStatus'
       updated_by:
+        description: Identity that last updated the resource
         format: email
         type: string
       updated_time:
+        description: Timestamp when the resource was last updated
         format: date-time
         type: string
     required:
@@ -1362,9 +1366,11 @@ definitions:
       updated_time: '2021-01-01T10:02:00Z'
     properties:
       created_by:
+        description: Identity that created the resource
         format: email
         type: string
       created_time:
+        description: Timestamp when the resource was created
         format: date-time
         type: string
       deleted_by:
@@ -1411,9 +1417,11 @@ definitions:
       status:
         $ref: '#/definitions/NodePoolStatus'
       updated_by:
+        description: Identity that last updated the resource
         format: email
         type: string
       updated_time:
+        description: Timestamp when the resource was last updated
         format: date-time
         type: string
     required:
@@ -1464,9 +1472,11 @@ definitions:
   NodePoolCreateResponse:
     properties:
       created_by:
+        description: Identity that created the resource
         format: email
         type: string
       created_time:
+        description: Timestamp when the resource was created
         format: date-time
         type: string
       deleted_by:
@@ -1513,9 +1523,11 @@ definitions:
       status:
         $ref: '#/definitions/NodePoolStatus'
       updated_by:
+        description: Identity that last updated the resource
         format: email
         type: string
       updated_time:
+        description: Timestamp when the resource was last updated
         format: date-time
         type: string
     required:
