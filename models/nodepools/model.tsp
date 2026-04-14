@@ -1,6 +1,9 @@
+import "@typespec/openapi";
 import "../common/model.tsp";
 import "../statuses/model.tsp";
 import "../../aliases.tsp";
+
+using OpenAPI;
 
 model NodePoolBase {
   ...APIResource;
@@ -54,6 +57,14 @@ model NodePool {
 @example(exampleNodePoolCreateRequest)
 model NodePoolCreateRequest {
   ...NodePoolBase;
+}
+
+@extension("minProperties", 1)
+@extension("additionalProperties", false)
+@example(exampleNodePoolPatchRequest)
+model NodePoolPatchRequest {
+  spec?: NodePoolSpec;
+  labels?: Record<string>;
 }
 
 model NodePoolCreateResponse {
