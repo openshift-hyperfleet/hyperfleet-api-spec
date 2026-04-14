@@ -39,7 +39,7 @@ model NodePoolStatus {
 @example(exampleNodePool)
 model NodePool {
   ...NodePoolBase;
-  ...APICreatedResource;
+  ...APIMetadata;
 
   /**
    * Generation field is updated on customer updates, reflecting the version of the "intent" of the customer

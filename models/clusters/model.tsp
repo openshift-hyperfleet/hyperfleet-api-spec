@@ -42,7 +42,7 @@ model ClusterStatus {
 @example(exampleCluster)
 model Cluster {
   ...ClusterBase;
-  ...APICreatedResource;
+  ...APIMetadata;
 
   /**
    * Generation field is updated on customer updates, reflecting the version of the "intent" of the customer

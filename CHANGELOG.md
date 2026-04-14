@@ -17,6 +17,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Improved README.md structure to align with HyperFleet documentation standards
 
+## [1.0.6] - 2026-04-13
+
+### Added
+
+- DELETE endpoint for clusters with soft-delete semantics (returns 202, sets `deleted_time`)
+- DELETE endpoint for nodepools with soft-delete semantics and cascade support
+- `deleted_time` and `deleted_by` optional fields to API metadata
+
+### Changed
+
+- Renamed `APICreatedResource` model to `APIMetadata` to reflect broader scope
+
 ## [1.0.2] - 2026-01-13
 
 ### Added
@@ -51,6 +63,7 @@ First official stable release of the HyperFleet API specification.
 - Interactive API documentation
 
 <!-- Links -->
-[Unreleased]: https://github.com/openshift-hyperfleet/hyperfleet-api-spec/compare/v1.0.2...HEAD
+[Unreleased]: https://github.com/openshift-hyperfleet/hyperfleet-api-spec/compare/v1.0.6...HEAD
+[1.0.6]: https://github.com/openshift-hyperfleet/hyperfleet-api-spec/compare/v1.0.2...v1.0.6
 [1.0.2]: https://github.com/openshift-hyperfleet/hyperfleet-api-spec/compare/v1.0.0...v1.0.2
 [1.0.0]: https://github.com/openshift-hyperfleet/hyperfleet-api-spec/releases/tag/v1.0.0

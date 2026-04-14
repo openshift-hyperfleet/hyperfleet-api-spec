@@ -16,7 +16,7 @@ info:
     name: Apache 2.0
     url: 'https://www.apache.org/licenses/LICENSE-2.0'
   title: HyperFleet API
-  version: 1.0.5
+  version: 1.0.6
 host: hyperfleet.redhat.com
 basePath: /
 schemes:
@@ -117,6 +117,101 @@ paths:
       operationId: postCluster
       summary: Create cluster
   '/api/hyperfleet/v1/clusters/{cluster_id}':
+    delete:
+      produces:
+        - application/json
+        - application/problem+json
+      parameters:
+        - in: path
+          name: cluster_id
+          required: true
+          type: string
+      responses:
+        '202':
+          description: >-
+            The request has been accepted for processing, but processing has not
+            yet completed.
+          examples:
+            application/json:
+              created_by: user-123@example.com
+              created_time: '2021-01-01T00:00:00Z'
+              deleted_by: user-123@example.com
+              deleted_time: '2021-01-01T10:05:00Z'
+              generation: 2
+              href: >-
+                https://api.hyperfleet.com/v1/clusters/019466a0-8f8e-7abc-9def-0123456789ab
+              id: 019466a0-8f8e-7abc-9def-0123456789ab
+              kind: Cluster
+              labels:
+                environment: production
+                team: platform
+              name: cluster-123
+              spec: {}
+              status:
+                conditions:
+                  - created_time: '2021-01-01T10:00:00Z'
+                    last_transition_time: '2021-01-01T10:00:00Z'
+                    last_updated_time: '2021-01-01T10:00:00Z'
+                    message: >-
+                      All adapters reported Ready True for the current
+                      generation
+                    observed_generation: 1
+                    reason: >-
+                      All adapters reported Ready True for the current
+                      generation
+                    status: 'True'
+                    type: Ready
+                  - created_time: '2021-01-01T10:00:00Z'
+                    last_transition_time: '2021-01-01T10:00:00Z'
+                    last_updated_time: '2021-01-01T10:00:00Z'
+                    message: >-
+                      All adapters reported Available True for the same
+                      generation
+                    observed_generation: 1
+                    reason: >-
+                      All adapters reported Available True for the same
+                      generation
+                    status: 'True'
+                    type: Available
+                  - created_time: '2021-01-01T10:00:00Z'
+                    last_transition_time: '2021-01-01T10:00:00Z'
+                    last_updated_time: '2021-01-01T10:00:00Z'
+                    message: This adapter1 is available
+                    observed_generation: 1
+                    reason: This adapter1 is available
+                    status: 'True'
+                    type: Adapter1Successful
+                  - created_time: '2021-01-01T10:01:00Z'
+                    last_transition_time: '2021-01-01T10:01:00Z'
+                    last_updated_time: '2021-01-01T10:01:00Z'
+                    message: This adapter2 is available
+                    observed_generation: 1
+                    reason: This adapter2 is available
+                    status: 'True'
+                    type: Adapter2Successful
+              updated_by: user-123@example.com
+              updated_time: '2021-01-01T10:02:00Z'
+          schema:
+            $ref: '#/definitions/Cluster'
+        '400':
+          description: The server could not understand the request due to invalid syntax.
+        '404':
+          description: The server cannot find the requested resource.
+        default:
+          description: An unexpected error response.
+          schema:
+            $ref: '#/definitions/Error'
+      security:
+        - BearerAuth: []
+      description: >-
+        Marks the cluster for deletion by setting deleted_time to the current
+        time, cascades to its nodepools.
+
+        The cluster remains in the database until it is fully deleted.
+
+        Returns the updated cluster with generation incremented.
+      operationId: deleteClusterById
+      summary: Request cluster deletion
     get:
       produces:
         - application/json
@@ -246,6 +341,110 @@ paths:
       operationId: createNodePool
       summary: Create nodepool
   '/api/hyperfleet/v1/clusters/{cluster_id}/nodepools/{nodepool_id}':
+    delete:
+      produces:
+        - application/json
+        - application/problem+json
+      parameters:
+        - description: Cluster ID
+          in: path
+          name: cluster_id
+          required: true
+          type: string
+        - description: NodePool ID
+          in: path
+          name: nodepool_id
+          required: true
+          type: string
+      responses:
+        '202':
+          description: >-
+            The request has been accepted for processing, but processing has not
+            yet completed.
+          examples:
+            application/json:
+              created_by: user-123@example.com
+              created_time: '2021-01-01T00:00:00Z'
+              deleted_by: user-123@example.com
+              deleted_time: '2021-01-01T10:05:00Z'
+              generation: 2
+              href: >-
+                https://api.hyperfleet.com/v1/nodepools/019466a1-2b3c-7def-8abc-456789abcdef
+              id: 019466a1-2b3c-7def-8abc-456789abcdef
+              kind: NodePool
+              labels:
+                environment: production
+                pooltype: worker
+              name: worker-pool-1
+              owner_references:
+                href: >-
+                  https://api.hyperfleet.com/v1/clusters/019466a0-8f8e-7abc-9def-0123456789ab
+                id: 019466a0-8f8e-7abc-9def-0123456789ab
+                kind: Cluster
+              spec: {}
+              status:
+                conditions:
+                  - created_time: '2021-01-01T10:00:00Z'
+                    last_transition_time: '2021-01-01T10:00:00Z'
+                    last_updated_time: '2021-01-01T10:00:00Z'
+                    message: >-
+                      All adapters reported Ready True for the current
+                      generation
+                    observed_generation: 1
+                    reason: >-
+                      All adapters reported Ready True for the current
+                      generation
+                    status: 'True'
+                    type: Ready
+                  - created_time: '2021-01-01T10:00:00Z'
+                    last_transition_time: '2021-01-01T10:00:00Z'
+                    last_updated_time: '2021-01-01T10:00:00Z'
+                    message: >-
+                      All adapters reported Available True for the same
+                      generation
+                    observed_generation: 1
+                    reason: >-
+                      All adapters reported Available True for the same
+                      generation
+                    status: 'True'
+                    type: Available
+                  - created_time: '2021-01-01T10:00:00Z'
+                    last_transition_time: '2021-01-01T10:00:00Z'
+                    last_updated_time: '2021-01-01T10:00:00Z'
+                    message: This adapter1 is available
+                    observed_generation: 1
+                    reason: This adapter1 is available
+                    status: 'True'
+                    type: Adapter1Successful
+                  - created_time: '2021-01-01T10:01:00Z'
+                    last_transition_time: '2021-01-01T10:01:00Z'
+                    last_updated_time: '2021-01-01T10:01:00Z'
+                    message: This adapter2 is available
+                    observed_generation: 1
+                    reason: This adapter2 is available
+                    status: 'True'
+                    type: Adapter2Successful
+              updated_by: user-123@example.com
+              updated_time: '2021-01-01T10:02:00Z'
+          schema:
+            $ref: '#/definitions/NodePool'
+        '400':
+          description: The server could not understand the request due to invalid syntax.
+        '404':
+          description: The server cannot find the requested resource.
+        default:
+          description: An unexpected error response.
+          schema:
+            $ref: '#/definitions/Error'
+      security:
+        - BearerAuth: []
+      description: >-
+        Marks the nodepool for deletion by setting deleted_time and deleted_by.
+        Does not affect the parent cluster.
+
+        Returns the updated nodepool with generation incremented.
+      operationId: deleteNodePoolById
+      summary: Request nodepool deletion
     get:
       produces:
         - application/json
@@ -874,12 +1073,24 @@ definitions:
             status: 'True'
             type: Adapter2Successful
       updated_by: user-123@example.com
-      updated_time: '2021-01-01T00:00:00Z'
+      updated_time: '2021-01-01T10:02:00Z'
     properties:
       created_by:
+        description: Identity that created the resource
         format: email
         type: string
       created_time:
+        description: Timestamp when the resource was created
+        format: date-time
+        type: string
+      deleted_by:
+        description: Identity that requested deletion; omitted if not marked for deletion
+        format: email
+        type: string
+      deleted_time:
+        description: >-
+          Timestamp when deletion was requested; omitted if not marked for
+          deletion
         format: date-time
         type: string
       generation:
@@ -914,9 +1125,11 @@ definitions:
       status:
         $ref: '#/definitions/ClusterStatus'
       updated_by:
+        description: Identity that last updated the resource
         format: email
         type: string
       updated_time:
+        description: Timestamp when the resource was last updated
         format: date-time
         type: string
     required:
@@ -1150,12 +1363,24 @@ definitions:
             status: 'True'
             type: Adapter2Successful
       updated_by: user-123@example.com
-      updated_time: '2021-01-01T00:00:00Z'
+      updated_time: '2021-01-01T10:02:00Z'
     properties:
       created_by:
+        description: Identity that created the resource
         format: email
         type: string
       created_time:
+        description: Timestamp when the resource was created
+        format: date-time
+        type: string
+      deleted_by:
+        description: Identity that requested deletion; omitted if not marked for deletion
+        format: email
+        type: string
+      deleted_time:
+        description: >-
+          Timestamp when deletion was requested; omitted if not marked for
+          deletion
         format: date-time
         type: string
       generation:
@@ -1192,9 +1417,11 @@ definitions:
       status:
         $ref: '#/definitions/NodePoolStatus'
       updated_by:
+        description: Identity that last updated the resource
         format: email
         type: string
       updated_time:
+        description: Timestamp when the resource was last updated
         format: date-time
         type: string
     required:
@@ -1245,9 +1472,21 @@ definitions:
   NodePoolCreateResponse:
     properties:
       created_by:
+        description: Identity that created the resource
         format: email
         type: string
       created_time:
+        description: Timestamp when the resource was created
+        format: date-time
+        type: string
+      deleted_by:
+        description: Identity that requested deletion; omitted if not marked for deletion
+        format: email
+        type: string
+      deleted_time:
+        description: >-
+          Timestamp when deletion was requested; omitted if not marked for
+          deletion
         format: date-time
         type: string
       generation:
@@ -1284,9 +1523,11 @@ definitions:
       status:
         $ref: '#/definitions/NodePoolStatus'
       updated_by:
+        description: Identity that last updated the resource
         format: email
         type: string
       updated_time:
+        description: Timestamp when the resource was last updated
         format: date-time
         type: string
     required:

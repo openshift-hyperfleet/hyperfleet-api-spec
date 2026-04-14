@@ -72,4 +72,25 @@ interface NodePools {
     ): NodePool 
       | Error
       | BadRequestResponse;
+
+    /**
+     * Marks the nodepool for deletion by setting deleted_time and deleted_by. Does not affect the parent cluster.
+     * Returns the updated nodepool with generation incremented.
+     */
+    @opExample(#{ returnType: #{ statusCode: 202, nodepool: exampleDeletedNodePool } })
+    @route("/clusters/{cluster_id}/nodepools/{nodepool_id}")
+    @delete
+    @summary("Request nodepool deletion")
+    @operationId("deleteNodePoolById")
+    deleteNodePoolById(
+        /** Cluster ID */
+        @path cluster_id: string,
+        /** NodePool ID */
+        @path nodepool_id: string,
+    ): {
+      @statusCode statusCode: 202;
+      @body nodepool: NodePool;
+    } | NotFoundResponse
+      | Error
+      | BadRequestResponse;
 }

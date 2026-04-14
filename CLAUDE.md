@@ -13,10 +13,12 @@ npm run build:all           # Generate all variants with Swagger
 
 **Validation workflow:**
 ```bash
-npm install                 # Install dependencies
-npm run build:core         # Build and verify compilation
-npm run build:gcp          # Build GCP variant
-ls -l schemas/*/openapi.yaml  # Confirm outputs exist
+npm install                              # Install dependencies
+./build-schema.sh gcp                   # Build GCP OpenAPI 3.0
+./build-schema.sh gcp --swagger         # Build GCP OpenAPI 2.0 (Swagger)
+./build-schema.sh core                  # Build core OpenAPI 3.0
+./build-schema.sh core --swagger        # Build core OpenAPI 2.0 (Swagger)
+ls -l schemas/*/openapi.yaml            # Confirm outputs exist
 ```
 
 ## Key Concepts
@@ -98,7 +100,11 @@ services/
 - Commit `node_modules/` or build artifacts
 
 **DO:**
-- Run `npm run build:all` before committing schema changes
+- Run builds in this order before committing schema changes:
+  1. `./build-schema.sh gcp`
+  2. `./build-schema.sh gcp --swagger`
+  3. `./build-schema.sh core`
+  4. `./build-schema.sh core --swagger`
 - Test both provider variants when modifying shared models
 - Keep TypeSpec files focused (one resource per service file)
 - Use semantic versioning for releases (see RELEASING.md)
@@ -187,8 +193,10 @@ Build: `npm run build:gcp`
 Before submitting changes:
 
 - [ ] Dependencies installed: `npm install`
-- [ ] Core variant builds: `npm run build:core`
-- [ ] GCP variant builds: `npm run build:gcp`
+- [ ] GCP variant builds: `./build-schema.sh gcp`
+- [ ] GCP Swagger builds: `./build-schema.sh gcp --swagger`
+- [ ] Core variant builds: `./build-schema.sh core`
+- [ ] Core Swagger builds: `./build-schema.sh core --swagger`
 - [ ] Schema files generated: `ls schemas/*/openapi.yaml`
 - [ ] No TypeSpec compilation errors (check output)
 - [ ] Changes committed including schema updates
