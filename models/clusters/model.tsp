@@ -1,6 +1,9 @@
+import "@typespec/openapi";
 import "../common/model.tsp";
 import "../statuses/model.tsp";
 import "../../aliases.tsp";
+
+using OpenAPI;
 
 model ClusterBase {
   ...APIResource;
@@ -56,6 +59,14 @@ model Cluster {
 @example(exampleClusterCreateRequest)
 model ClusterCreateRequest  {
     ...ClusterBase;
+}
+
+@extension("minProperties", 1)
+@extension("additionalProperties", false)
+@example(exampleClusterPatchRequest)
+model ClusterPatchRequest {
+  spec?: ClusterSpec;
+  labels?: Record<string>;
 }
 
 model ClusterList {

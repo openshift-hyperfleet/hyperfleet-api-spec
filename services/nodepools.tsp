@@ -69,7 +69,7 @@ interface NodePools {
         @path cluster_id: string,
         /** NodePool ID */
         @path nodepool_id: string,
-    ): NodePool 
+    ): NodePool
       | Error
       | BadRequestResponse;
 
@@ -92,5 +92,23 @@ interface NodePools {
       @body nodepool: NodePool;
     } | NotFoundResponse
       | Error
+      | BadRequestResponse;
+
+    /**
+     * Patch a specific nodepool within a cluster
+     */
+    @route("/clusters/{cluster_id}/nodepools/{nodepool_id}")
+    @patch(#{implicitOptionality: true})
+    @summary("Patch nodepool by ID")
+    @operationId("patchNodePoolById")
+    patchNodePoolById(
+        /** Cluster ID */
+        @path cluster_id: string,
+        /** NodePool ID */
+        @path nodepool_id: string,
+        @body body: NodePoolPatchRequest,
+    ): NodePool
+      | Error
+      | NotFoundResponse
       | BadRequestResponse;
 }

@@ -16,7 +16,7 @@ info:
     name: Apache 2.0
     url: 'https://www.apache.org/licenses/LICENSE-2.0'
   title: HyperFleet API
-  version: 1.0.6
+  version: 1.0.7
 host: hyperfleet.redhat.com
 basePath: /
 schemes:
@@ -245,6 +245,41 @@ paths:
         - BearerAuth: []
       operationId: getClusterById
       summary: Get cluster by ID
+    patch:
+      consumes:
+        - application/json
+      produces:
+        - application/json
+        - application/problem+json
+      parameters:
+        - description: Cluster ID
+          in: path
+          name: cluster_id
+          required: true
+          type: string
+        - in: body
+          name: body
+          required: true
+          schema:
+            $ref: '#/definitions/ClusterPatchRequest'
+      responses:
+        '200':
+          description: The request has succeeded.
+          schema:
+            $ref: '#/definitions/Cluster'
+        '400':
+          description: The server could not understand the request due to invalid syntax.
+        '404':
+          description: The server cannot find the requested resource.
+        default:
+          description: An unexpected error response.
+          schema:
+            $ref: '#/definitions/Error'
+      security:
+        - BearerAuth: []
+      description: Patch a specific cluster by ID
+      operationId: patchClusterById
+      summary: Patch cluster by ID
   '/api/hyperfleet/v1/clusters/{cluster_id}/nodepools':
     get:
       produces:
@@ -476,6 +511,46 @@ paths:
       description: Returns specific nodepool
       operationId: getNodePoolById
       summary: Get nodepool by ID
+    patch:
+      consumes:
+        - application/json
+      produces:
+        - application/json
+        - application/problem+json
+      parameters:
+        - description: Cluster ID
+          in: path
+          name: cluster_id
+          required: true
+          type: string
+        - description: NodePool ID
+          in: path
+          name: nodepool_id
+          required: true
+          type: string
+        - in: body
+          name: body
+          required: true
+          schema:
+            $ref: '#/definitions/NodePoolPatchRequest'
+      responses:
+        '200':
+          description: The request has succeeded.
+          schema:
+            $ref: '#/definitions/NodePool'
+        '400':
+          description: The server could not understand the request due to invalid syntax.
+        '404':
+          description: The server cannot find the requested resource.
+        default:
+          description: An unexpected error response.
+          schema:
+            $ref: '#/definitions/Error'
+      security:
+        - BearerAuth: []
+      description: Patch a specific nodepool within a cluster
+      operationId: patchNodePoolById
+      summary: Patch nodepool by ID
   '/api/hyperfleet/v1/clusters/{cluster_id}/nodepools/{nodepool_id}/statuses':
     get:
       produces:
@@ -1201,6 +1276,21 @@ definitions:
       - total
       - items
     type: object
+  ClusterPatchRequest:
+    additionalProperties: false
+    example:
+      labels:
+        env: staging
+      spec: {}
+    minProperties: 1
+    properties:
+      labels:
+        additionalProperties:
+          type: string
+        type: object
+      spec:
+        $ref: '#/definitions/ClusterSpec'
+    type: object
   ClusterSpec:
     description: |-
       Core cluster specification.
@@ -1564,6 +1654,21 @@ definitions:
       - size
       - total
       - items
+    type: object
+  NodePoolPatchRequest:
+    additionalProperties: false
+    example:
+      labels:
+        env: staging
+      spec: {}
+    minProperties: 1
+    properties:
+      labels:
+        additionalProperties:
+          type: string
+        type: object
+      spec:
+        $ref: '#/definitions/NodePoolSpec'
     type: object
   NodePoolSpec:
     description: |-
