@@ -164,13 +164,9 @@ paths:
                   - created_time: '2021-01-01T10:00:00Z'
                     last_transition_time: '2021-01-01T10:00:00Z'
                     last_updated_time: '2021-01-01T10:00:00Z'
-                    message: >-
-                      All adapters reported Reconciled True for the current
-                      generation
+                    message: All adapters reconciled at the current generation
                     observed_generation: 1
-                    reason: >-
-                      All adapters reported Reconciled True for the current
-                      generation
+                    reason: All adapters reconciled at the current generation
                     status: 'True'
                     type: Reconciled
                   - created_time: '2021-01-01T10:00:00Z'
@@ -446,13 +442,9 @@ paths:
                   - created_time: '2021-01-01T10:00:00Z'
                     last_transition_time: '2021-01-01T10:00:00Z'
                     last_updated_time: '2021-01-01T10:00:00Z'
-                    message: >-
-                      All adapters reported Reconciled True for the current
-                      generation
+                    message: All adapters reconciled at the current generation
                     observed_generation: 1
-                    reason: >-
-                      All adapters reported Reconciled True for the current
-                      generation
+                    reason: All adapters reconciled at the current generation
                     status: 'True'
                     type: Reconciled
                   - created_time: '2021-01-01T10:00:00Z'
@@ -1150,9 +1142,9 @@ definitions:
           - created_time: '2021-01-01T10:00:00Z'
             last_transition_time: '2021-01-01T10:00:00Z'
             last_updated_time: '2021-01-01T10:00:00Z'
-            message: All adapters reported Reconciled True for the current generation
+            message: All adapters reconciled at the current generation
             observed_generation: 1
-            reason: All adapters reported Reconciled True for the current generation
+            reason: All adapters reconciled at the current generation
             status: 'True'
             type: Reconciled
           - created_time: '2021-01-01T10:00:00Z'
@@ -1466,9 +1458,9 @@ definitions:
           - created_time: '2021-01-01T10:00:00Z'
             last_transition_time: '2021-01-01T10:00:00Z'
             last_updated_time: '2021-01-01T10:00:00Z'
-            message: All adapters reported Reconciled True for the current generation
+            message: All adapters reconciled at the current generation
             observed_generation: 1
-            reason: All adapters reported Reconciled True for the current generation
+            reason: All adapters reconciled at the current generation
             status: 'True'
             type: Reconciled
           - created_time: '2021-01-01T10:00:00Z'
