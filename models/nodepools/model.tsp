@@ -30,7 +30,8 @@ model NodePoolStatus {
    * List of status conditions for the nodepool.
    * 
    * **Mandatory conditions**: 
-   * - `type: "Ready"`: Whether all adapters report successfully at the current generation.
+   * - `type: "Ready"` *(deprecated — use Reconciled)*: Whether all adapters report successfully at the current generation.
+   * - `type: "Reconciled"`: Whether the resource's desired state has been fully reconciled by all adapters at the current generation.
    * - `type: "Available"`: Aggregated adapter result for a common observed_generation.   
    * 
    * These conditions are present immediately upon resource creation.

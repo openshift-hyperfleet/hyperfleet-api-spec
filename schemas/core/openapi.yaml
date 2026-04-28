@@ -1,7 +1,7 @@
 openapi: 3.0.0
 info:
   title: HyperFleet API
-  version: 1.0.7
+  version: 1.0.8
   contact:
     name: HyperFleet Team
   license:
@@ -50,7 +50,7 @@ paths:
 
         **Note**: The `status` object in the response is read-only and computed by the service.
         It is NOT part of the request body. Initially,
-        status.conditions will include mandatory "Available" and "Ready" conditions.
+        status.conditions will include mandatory "Available", "Ready" and "Reconciled" conditions.
       parameters: []
       responses:
         '201':
@@ -175,6 +175,14 @@ paths:
                       status: 'True'
                       reason: All adapters reported Ready True for the current generation
                       message: All adapters reported Ready True for the current generation
+                      observed_generation: 1
+                      created_time: '2021-01-01T10:00:00Z'
+                      last_updated_time: '2021-01-01T10:00:00Z'
+                      last_transition_time: '2021-01-01T10:00:00Z'
+                    - type: Reconciled
+                      status: 'True'
+                      reason: All adapters reported Reconciled True for the current generation
+                      message: All adapters reported Reconciled True for the current generation
                       observed_generation: 1
                       created_time: '2021-01-01T10:00:00Z'
                       last_updated_time: '2021-01-01T10:00:00Z'
@@ -370,6 +378,14 @@ paths:
                       status: 'True'
                       reason: All adapters reported Ready True for the current generation
                       message: All adapters reported Ready True for the current generation
+                      observed_generation: 1
+                      created_time: '2021-01-01T10:00:00Z'
+                      last_updated_time: '2021-01-01T10:00:00Z'
+                      last_transition_time: '2021-01-01T10:00:00Z'
+                    - type: Reconciled
+                      status: 'True'
+                      reason: All adapters reported Reconciled True for the current generation
+                      message: All adapters reported Reconciled True for the current generation
                       observed_generation: 1
                       created_time: '2021-01-01T10:00:00Z'
                       last_updated_time: '2021-01-01T10:00:00Z'
@@ -1036,6 +1052,14 @@ components:
               created_time: '2021-01-01T10:00:00Z'
               last_updated_time: '2021-01-01T10:00:00Z'
               last_transition_time: '2021-01-01T10:00:00Z'
+            - type: Reconciled
+              status: 'True'
+              reason: All adapters reported Reconciled True for the current generation
+              message: All adapters reported Reconciled True for the current generation
+              observed_generation: 1
+              created_time: '2021-01-01T10:00:00Z'
+              last_updated_time: '2021-01-01T10:00:00Z'
+              last_transition_time: '2021-01-01T10:00:00Z'
             - type: Available
               status: 'True'
               reason: All adapters reported Available True for the same generation
@@ -1158,7 +1182,8 @@ components:
             List of status conditions for the cluster.
 
             **Mandatory conditions**: 
-            - `type: "Ready"`: Whether all adapters report successfully at the current generation.
+            - `type: "Ready"` *(deprecated — use Reconciled)*: Whether all adapters report successfully at the current generation.
+            - `type: "Reconciled"`: Whether the resource's desired state has been fully reconciled by all adapters at the current generation.
             - `type: "Available"`: Aggregated adapter result for a common observed_generation.   
 
             These conditions are present immediately upon resource creation.
@@ -1322,6 +1347,14 @@ components:
               status: 'True'
               reason: All adapters reported Ready True for the current generation
               message: All adapters reported Ready True for the current generation
+              observed_generation: 1
+              created_time: '2021-01-01T10:00:00Z'
+              last_updated_time: '2021-01-01T10:00:00Z'
+              last_transition_time: '2021-01-01T10:00:00Z'
+            - type: Reconciled
+              status: 'True'
+              reason: All adapters reported Reconciled True for the current generation
+              message: All adapters reported Reconciled True for the current generation
               observed_generation: 1
               created_time: '2021-01-01T10:00:00Z'
               last_updated_time: '2021-01-01T10:00:00Z'
@@ -1515,7 +1548,8 @@ components:
             List of status conditions for the nodepool.
 
             **Mandatory conditions**: 
-            - `type: "Ready"`: Whether all adapters report successfully at the current generation.
+            - `type: "Ready"` *(deprecated — use Reconciled)*: Whether all adapters report successfully at the current generation.
+            - `type: "Reconciled"`: Whether the resource's desired state has been fully reconciled by all adapters at the current generation.
             - `type: "Available"`: Aggregated adapter result for a common observed_generation.   
 
             These conditions are present immediately upon resource creation.

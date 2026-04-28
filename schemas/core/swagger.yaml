@@ -16,7 +16,7 @@ info:
     name: Apache 2.0
     url: 'https://www.apache.org/licenses/LICENSE-2.0'
   title: HyperFleet API
-  version: 1.0.7
+  version: 1.0.8
 host: hyperfleet.redhat.com
 basePath: /
 schemes:
@@ -112,8 +112,8 @@ paths:
 
         It is NOT part of the request body. Initially,
 
-        status.conditions will include mandatory "Available" and "Ready"
-        conditions.
+        status.conditions will include mandatory "Available", "Ready" and
+        "Reconciled" conditions.
       operationId: postCluster
       summary: Create cluster
   '/api/hyperfleet/v1/clusters/{cluster_id}':
@@ -161,6 +161,18 @@ paths:
                       generation
                     status: 'True'
                     type: Ready
+                  - created_time: '2021-01-01T10:00:00Z'
+                    last_transition_time: '2021-01-01T10:00:00Z'
+                    last_updated_time: '2021-01-01T10:00:00Z'
+                    message: >-
+                      All adapters reported Reconciled True for the current
+                      generation
+                    observed_generation: 1
+                    reason: >-
+                      All adapters reported Reconciled True for the current
+                      generation
+                    status: 'True'
+                    type: Reconciled
                   - created_time: '2021-01-01T10:00:00Z'
                     last_transition_time: '2021-01-01T10:00:00Z'
                     last_updated_time: '2021-01-01T10:00:00Z'
@@ -431,6 +443,18 @@ paths:
                       generation
                     status: 'True'
                     type: Ready
+                  - created_time: '2021-01-01T10:00:00Z'
+                    last_transition_time: '2021-01-01T10:00:00Z'
+                    last_updated_time: '2021-01-01T10:00:00Z'
+                    message: >-
+                      All adapters reported Reconciled True for the current
+                      generation
+                    observed_generation: 1
+                    reason: >-
+                      All adapters reported Reconciled True for the current
+                      generation
+                    status: 'True'
+                    type: Reconciled
                   - created_time: '2021-01-01T10:00:00Z'
                     last_transition_time: '2021-01-01T10:00:00Z'
                     last_updated_time: '2021-01-01T10:00:00Z'
@@ -1126,6 +1150,14 @@ definitions:
           - created_time: '2021-01-01T10:00:00Z'
             last_transition_time: '2021-01-01T10:00:00Z'
             last_updated_time: '2021-01-01T10:00:00Z'
+            message: All adapters reported Reconciled True for the current generation
+            observed_generation: 1
+            reason: All adapters reported Reconciled True for the current generation
+            status: 'True'
+            type: Reconciled
+          - created_time: '2021-01-01T10:00:00Z'
+            last_transition_time: '2021-01-01T10:00:00Z'
+            last_updated_time: '2021-01-01T10:00:00Z'
             message: All adapters reported Available True for the same generation
             observed_generation: 1
             reason: All adapters reported Available True for the same generation
@@ -1317,8 +1349,11 @@ definitions:
 
           **Mandatory conditions**: 
 
-          - `type: "Ready"`: Whether all adapters report successfully at the
-          current generation.
+          - `type: "Ready"` *(deprecated — use Reconciled)*: Whether all
+          adapters report successfully at the current generation.
+
+          - `type: "Reconciled"`: Whether the resource's desired state has been
+          fully reconciled by all adapters at the current generation.
 
           - `type: "Available"`: Aggregated adapter result for a common
           observed_generation.   
@@ -1428,6 +1463,14 @@ definitions:
             reason: All adapters reported Ready True for the current generation
             status: 'True'
             type: Ready
+          - created_time: '2021-01-01T10:00:00Z'
+            last_transition_time: '2021-01-01T10:00:00Z'
+            last_updated_time: '2021-01-01T10:00:00Z'
+            message: All adapters reported Reconciled True for the current generation
+            observed_generation: 1
+            reason: All adapters reported Reconciled True for the current generation
+            status: 'True'
+            type: Reconciled
           - created_time: '2021-01-01T10:00:00Z'
             last_transition_time: '2021-01-01T10:00:00Z'
             last_updated_time: '2021-01-01T10:00:00Z'
@@ -1689,8 +1732,11 @@ definitions:
 
           **Mandatory conditions**: 
 
-          - `type: "Ready"`: Whether all adapters report successfully at the
-          current generation.
+          - `type: "Ready"` *(deprecated — use Reconciled)*: Whether all
+          adapters report successfully at the current generation.
+
+          - `type: "Reconciled"`: Whether the resource's desired state has been
+          fully reconciled by all adapters at the current generation.
 
           - `type: "Available"`: Aggregated adapter result for a common
           observed_generation.   

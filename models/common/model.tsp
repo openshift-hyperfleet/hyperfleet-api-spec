@@ -176,7 +176,8 @@ model List<T> {
 union ConditionType {
     string,
     Available: "Available",
-    Ready: "Ready"
+    Ready: "Ready",
+    Reconciled: "Reconciled"
 }
 
 /**
@@ -246,6 +247,8 @@ model ResourceCondition {
     const ExampleAvailableMessage: string = "All adapters reported Available True for the same generation";
     const ExampleReadyReason: string = "All adapters reported Ready True for the current generation";
     const ExampleReadyMessage: string = "All adapters reported Ready True for the current generation";
+    const ExampleReconciledReason: string = "All adapters reported Reconciled True for the current generation";
+    const ExampleReconciledMessage: string = "All adapters reported Reconciled True for the current generation";
     const ExampleAdapter1: string = "adapter1";
     const ExampleAdapter2: string = "adapter2";
     const ExampleAdapter1AppliedReason: string = "Validation job applied";
