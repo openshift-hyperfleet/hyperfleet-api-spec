@@ -194,7 +194,7 @@ paths:
                       status: 'True'
                       reason: All adapters reported Ready True for the current generation
                       message: All adapters reported Ready True for the current generation
-                      observed_generation: 1
+                      observed_generation: 2
                       created_time: '2021-01-01T10:00:00Z'
                       last_updated_time: '2021-01-01T10:00:00Z'
                       last_transition_time: '2021-01-01T10:00:00Z'
@@ -202,7 +202,7 @@ paths:
                       status: 'True'
                       reason: All required adapters reported Available=True or Finalized=True at the current generation
                       message: All required adapters reported Available=True or Finalized=True at the current generation
-                      observed_generation: 1
+                      observed_generation: 2
                       created_time: '2021-01-01T10:00:00Z'
                       last_updated_time: '2021-01-01T10:00:00Z'
                       last_transition_time: '2021-01-01T10:00:00Z'
@@ -210,7 +210,7 @@ paths:
                       status: 'True'
                       reason: All adapters reported Available True for the same generation
                       message: All adapters reported Available True for the same generation
-                      observed_generation: 1
+                      observed_generation: 2
                       created_time: '2021-01-01T10:00:00Z'
                       last_updated_time: '2021-01-01T10:00:00Z'
                       last_transition_time: '2021-01-01T10:00:00Z'
@@ -218,7 +218,7 @@ paths:
                       status: 'True'
                       reason: This adapter1 is available
                       message: This adapter1 is available
-                      observed_generation: 1
+                      observed_generation: 2
                       created_time: '2021-01-01T10:00:00Z'
                       last_updated_time: '2021-01-01T10:00:00Z'
                       last_transition_time: '2021-01-01T10:00:00Z'
@@ -226,7 +226,7 @@ paths:
                       status: 'True'
                       reason: This adapter2 is available
                       message: This adapter2 is available
-                      observed_generation: 1
+                      observed_generation: 2
                       created_time: '2021-01-01T10:01:00Z'
                       last_updated_time: '2021-01-01T10:01:00Z'
                       last_transition_time: '2021-01-01T10:01:00Z'
@@ -416,7 +416,7 @@ paths:
                       status: 'True'
                       reason: ResourceReady
                       message: All conditions successful for current spec generation
-                      observed_generation: 1
+                      observed_generation: 2
                       created_time: '2021-01-01T10:00:00Z'
                       last_updated_time: '2021-01-01T10:00:00Z'
                       last_transition_time: '2021-01-01T10:00:00Z'
@@ -424,7 +424,7 @@ paths:
                       status: 'True'
                       reason: All required adapters reported Available=True or Finalized=True at the current generation
                       message: All required adapters reported Available=True or Finalized=True at the current generation
-                      observed_generation: 1
+                      observed_generation: 2
                       created_time: '2021-01-01T10:00:00Z'
                       last_updated_time: '2021-01-01T10:00:00Z'
                       last_transition_time: '2021-01-01T10:00:00Z'
@@ -432,7 +432,7 @@ paths:
                       status: 'True'
                       reason: ResourceAvailable
                       message: All conditions successful for observed_generation
-                      observed_generation: 1
+                      observed_generation: 2
                       created_time: '2021-01-01T10:00:00Z'
                       last_updated_time: '2021-01-01T10:00:00Z'
                       last_transition_time: '2021-01-01T10:00:00Z'
@@ -440,7 +440,7 @@ paths:
                       status: 'True'
                       reason: All validations passed
                       message: NodePool validation passed
-                      observed_generation: 1
+                      observed_generation: 2
                       created_time: '2021-01-01T10:00:00Z'
                       last_updated_time: '2021-01-01T10:00:00Z'
                       last_transition_time: '2021-01-01T10:00:00Z'
@@ -448,7 +448,7 @@ paths:
                       status: 'True'
                       reason: NodePool provisioned successfully
                       message: NodePool has 3 nodes running
-                      observed_generation: 1
+                      observed_generation: 2
                       created_time: '2021-01-01T10:01:00Z'
                       last_updated_time: '2021-01-01T10:01:00Z'
                       last_transition_time: '2021-01-01T10:01:00Z'

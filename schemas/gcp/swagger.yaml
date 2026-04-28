@@ -175,7 +175,7 @@ paths:
                     message: >-
                       All adapters reported Ready True for the current
                       generation
-                    observed_generation: 1
+                    observed_generation: 2
                     reason: >-
                       All adapters reported Ready True for the current
                       generation
@@ -187,7 +187,7 @@ paths:
                     message: >-
                       All required adapters reported Available=True or
                       Finalized=True at the current generation
-                    observed_generation: 1
+                    observed_generation: 2
                     reason: >-
                       All required adapters reported Available=True or
                       Finalized=True at the current generation
@@ -199,7 +199,7 @@ paths:
                     message: >-
                       All adapters reported Available True for the same
                       generation
-                    observed_generation: 1
+                    observed_generation: 2
                     reason: >-
                       All adapters reported Available True for the same
                       generation
@@ -209,7 +209,7 @@ paths:
                     last_transition_time: '2021-01-01T10:00:00Z'
                     last_updated_time: '2021-01-01T10:00:00Z'
                     message: This adapter1 is available
-                    observed_generation: 1
+                    observed_generation: 2
                     reason: This adapter1 is available
                     status: 'True'
                     type: Adapter1Successful
@@ -217,7 +217,7 @@ paths:
                     last_transition_time: '2021-01-01T10:01:00Z'
                     last_updated_time: '2021-01-01T10:01:00Z'
                     message: This adapter2 is available
-                    observed_generation: 1
+                    observed_generation: 2
                     reason: This adapter2 is available
                     status: 'True'
                     type: Adapter2Successful
@@ -474,7 +474,7 @@ paths:
                     last_transition_time: '2021-01-01T10:00:00Z'
                     last_updated_time: '2021-01-01T10:00:00Z'
                     message: All conditions successful for current spec generation
-                    observed_generation: 1
+                    observed_generation: 2
                     reason: ResourceReady
                     status: 'True'
                     type: Ready
@@ -484,7 +484,7 @@ paths:
                     message: >-
                       All required adapters reported Available=True or
                       Finalized=True at the current generation
-                    observed_generation: 1
+                    observed_generation: 2
                     reason: >-
                       All required adapters reported Available=True or
                       Finalized=True at the current generation
@@ -494,7 +494,7 @@ paths:
                     last_transition_time: '2021-01-01T10:00:00Z'
                     last_updated_time: '2021-01-01T10:00:00Z'
                     message: All conditions successful for observed_generation
-                    observed_generation: 1
+                    observed_generation: 2
                     reason: ResourceAvailable
                     status: 'True'
                     type: Available
@@ -502,7 +502,7 @@ paths:
                     last_transition_time: '2021-01-01T10:00:00Z'
                     last_updated_time: '2021-01-01T10:00:00Z'
                     message: NodePool validation passed
-                    observed_generation: 1
+                    observed_generation: 2
                     reason: All validations passed
                     status: 'True'
                     type: ValidationSuccessful
@@ -510,7 +510,7 @@ paths:
                     last_transition_time: '2021-01-01T10:01:00Z'
                     last_updated_time: '2021-01-01T10:01:00Z'
                     message: NodePool has 3 nodes running
-                    observed_generation: 1
+                    observed_generation: 2
                     reason: NodePool provisioned successfully
                     status: 'True'
                     type: NodePoolSuccessful
