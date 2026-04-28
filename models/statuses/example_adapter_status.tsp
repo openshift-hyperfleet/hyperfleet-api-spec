@@ -26,6 +26,13 @@ const exampleAdapterStatus: AdapterStatus = (#{
       reason: ExampleAdapter1HealthReason,
       message: ExampleAdapter1HealthMessage,
       last_transition_time: "2021-01-01T10:00:00Z",
+    },
+    #{
+      type: "Finalized",
+      status: AdapterConditionStatus.True,
+      reason: ExampleAdapter1FinalizedReason,
+      message: ExampleAdapter1FinalizedMessage,
+      last_transition_time: "2021-01-01T10:00:00Z",
     }
   ],
   metadata: #{
@@ -70,6 +77,12 @@ const exampleAdapterStatusCreateRequest: AdapterStatusCreateRequest = (#{
       status: AdapterConditionStatus.True,
       reason: ExampleAdapter1HealthReason,
       message: ExampleAdapter1HealthMessage,
+    },
+    #{
+      type: "Finalized",
+      status: AdapterConditionStatus.True,
+      reason: ExampleAdapter1FinalizedReason,
+      message: ExampleAdapter1FinalizedMessage,
     }
   ],
   metadata: #{
