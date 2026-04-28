@@ -11,7 +11,7 @@ enum ResourceConditionStatus {
 
 /**
  * Condition in AdapterStatus
- * Used for standard Kubernetes condition types: "Available", "Applied", "Health"
+ * Used for standard Kubernetes condition types: "Available", "Applied", "Health", "Finalized"
  * Note: observed_generation is at AdapterStatus level, not per-condition,
  * since all conditions in one AdapterStatus share the same observed generation
  */
@@ -74,7 +74,7 @@ model AdapterStatus {
   ...AdapterStatusBase;
   /**
    * Kubernetes-style conditions tracking adapter state
-   * Typically includes: Available, Applied, Health
+   * Typically includes: Available, Applied, Health, Finalized
    */
   conditions: AdapterCondition[];
 

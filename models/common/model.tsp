@@ -247,8 +247,8 @@ model ResourceCondition {
     const ExampleAvailableMessage: string = "All adapters reported Available True for the same generation";
     const ExampleReadyReason: string = "All adapters reported Ready True for the current generation";
     const ExampleReadyMessage: string = "All adapters reported Ready True for the current generation";
-    const ExampleReconciledReason: string = "All adapters reconciled at the current generation";
-    const ExampleReconciledMessage: string = "All adapters reconciled at the current generation";
+    const ExampleReconciledReason: string = "All required adapters reported Available=True or Finalized=True at the current generation";
+    const ExampleReconciledMessage: string = "All required adapters reported Available=True or Finalized=True at the current generation";
     const ExampleAdapter1: string = "adapter1";
     const ExampleAdapter2: string = "adapter2";
     const ExampleAdapter1AppliedReason: string = "Validation job applied";
@@ -257,6 +257,8 @@ model ResourceCondition {
     const ExampleAdapter1HealthMessage: string = "All adapter1 runtime operations completed successfully";
     const ExampleAdapter1AvaliableReason: string = "This adapter1 is available";
     const ExampleAdapter1AvaliableMessage: string = "This adapter1 is available";
+    const ExampleAdapter1FinalizedReason: string = "All resources deleted; cleanup confirmed";
+    const ExampleAdapter1FinalizedMessage: string = "All resources deleted; cleanup confirmed";
     const ExampleAdapter2AppliedReason: string = "Validation job applied";
     const ExampleAdapter2AppliedMessage: string = "Adapter2 validation job applied successfully";
     const ExampleAdapter2HealthReason: string = "All adapter2 operations completed successfully";
