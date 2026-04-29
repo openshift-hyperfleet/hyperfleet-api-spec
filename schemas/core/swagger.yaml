@@ -16,7 +16,7 @@ info:
     name: Apache 2.0
     url: 'https://www.apache.org/licenses/LICENSE-2.0'
   title: HyperFleet API
-  version: 1.0.8
+  version: 1.0.9
 host: hyperfleet.redhat.com
 basePath: /
 schemes:
@@ -648,7 +648,8 @@ paths:
           name: cluster_id
           required: true
           type: string
-        - in: path
+        - description: Nodepool ID
+          in: path
           name: nodepool_id
           required: true
           type: string
@@ -670,6 +671,8 @@ paths:
           description: The server cannot find the requested resource.
         '409':
           description: The request conflicts with the current state of the server.
+      security:
+        - BearerAuth: []
       description: >-
         Adapter creates or updates its status report for this nodepool.
 
@@ -682,6 +685,44 @@ paths:
         Adapter should call this endpoint every time it evaluates the nodepool.
       operationId: postNodePoolStatuses
       summary: Create or update adapter status
+    put:
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - description: Cluster ID
+          in: path
+          name: cluster_id
+          required: true
+          type: string
+        - description: Nodepool ID
+          in: path
+          name: nodepool_id
+          required: true
+          type: string
+        - in: body
+          name: body
+          required: true
+          schema:
+            $ref: '#/definitions/AdapterStatusCreateRequest'
+      responses:
+        '201':
+          description: >-
+            The request has succeeded and a new resource has been created as a
+            result.
+          schema:
+            $ref: '#/definitions/AdapterStatus'
+        '400':
+          description: The server could not understand the request due to invalid syntax.
+        '404':
+          description: The server cannot find the requested resource.
+        '409':
+          description: The request conflicts with the current state of the server.
+      security:
+        - BearerAuth: []
+      operationId: putNodePoolStatuses
+      summary: Adapter creates or updates resource nodepool status
   '/api/hyperfleet/v1/clusters/{cluster_id}/statuses':
     get:
       produces:
@@ -782,6 +823,39 @@ paths:
         Adapter should call this endpoint every time it evaluates the cluster.
       operationId: postClusterStatuses
       summary: Create or update adapter status
+    put:
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - description: Cluster ID
+          in: path
+          name: cluster_id
+          required: true
+          type: string
+        - in: body
+          name: body
+          required: true
+          schema:
+            $ref: '#/definitions/AdapterStatusCreateRequest'
+      responses:
+        '201':
+          description: >-
+            The request has succeeded and a new resource has been created as a
+            result.
+          schema:
+            $ref: '#/definitions/AdapterStatus'
+        '400':
+          description: The server could not understand the request due to invalid syntax.
+        '404':
+          description: The server cannot find the requested resource.
+        '409':
+          description: The request conflicts with the current state of the server.
+      security:
+        - BearerAuth: []
+      operationId: putClusterStatuses
+      summary: Adapter creates or updates resource cluster status
   /api/hyperfleet/v1/nodepools:
     get:
       produces:

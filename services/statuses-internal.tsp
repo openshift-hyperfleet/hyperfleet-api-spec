@@ -10,18 +10,17 @@ using Http;
 using OpenAPI;
 
 namespace HyperFleet;
+
 @route("/clusters/{cluster_id}/statuses")
 @useAuth(HyperFleet.BearerAuth)
 //@tag("Cluster statuses")
-interface ClusterStatusesInternal{
-
+interface ClusterStatusesInternal {
   /**
    * Adapter creates or updates its status report for this cluster.
    * If adapter already has a status, it will be updated (upsert by adapter name).
    *
    * Response includes the full adapter status with all conditions.
    * Adapter should call this endpoint every time it evaluates the cluster.
-   *
    */
   @route("")
   @post
@@ -31,29 +30,43 @@ interface ClusterStatusesInternal{
     /**
      * Cluster ID
      */
-     @path cluster_id: string,
+    @path cluster_id: string,
 
     @body body: AdapterStatusCreateRequest,
   ):
     | (CreatedResponse & AdapterStatus)
-      | BadRequestResponse
-      | NotFoundResponse
-      | ConflictResponse
-      | BadRequestResponse;
+    | BadRequestResponse
+    | NotFoundResponse
+    | ConflictResponse;
 
+  @route("")
+  @put
+  @summary("Adapter creates or updates resource cluster status")
+  @operationId("putClusterStatuses")
+  putClusterStatuses(
+    /**
+     * Cluster ID
+     */
+    @path cluster_id: string,
+
+    @body body: AdapterStatusCreateRequest,
+  ):
+    | (CreatedResponse & AdapterStatus)
+    | BadRequestResponse
+    | NotFoundResponse
+    | ConflictResponse;
 }
 
 //@tag("NodePool statuses")
 @route("/clusters/{cluster_id}/nodepools/{nodepool_id}/statuses")
-interface NodePoolStatusesInternal{
-
+@useAuth(HyperFleet.BearerAuth)
+interface NodePoolStatusesInternal {
   /**
    * Adapter creates or updates its status report for this nodepool.
    * If adapter already has a status, it will be updated (upsert by adapter name).
    *
    * Response includes the full adapter status with all conditions.
    * Adapter should call this endpoint every time it evaluates the nodepool.
-   *
    */
   @route("")
   @post
@@ -63,15 +76,39 @@ interface NodePoolStatusesInternal{
     /**
      * Cluster ID
      */
-     @path cluster_id: string,
-     @path nodepool_id: string,
+    @path cluster_id: string,
+
+    /**
+     * Nodepool ID
+     */
+    @path nodepool_id: string,
 
     @body body: AdapterStatusCreateRequest,
   ):
     | (CreatedResponse & AdapterStatus)
-      | BadRequestResponse
-      | NotFoundResponse
-      | ConflictResponse
-      | BadRequestResponse;
+    | BadRequestResponse
+    | NotFoundResponse
+    | ConflictResponse;
 
+  @route("")
+  @put
+  @summary("Adapter creates or updates resource nodepool status")
+  @operationId("putNodePoolStatuses")
+  putNodePoolStatuses(
+    /**
+     * Cluster ID
+     */
+    @path cluster_id: string,
+
+    /**
+     * Nodepool ID
+     */
+    @path nodepool_id: string,
+
+    @body body: AdapterStatusCreateRequest,
+  ):
+    | (CreatedResponse & AdapterStatus)
+    | BadRequestResponse
+    | NotFoundResponse
+    | ConflictResponse;
 }

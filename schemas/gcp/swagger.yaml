@@ -16,7 +16,7 @@ info:
     name: Apache 2.0
     url: 'https://www.apache.org/licenses/LICENSE-2.0'
   title: HyperFleet API
-  version: 1.0.8
+  version: 1.0.9
 host: hyperfleet.redhat.com
 basePath: /
 schemes:
