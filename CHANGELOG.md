@@ -17,6 +17,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Improved README.md structure to align with HyperFleet documentation standards
 
+## [1.0.9] - 2026-04-29
+
+### Added
+
+- PATCH endpoint for clusters (PATCH `/clusters/{cluster_id}`) with `ClusterPatchRequest`
+- PATCH endpoint for nodepools (PATCH `/clusters/{cluster_id}/nodepools/{nodepool_id}`) with `NodePoolPatchRequest`
+- "Reconciled" condition type to resource status conditions
+- "Finalized" condition type to adapter status conditions
+- 409 Conflict response to cluster patch (PATCH `/clusters/{cluster_id}`) for soft-deleted cluster rejection
+- 409 Conflict response to nodepool create (POST `/clusters/{cluster_id}/nodepools`) for soft-deleted cluster rejection
+- 409 Conflict response to nodepool patch (PATCH `/clusters/{cluster_id}/nodepools/{nodepool_id}`) for soft-deleted cluster rejection
+
 ## [1.0.6] - 2026-04-13
 
 ### Added
@@ -63,7 +75,8 @@ First official stable release of the HyperFleet API specification.
 - Interactive API documentation
 
 <!-- Links -->
-[Unreleased]: https://github.com/openshift-hyperfleet/hyperfleet-api-spec/compare/v1.0.6...HEAD
+[Unreleased]: https://github.com/openshift-hyperfleet/hyperfleet-api-spec/compare/v1.0.9...HEAD
+[1.0.9]: https://github.com/openshift-hyperfleet/hyperfleet-api-spec/compare/v1.0.6...v1.0.9
 [1.0.6]: https://github.com/openshift-hyperfleet/hyperfleet-api-spec/compare/v1.0.2...v1.0.6
 [1.0.2]: https://github.com/openshift-hyperfleet/hyperfleet-api-spec/compare/v1.0.0...v1.0.2
 [1.0.0]: https://github.com/openshift-hyperfleet/hyperfleet-api-spec/releases/tag/v1.0.0

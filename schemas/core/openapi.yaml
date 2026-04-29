@@ -125,6 +125,8 @@ paths:
           description: The server could not understand the request due to invalid syntax.
         '404':
           description: The server cannot find the requested resource.
+        '409':
+          description: The request conflicts with the current state of the server.
         default:
           description: An unexpected error response.
           content:
@@ -283,6 +285,8 @@ paths:
                 $ref: '#/components/schemas/NodePoolCreateResponse'
         '400':
           description: The server could not understand the request due to invalid syntax.
+        '409':
+          description: The request conflicts with the current state of the server.
         default:
           description: An unexpected error response.
           content:
@@ -460,6 +464,8 @@ paths:
           description: The server could not understand the request due to invalid syntax.
         '404':
           description: The server cannot find the requested resource.
+        '409':
+          description: The request conflicts with the current state of the server.
         default:
           description: An unexpected error response.
           content:

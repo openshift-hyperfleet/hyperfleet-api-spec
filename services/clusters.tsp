@@ -66,7 +66,8 @@ interface Clusters {
   ): Cluster
     | Error
     | NotFoundResponse
-    | BadRequestResponse;
+    | BadRequestResponse
+    | ConflictResponse;
 
   /**
    * Marks the cluster for deletion by setting deleted_time to the current time, cascades to its nodepools.
