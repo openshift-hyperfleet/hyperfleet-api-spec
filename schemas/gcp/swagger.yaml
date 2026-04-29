@@ -16,7 +16,7 @@ info:
     name: Apache 2.0
     url: 'https://www.apache.org/licenses/LICENSE-2.0'
   title: HyperFleet API
-  version: 1.0.9
+  version: 1.0.10
 host: hyperfleet.redhat.com
 basePath: /
 schemes:
@@ -173,11 +173,11 @@ paths:
                     last_transition_time: '2021-01-01T10:00:00Z'
                     last_updated_time: '2021-01-01T10:00:00Z'
                     message: >-
-                      All adapters reported Ready True for the current
+                      All adapters reported Available=True for the current
                       generation
                     observed_generation: 2
                     reason: >-
-                      All adapters reported Ready True for the current
+                      All adapters reported Available=True for the current
                       generation
                     status: 'True'
                     type: Ready
@@ -478,11 +478,11 @@ paths:
                     last_transition_time: '2021-01-01T10:00:00Z'
                     last_updated_time: '2021-01-01T10:00:00Z'
                     message: >-
-                      All adapters reported Ready True for the current
+                      All adapters reported Available=True for the current
                       generation
                     observed_generation: 2
                     reason: >-
-                      All adapters reported Ready True for the current
+                      All adapters reported Available=True for the current
                       generation
                     status: 'True'
                     type: Ready
@@ -1079,9 +1079,9 @@ definitions:
           - created_time: '2021-01-01T10:00:00Z'
             last_transition_time: '2021-01-01T10:00:00Z'
             last_updated_time: '2021-01-01T10:00:00Z'
-            message: All adapters reported Ready True for the current generation
+            message: All adapters reported Available=True for the current generation
             observed_generation: 1
-            reason: All adapters reported Ready True for the current generation
+            reason: All adapters reported Available=True for the current generation
             status: 'True'
             type: Ready
           - created_time: '2021-01-01T10:00:00Z'
@@ -1516,9 +1516,9 @@ definitions:
           - created_time: '2021-01-01T10:00:00Z'
             last_transition_time: '2021-01-01T10:00:00Z'
             last_updated_time: '2021-01-01T10:00:00Z'
-            message: All adapters reported Ready True for the current generation
+            message: All adapters reported Available=True for the current generation
             observed_generation: 1
-            reason: All adapters reported Ready True for the current generation
+            reason: All adapters reported Available=True for the current generation
             status: 'True'
             type: Ready
           - created_time: '2021-01-01T10:00:00Z'

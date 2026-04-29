@@ -9,8 +9,8 @@ const exampleAdapterStatus: AdapterStatus = (#{
     #{
       type: ConditionType.Available,
       status: AdapterConditionStatus.True,
-      reason: ExampleAdapter1AvaliableReason,
-      message: ExampleAdapter1AvaliableMessage,
+      reason: ExampleAdapter1AvailableReason,
+      message: ExampleAdapter1AvailableMessage,
       last_transition_time: "2021-01-01T10:00:00Z",
     },
     #{
@@ -63,8 +63,8 @@ const exampleAdapterStatusCreateRequest: AdapterStatusCreateRequest = (#{
     #{
       type: ConditionType.Available,
       status: AdapterConditionStatus.True,
-      reason: ExampleAdapter1AvaliableReason,
-      message: ExampleAdapter1AvaliableMessage,
+      reason: ExampleAdapter1AvailableReason,
+      message: ExampleAdapter1AvailableMessage,
     },
     #{
       type: "Applied",
@@ -116,8 +116,8 @@ const exampleAdapterStatusList: AdapterStatusList = (#{
         #{
           type: ConditionType.Available,
           status: AdapterConditionStatus.True,
-          reason: ExampleAdapter1AvaliableReason,
-          message: ExampleAdapter1AvaliableMessage,
+          reason: ExampleAdapter1AvailableReason,
+          message: ExampleAdapter1AvailableMessage,
           last_transition_time: "2021-01-01T10:00:00Z",
         },
       ],
@@ -135,8 +135,8 @@ const exampleAdapterStatusList: AdapterStatusList = (#{
         #{
           type: ConditionType.Available,
           status: AdapterConditionStatus.True,
-          reason: ExampleAdapter2AvaliableReason,
-          message: ExampleAdapter2AvaliableMessage,
+          reason: ExampleAdapter2AvailableReason,
+          message: ExampleAdapter2AvailableMessage,
           last_transition_time: "2021-01-01T10:01:00Z",
         },
       ],

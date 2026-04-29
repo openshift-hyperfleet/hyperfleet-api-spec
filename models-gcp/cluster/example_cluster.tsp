@@ -67,8 +67,8 @@ const exampleCluster: Cluster = #{
       #{
         type: "Adapter1Successful",
         status: ResourceConditionStatus.True,
-        reason: ExampleAdapter1AvaliableReason,
-        message: ExampleAdapter1AvaliableMessage,
+        reason: ExampleAdapter1AvailableReason,
+        message: ExampleAdapter1AvailableMessage,
         observed_generation: 1,
         created_time: "2021-01-01T10:00:00Z",
         last_updated_time: "2021-01-01T10:00:00Z",
@@ -77,8 +77,8 @@ const exampleCluster: Cluster = #{
       #{
         type: "Adapter2Successful",
         status: ResourceConditionStatus.True,
-        reason: ExampleAdapter2AvaliableReason,
-        message: ExampleAdapter2AvaliableMessage,
+        reason: ExampleAdapter2AvailableReason,
+        message: ExampleAdapter2AvailableMessage,
         observed_generation: 1,
         created_time: "2021-01-01T10:01:00Z",
         last_updated_time: "2021-01-01T10:01:00Z",
@@ -157,8 +157,8 @@ const exampleDeletedCluster: Cluster = #{
       #{
         type: "Adapter1Successful",
         status: ResourceConditionStatus.True,
-        reason: ExampleAdapter1AvaliableReason,
-        message: ExampleAdapter1AvaliableMessage,
+        reason: ExampleAdapter1AvailableReason,
+        message: ExampleAdapter1AvailableMessage,
         observed_generation: 2,
         created_time: "2021-01-01T10:00:00Z",
         last_updated_time: "2021-01-01T10:00:00Z",
@@ -167,8 +167,8 @@ const exampleDeletedCluster: Cluster = #{
       #{
         type: "Adapter2Successful",
         status: ResourceConditionStatus.True,
-        reason: ExampleAdapter2AvaliableReason,
-        message: ExampleAdapter2AvaliableMessage,
+        reason: ExampleAdapter2AvailableReason,
+        message: ExampleAdapter2AvailableMessage,
         observed_generation: 2,
         created_time: "2021-01-01T10:01:00Z",
         last_updated_time: "2021-01-01T10:01:00Z",
