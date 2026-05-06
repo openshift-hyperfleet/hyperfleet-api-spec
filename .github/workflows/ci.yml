@@ -1,0 +1,62 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install TypeSpec compiler
+        run: npm install -g @typespec/compiler@1.6
+
+      - name: Build all schemas
+        run: |
+          ./build-schema.sh core
+          ./build-schema.sh core --swagger
+          ./build-schema.sh gcp
+          ./build-schema.sh gcp --swagger
+
+      - name: Check schema consistency
+        run: |
+          if ! git diff --exit-code schemas/; then
+            echo "Committed schemas are out of sync with TypeSpec sources."
+            echo "Run './build-schema.sh core --swagger && ./build-schema.sh gcp --swagger' and commit the results."
+            exit 1
+          fi
+
+      - name: Lint OpenAPI schemas
+        run: npx spectral lint schemas/core/openapi.yaml schemas/gcp/openapi.yaml
+
+      - name: Check version bump
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          CURRENT=$(grep -oP '(?<=version: ")[^"]+' main.tsp)
+          LATEST=$(gh release list --limit 1 --json tagName --jq '.[0].tagName' 2>/dev/null | sed 's/^v//' || echo "")
+          if [ -z "$LATEST" ]; then
+            echo "No previous releases found — version check skipped"
+            exit 0
+          fi
+          if [ "$CURRENT" = "$LATEST" ]; then
+            echo "Version '$CURRENT' matches latest release tag 'v$LATEST' — bump the version in main.tsp before merging."
+            exit 1
+          fi
+          echo "Version bump OK: $LATEST → $CURRENT"
