@@ -38,7 +38,7 @@ interface Clusters {
    *
    * **Note**: The `status` object in the response is read-only and computed by the service.
    * It is NOT part of the request body. Initially,
-   * status.conditions will include mandatory "Available", "Ready" and "Reconciled" conditions.
+   * status.conditions will include mandatory "LastKnownReconciled", "Ready" and "Reconciled" conditions.
    *
    */
   @route("")
