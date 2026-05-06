@@ -245,8 +245,8 @@ model ResourceCondition {
 
     const ExampleAvailableReason: string = "All adapters reported Available True for the same generation";
     const ExampleAvailableMessage: string = "All adapters reported Available True for the same generation";
-    const ExampleReadyReason: string = "All adapters reported Ready True for the current generation";
-    const ExampleReadyMessage: string = "All adapters reported Ready True for the current generation";
+    const ExampleReadyReason: string = "All adapters reported Available=True for the current generation";
+    const ExampleReadyMessage: string = "All adapters reported Available=True for the current generation";
     const ExampleReconciledReason: string = "All required adapters reported Available=True or Finalized=True at the current generation";
     const ExampleReconciledMessage: string = "All required adapters reported Available=True or Finalized=True at the current generation";
     const ExampleAdapter1: string = "adapter1";
@@ -255,13 +255,13 @@ model ResourceCondition {
     const ExampleAdapter1AppliedMessage: string = "Adapter1 validation job applied successfully";
     const ExampleAdapter1HealthReason: string = "All adapter1 operations completed successfully";
     const ExampleAdapter1HealthMessage: string = "All adapter1 runtime operations completed successfully";
-    const ExampleAdapter1AvaliableReason: string = "This adapter1 is available";
-    const ExampleAdapter1AvaliableMessage: string = "This adapter1 is available";
+    const ExampleAdapter1AvailableReason: string = "This adapter1 is available";
+    const ExampleAdapter1AvailableMessage: string = "This adapter1 is available";
     const ExampleAdapter1FinalizedReason: string = "All resources deleted; cleanup confirmed";
     const ExampleAdapter1FinalizedMessage: string = "All resources deleted; cleanup confirmed";
     const ExampleAdapter2AppliedReason: string = "Validation job applied";
     const ExampleAdapter2AppliedMessage: string = "Adapter2 validation job applied successfully";
     const ExampleAdapter2HealthReason: string = "All adapter2 operations completed successfully";
     const ExampleAdapter2HealthMessage: string = "All adapter2 runtime operations completed successfully";
-    const ExampleAdapter2AvaliableReason: string = "This adapter2 is available";
-    const ExampleAdapter2AvaliableMessage: string = "This adapter2 is available";
+    const ExampleAdapter2AvailableReason: string = "This adapter2 is available";
+    const ExampleAdapter2AvailableMessage: string = "This adapter2 is available";

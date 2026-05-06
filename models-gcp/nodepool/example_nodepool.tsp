@@ -1,5 +1,6 @@
 import "../../aliases-gcp.tsp";
 import "../../models/nodepools/model.tsp";
+import "../../models/common/model.tsp";
 
 const exampleNodePool: NodePool = #{
   kind: "NodePool",
@@ -41,8 +42,8 @@ const exampleNodePool: NodePool = #{
       #{
         type: ConditionType.Ready,
         status: ResourceConditionStatus.True,
-        reason: "ResourceReady",
-        message: "All conditions successful for current spec generation",
+        reason: ExampleReadyReason,
+        message: ExampleReadyMessage,
         observed_generation: 1,
         created_time: "2021-01-01T10:00:00Z",
         last_updated_time: "2021-01-01T10:00:00Z",
@@ -61,8 +62,8 @@ const exampleNodePool: NodePool = #{
       #{
         type: ConditionType.Available,
         status: ResourceConditionStatus.True,
-        reason: "ResourceAvailable",
-        message: "All conditions successful for observed_generation",
+        reason: ExampleAvailableReason,
+        message: ExampleAvailableMessage,
         observed_generation: 1,
         created_time: "2021-01-01T10:00:00Z",
         last_updated_time: "2021-01-01T10:00:00Z",
@@ -136,8 +137,8 @@ const exampleDeletedNodePool: NodePool = #{
       #{
         type: ConditionType.Ready,
         status: ResourceConditionStatus.True,
-        reason: "ResourceReady",
-        message: "All conditions successful for current spec generation",
+        reason: ExampleReadyReason,
+        message: ExampleReadyMessage,
         observed_generation: 2,
         created_time: "2021-01-01T10:00:00Z",
         last_updated_time: "2021-01-01T10:00:00Z",
@@ -156,8 +157,8 @@ const exampleDeletedNodePool: NodePool = #{
       #{
         type: ConditionType.Available,
         status: ResourceConditionStatus.True,
-        reason: "ResourceAvailable",
-        message: "All conditions successful for observed_generation",
+        reason: ExampleAvailableReason,
+        message: ExampleAvailableMessage,
         observed_generation: 2,
         created_time: "2021-01-01T10:00:00Z",
         last_updated_time: "2021-01-01T10:00:00Z",

@@ -55,7 +55,8 @@ interface NodePools {
     ):
          (CreatedResponse & NodePoolCreateResponse)
          | Error
-         | BadRequestResponse;
+         | BadRequestResponse
+         | ConflictResponse;
 
     /**
      * Returns specific nodepool
@@ -110,5 +111,6 @@ interface NodePools {
     ): NodePool
       | Error
       | NotFoundResponse
-      | BadRequestResponse;
+      | BadRequestResponse
+      | ConflictResponse;
 }
