@@ -25,7 +25,7 @@ jobs:
         run: npm ci
 
       - name: Install TypeSpec compiler
-        run: npm install -g @typespec/compiler@1.6
+        run: npm install -g @typespec/compiler@1.11
 
       - name: Build all schemas
         run: |
@@ -43,7 +43,9 @@ jobs:
           fi
 
       - name: Lint OpenAPI schemas
-        run: npx spectral lint schemas/core/openapi.yaml schemas/gcp/openapi.yaml
+        uses: stoplightio/spectral-action@v0.8.13
+        with:
+          file_glob: schemas/**/openapi.yaml
 
       - name: Check version bump
         env:
