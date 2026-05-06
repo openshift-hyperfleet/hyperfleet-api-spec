@@ -1419,7 +1419,7 @@ definitions:
       instance:
         description: URI reference for this specific occurrence
         example: /api/hyperfleet/v1/clusters
-        format: uri
+        format: uri-reference
         type: string
       status:
         description: HTTP status code

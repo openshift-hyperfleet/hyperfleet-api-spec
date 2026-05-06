@@ -1267,7 +1267,7 @@ components:
           example: The cluster name field is required
         instance:
           type: string
-          format: uri
+          format: uri-reference
           description: URI reference for this specific occurrence
           example: /api/hyperfleet/v1/clusters
         code:
