@@ -131,36 +131,13 @@ The status endpoints are split into two files to support different API consumers
 
 ## Prerequisites
 
-### Install TypeSpec Compiler (Global)
-
-First, install the TypeSpec compiler globally to get the `tsp` command:
-
-```bash
-npm install -g @typespec/compiler
-```
-
-This provides the `tsp` CLI tool but **does not** install the project-specific dependencies.
-
-### Install Project Dependencies (Required)
-
-After cloning the repository, install the project's TypeSpec dependencies:
+After cloning the repository, install all dependencies:
 
 ```bash
 npm install
 ```
 
-This installs all required TypeSpec libraries to the local `node_modules/` directory:
-
-- `@typespec/compiler` - TypeSpec compiler
-- `@typespec/http` - HTTP protocol support
-- `@typespec/rest` - REST API support
-- `@typespec/openapi` - OpenAPI decorators
-- `@typespec/openapi3` - OpenAPI 3.0 emitter
-
-**Why both?**
-
-- **Global install**: Provides the `tsp` command-line tool
-- **Local install**: Provides the TypeSpec libraries that your `.tsp` files import
+This installs the TypeSpec compiler and all required libraries into `node_modules/`. The build scripts invoke `tsp` directly from `node_modules/.bin/`, so no global install is needed.
 
 ## Building OpenAPI Specifications
 
@@ -336,6 +313,60 @@ To add a new service (e.g., with additional endpoints):
 - `@typespec/openapi` - OpenAPI decorators
 - `@typespec/openapi3` - OpenAPI 3.0 emitter
 - `api-spec-converter` - Converts OpenAPI 3.0 to OpenAPI 2.0 (Swagger)
+
+## Updating the Specification
+
+### Making an API change
+
+1. **Edit the TypeSpec sources** in `models/`, `models-gcp/`, or `services/`.
+
+2. **Bump the version** in `main.tsp`:
+
+   ```typescript
+   @info(#{ version: "1.0.12", ... })
+   ```
+
+3. **Rebuild all four schemas**:
+
+   ```bash
+   ./build-schema.sh core
+   ./build-schema.sh core --swagger
+   ./build-schema.sh gcp
+   ./build-schema.sh gcp --swagger
+   ```
+
+4. **Update [CHANGELOG.md](CHANGELOG.md)** — move your changes from `[Unreleased]` into a new versioned entry.
+
+5. **Open a PR.** CI enforces three things automatically:
+   - Committed schemas match freshly generated output (catches manual edits or forgotten rebuilds).
+   - OpenAPI 3.0 schemas pass `spectral:oas` linting.
+   - Version in `main.tsp` is higher than the latest GitHub release tag.
+
+6. **Merge to main.** The release workflow runs automatically: it creates an annotated tag (`vX.Y.Z`), builds all four schemas from scratch, and publishes a GitHub release with the artifacts attached.
+
+### Consuming schemas as a Go module
+
+Each release tag is a valid Go module version. Import the embedded schemas:
+
+```go
+import specschemas "github.com/openshift-hyperfleet/hyperfleet-api-spec/schemas"
+
+data, err := specschemas.FS.ReadFile("gcp/openapi.yaml")
+```
+
+To update a consumer after a new release:
+
+```bash
+go get github.com/openshift-hyperfleet/hyperfleet-api-spec@v1.0.12
+```
+
+To test locally against an unreleased branch, use a `replace` directive in your `go.mod`:
+
+```go
+replace github.com/openshift-hyperfleet/hyperfleet-api-spec => /path/to/local/hyperfleet-api-spec
+```
+
+See [hyperfleet-api docs/openapi-spec.md](https://github.com/openshift-hyperfleet/hyperfleet-api/blob/main/docs/openapi-spec.md) for how the hyperfleet-api service consumes this module.
 
 ## Contributing
 

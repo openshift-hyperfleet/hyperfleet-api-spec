@@ -82,11 +82,11 @@ if [ ! -f "main.tsp" ]; then
 fi
 
 # Check if tsp command is available
-if ! command -v tsp &> /dev/null; then
-    echo -e "${RED}Error: tsp command not found. Please install TypeSpec compiler.${NC}"
-    echo "Install with: npm install -g @typespec/compiler"
+if [ ! -x "${SCRIPT_DIR}/node_modules/.bin/tsp" ]; then
+    echo -e "${RED}Error: tsp not found in node_modules. Run 'npm install' first.${NC}"
     exit 1
 fi
+TSP="${SCRIPT_DIR}/node_modules/.bin/tsp"
 
 # Check if api-spec-converter is available when swagger output is requested
 if [ "$GENERATE_SWAGGER" = true ]; then
@@ -133,7 +133,7 @@ cleanup() {
 }
 trap cleanup EXIT
 
-if tsp compile main.tsp --output-dir "$TEMP_OUTPUT_DIR"; then
+if "$TSP" compile main.tsp --output-dir "$TEMP_OUTPUT_DIR"; then
     # Move the generated schema to the provider-specific directory
     if [ -f "${TEMP_OUTPUT_DIR}/schema/openapi.yaml" ]; then
         mv "${TEMP_OUTPUT_DIR}/schema/openapi.yaml" "${OUTPUT_DIR}/openapi.yaml"
