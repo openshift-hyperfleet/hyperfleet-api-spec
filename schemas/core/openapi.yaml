@@ -1,9 +1,10 @@
 openapi: 3.0.0
 info:
   title: HyperFleet API
-  version: 1.0.12
+  version: 1.0.13
   contact:
     name: HyperFleet Team
+    url: https://github.com/openshift-hyperfleet
   license:
     name: Apache 2.0
     url: https://www.apache.org/licenses/LICENSE-2.0
@@ -507,55 +508,10 @@ paths:
       security:
         - BearerAuth: []
   /api/hyperfleet/v1/clusters/{cluster_id}/nodepools/{nodepool_id}/statuses:
-    post:
-      operationId: postNodePoolStatuses
-      summary: Create or update adapter status
-      description: |-
-        Adapter creates or updates its status report for this nodepool.
-        If adapter already has a status, it will be updated (upsert by adapter name).
-
-        Response includes the full adapter status with all conditions.
-        Adapter should call this endpoint every time it evaluates the nodepool.
-      parameters:
-        - name: cluster_id
-          in: path
-          required: true
-          description: Cluster ID
-          schema:
-            type: string
-        - name: nodepool_id
-          in: path
-          required: true
-          description: Nodepool ID
-          schema:
-            type: string
-      responses:
-        '201':
-          description: The request has succeeded and a new resource has been created as a result.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/AdapterStatus'
-        '400':
-          description: The server could not understand the request due to invalid syntax.
-        '404':
-          description: The server cannot find the requested resource.
-        '409':
-          description: The request conflicts with the current state of the server.
-      tags:
-        - NodePool statuses
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/AdapterStatusCreateRequest'
-      security:
-        - BearerAuth: []
     put:
       operationId: putNodePoolStatuses
-      summary: Adapter creates or updates resource nodepool status
-      description: Idempotent upsert of an adapter status for this nodepool. Use instead of POST when the adapter name is known upfront.
+      summary: Adapter creates or updates nodepool status
+      description: Adapters call this endpoint to report the status for a nodepool after each evaluation. The adapter's status entry is created if it doesn't exist, or updated if it does (upserted by adapter name). This allows HyperFleet to aggregate multiple adapter perspectives into a unified nodepool status.
       parameters:
         - name: cluster_id
           in: path
@@ -566,7 +522,7 @@ paths:
         - name: nodepool_id
           in: path
           required: true
-          description: Nodepool ID
+          description: NodePool ID
           schema:
             type: string
       responses:
@@ -631,49 +587,10 @@ paths:
       tags:
         - NodePool statuses
   /api/hyperfleet/v1/clusters/{cluster_id}/statuses:
-    post:
-      operationId: postClusterStatuses
-      summary: Create or update adapter status
-      description: |-
-        Adapter creates or updates its status report for this cluster.
-        If adapter already has a status, it will be updated (upsert by adapter name).
-
-        Response includes the full adapter status with all conditions.
-        Adapter should call this endpoint every time it evaluates the cluster.
-      parameters:
-        - name: cluster_id
-          in: path
-          required: true
-          description: Cluster ID
-          schema:
-            type: string
-      responses:
-        '201':
-          description: The request has succeeded and a new resource has been created as a result.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/AdapterStatus'
-        '400':
-          description: The server could not understand the request due to invalid syntax.
-        '404':
-          description: The server cannot find the requested resource.
-        '409':
-          description: The request conflicts with the current state of the server.
-      tags:
-        - Cluster statuses
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/AdapterStatusCreateRequest'
-      security:
-        - BearerAuth: []
     put:
       operationId: putClusterStatuses
-      summary: Adapter creates or updates resource cluster status
-      description: Idempotent upsert of an adapter status for this cluster. Use instead of POST when the adapter name is known upfront.
+      summary: Adapter creates or updates cluster status
+      description: Adapters call this endpoint to report the status for a cluster after each evaluation. The adapter's status entry is created if it doesn't exist, or updated if it does (upserted by adapter name). This allows HyperFleet to aggregate multiple adapter perspectives into a unified cluster status.
       parameters:
         - name: cluster_id
           in: path
@@ -902,7 +819,7 @@ components:
           format: date-time
           description: |-
             When this adapter last reported its status (API-managed)
-            Updated every time the adapter POSTs, even if conditions haven't changed
+            Updated every time the adapter PUTs, even if conditions haven't changed
             Used by Sentinel to detect adapter liveness
       description: |-
         AdapterStatus represents the complete status report from an adapter
@@ -1742,7 +1659,7 @@ components:
           format: date-time
           description: |-
             When the corresponding adapter last reported (API-managed)
-            Updated every time the adapter POSTs, even if condition status hasn't changed
+            Updated every time the adapter PUTs, even if condition status hasn't changed
             Copied from AdapterStatus.last_report_time
       description: |-
         Condition in Cluster/NodePool status

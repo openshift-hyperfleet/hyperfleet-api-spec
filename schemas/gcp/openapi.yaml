@@ -1,9 +1,10 @@
 openapi: 3.0.0
 info:
   title: HyperFleet API
-  version: 1.0.12
+  version: 1.0.13
   contact:
     name: HyperFleet Team
+    url: https://github.com/openshift-hyperfleet
   license:
     name: Apache 2.0
     url: https://www.apache.org/licenses/LICENSE-2.0
@@ -793,7 +794,7 @@ components:
           format: date-time
           description: |-
             When this adapter last reported its status (API-managed)
-            Updated every time the adapter POSTs, even if conditions haven't changed
+            Updated every time the adapter PUTs, even if conditions haven't changed
             Used by Sentinel to detect adapter liveness
       description: |-
         AdapterStatus represents the complete status report from an adapter
@@ -1826,7 +1827,7 @@ components:
           format: date-time
           description: |-
             When the corresponding adapter last reported (API-managed)
-            Updated every time the adapter POSTs, even if condition status hasn't changed
+            Updated every time the adapter PUTs, even if condition status hasn't changed
             Copied from AdapterStatus.last_report_time
       description: |-
         Condition in Cluster/NodePool status

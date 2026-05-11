@@ -15,35 +15,11 @@ namespace HyperFleet;
 @useAuth(HyperFleet.BearerAuth)
 @tag("Cluster statuses")
 interface ClusterStatusesInternal {
-  /**
-   * Adapter creates or updates its status report for this cluster.
-   * If adapter already has a status, it will be updated (upsert by adapter name).
-   *
-   * Response includes the full adapter status with all conditions.
-   * Adapter should call this endpoint every time it evaluates the cluster.
-   */
-  @route("")
-  @post
-  @summary("Create or update adapter status")
-  @operationId("postClusterStatuses")
-  postClusterStatuses(
-    /**
-     * Cluster ID
-     */
-    @path cluster_id: string,
-
-    @body body: AdapterStatusCreateRequest,
-  ):
-    | (CreatedResponse & AdapterStatus)
-    | BadRequestResponse
-    | NotFoundResponse
-    | ConflictResponse;
-
   @route("")
   @put
-  @summary("Adapter creates or updates resource cluster status")
+  @summary("Adapter creates or updates cluster status")
   @operationId("putClusterStatuses")
-  @doc("Idempotent upsert of an adapter status for this cluster. Use instead of POST when the adapter name is known upfront.")
+  @doc("Adapters call this endpoint to report the status for a cluster after each evaluation. The adapter's status entry is created if it doesn't exist, or updated if it does (upserted by adapter name). This allows HyperFleet to aggregate multiple adapter perspectives into a unified cluster status.")
   putClusterStatuses(
     /**
      * Cluster ID
@@ -62,40 +38,11 @@ interface ClusterStatusesInternal {
 @route("/clusters/{cluster_id}/nodepools/{nodepool_id}/statuses")
 @useAuth(HyperFleet.BearerAuth)
 interface NodePoolStatusesInternal {
-  /**
-   * Adapter creates or updates its status report for this nodepool.
-   * If adapter already has a status, it will be updated (upsert by adapter name).
-   *
-   * Response includes the full adapter status with all conditions.
-   * Adapter should call this endpoint every time it evaluates the nodepool.
-   */
-  @route("")
-  @post
-  @summary("Create or update adapter status")
-  @operationId("postNodePoolStatuses")
-  postNodePoolStatuses(
-    /**
-     * Cluster ID
-     */
-    @path cluster_id: string,
-
-    /**
-     * Nodepool ID
-     */
-    @path nodepool_id: string,
-
-    @body body: AdapterStatusCreateRequest,
-  ):
-    | (CreatedResponse & AdapterStatus)
-    | BadRequestResponse
-    | NotFoundResponse
-    | ConflictResponse;
-
   @route("")
   @put
-  @summary("Adapter creates or updates resource nodepool status")
+  @summary("Adapter creates or updates nodepool status")
   @operationId("putNodePoolStatuses")
-  @doc("Idempotent upsert of an adapter status for this nodepool. Use instead of POST when the adapter name is known upfront.")
+  @doc("Adapters call this endpoint to report the status for a nodepool after each evaluation. The adapter's status entry is created if it doesn't exist, or updated if it does (upserted by adapter name). This allows HyperFleet to aggregate multiple adapter perspectives into a unified nodepool status.")
   putNodePoolStatuses(
     /**
      * Cluster ID
@@ -103,7 +50,7 @@ interface NodePoolStatusesInternal {
     @path cluster_id: string,
 
     /**
-     * Nodepool ID
+     * NodePool ID
      */
     @path nodepool_id: string,
 

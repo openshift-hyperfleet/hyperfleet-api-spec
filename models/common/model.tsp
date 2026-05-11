@@ -238,7 +238,7 @@ model ResourceCondition {
 
   /**
    * When the corresponding adapter last reported (API-managed)
-   * Updated every time the adapter POSTs, even if condition status hasn't changed
+   * Updated every time the adapter PUTs, even if condition status hasn't changed
    * Copied from AdapterStatus.last_report_time
    */
   @format("date-time") last_updated_time: string;
