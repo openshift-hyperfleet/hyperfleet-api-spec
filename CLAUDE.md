@@ -35,7 +35,7 @@ alias ClusterSpec = Record<unknown>;  // Generic
 alias ClusterSpec = GCPClusterSpec;   // Provider-specific
 ```
 
-The `aliases.tsp` symlink determines which provider types are active. The `build-schema.sh` script automatically re-links this during builds.
+The `aliases.tsp` symlink determines which provider types are active. The `build-schema.sh` script automatically re-links this during builds. The symlink is tracked in git and should always point to `aliases-core.tsp` by default. Do not remove it from version control or add it to `.gitignore`.
 
 **When adding new models:**
 - Shared models → `models/`
@@ -187,6 +187,15 @@ alias ClusterSpec = GCPClusterSpec;
 ```
 
 Build: `npm run build:gcp`
+
+## Version Bump and Changelog
+
+When bumping the version in `main.tsp`, always update `CHANGELOG.md`:
+
+1. Keep `## [Unreleased]` at the top, then add a new version section as `## [X.Y.Z] - YYYY-MM-DD`
+2. List changes under appropriate headings (`Added`, `Changed`, `Fixed`, `Removed`)
+3. Update the comparison links at the bottom of the file
+4. Follow [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) format
 
 ## Validation Checklist
 
