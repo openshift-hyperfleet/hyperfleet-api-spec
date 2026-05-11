@@ -112,8 +112,8 @@ paths:
 
         It is NOT part of the request body. Initially,
 
-        status.conditions will include mandatory "Available", "Ready" and
-        "Reconciled" conditions.
+        status.conditions will include mandatory "LastKnownReconciled", "Ready"
+        and "Reconciled" conditions.
       operationId: postCluster
       summary: Create cluster
   '/api/hyperfleet/v1/clusters/{cluster_id}':
@@ -177,14 +177,14 @@ paths:
                     last_transition_time: '2021-01-01T10:00:00Z'
                     last_updated_time: '2021-01-01T10:00:00Z'
                     message: >-
-                      All adapters reported Available True for the same
+                      All required adapters were reconciled at a common observed
                       generation
                     observed_generation: 2
                     reason: >-
-                      All adapters reported Available True for the same
+                      All required adapters were reconciled at a common observed
                       generation
                     status: 'True'
-                    type: Available
+                    type: LastKnownReconciled
                   - created_time: '2021-01-01T10:00:00Z'
                     last_transition_time: '2021-01-01T10:00:00Z'
                     last_updated_time: '2021-01-01T10:00:00Z'
@@ -463,14 +463,14 @@ paths:
                     last_transition_time: '2021-01-01T10:00:00Z'
                     last_updated_time: '2021-01-01T10:00:00Z'
                     message: >-
-                      All adapters reported Available True for the same
+                      All required adapters were reconciled at a common observed
                       generation
                     observed_generation: 2
                     reason: >-
-                      All adapters reported Available True for the same
+                      All required adapters were reconciled at a common observed
                       generation
                     status: 'True'
-                    type: Available
+                    type: LastKnownReconciled
                   - created_time: '2021-01-01T10:00:00Z'
                     last_transition_time: '2021-01-01T10:00:00Z'
                     last_updated_time: '2021-01-01T10:00:00Z'
@@ -1251,11 +1251,15 @@ definitions:
           - created_time: '2021-01-01T10:00:00Z'
             last_transition_time: '2021-01-01T10:00:00Z'
             last_updated_time: '2021-01-01T10:00:00Z'
-            message: All adapters reported Available True for the same generation
+            message: >-
+              All required adapters were reconciled at a common observed
+              generation
             observed_generation: 1
-            reason: All adapters reported Available True for the same generation
+            reason: >-
+              All required adapters were reconciled at a common observed
+              generation
             status: 'True'
-            type: Available
+            type: LastKnownReconciled
           - created_time: '2021-01-01T10:00:00Z'
             last_transition_time: '2021-01-01T10:00:00Z'
             last_updated_time: '2021-01-01T10:00:00Z'
@@ -1448,8 +1452,10 @@ definitions:
           - `type: "Reconciled"`: Whether the resource's desired state has been
           fully reconciled by all adapters at the current generation.
 
-          - `type: "Available"`: Aggregated adapter result for a common
-          observed_generation.   
+          - `type: "LastKnownReconciled"`: Sticky cross-generation condition —
+          stays True as long as all required adapters were reconciled at a
+          common observed generation, even if a newer generation is being
+          processed.
 
 
           These conditions are present immediately upon resource creation.
@@ -1571,11 +1577,15 @@ definitions:
           - created_time: '2021-01-01T10:00:00Z'
             last_transition_time: '2021-01-01T10:00:00Z'
             last_updated_time: '2021-01-01T10:00:00Z'
-            message: All adapters reported Available True for the same generation
+            message: >-
+              All required adapters were reconciled at a common observed
+              generation
             observed_generation: 1
-            reason: All adapters reported Available True for the same generation
+            reason: >-
+              All required adapters were reconciled at a common observed
+              generation
             status: 'True'
-            type: Available
+            type: LastKnownReconciled
           - created_time: '2021-01-01T10:00:00Z'
             last_transition_time: '2021-01-01T10:00:00Z'
             last_updated_time: '2021-01-01T10:00:00Z'
@@ -1835,8 +1845,10 @@ definitions:
           - `type: "Reconciled"`: Whether the resource's desired state has been
           fully reconciled by all adapters at the current generation.
 
-          - `type: "Available"`: Aggregated adapter result for a common
-          observed_generation.   
+          - `type: "LastKnownReconciled"`: Sticky cross-generation condition —
+          stays True as long as all required adapters were reconciled at a
+          common observed generation, even if a newer generation is being
+          processed.
 
 
           These conditions are present immediately upon resource creation.

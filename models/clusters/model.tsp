@@ -35,7 +35,7 @@ model ClusterStatus {
    * **Mandatory conditions**: 
    * - `type: "Ready"` *(deprecated — use Reconciled)*: Whether all adapters report successfully at the current generation.
    * - `type: "Reconciled"`: Whether the resource's desired state has been fully reconciled by all adapters at the current generation.
-   * - `type: "Available"`: Aggregated adapter result for a common observed_generation.   
+   * - `type: "LastKnownReconciled"`: Sticky cross-generation condition — stays True as long as all required adapters were reconciled at a common observed generation, even if a newer generation is being processed.
    * 
    * These conditions are present immediately upon resource creation.
    */

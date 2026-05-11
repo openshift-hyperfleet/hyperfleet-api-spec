@@ -19,6 +19,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Release workflow now triggers automatically on push to main instead of requiring a manual tag push; auto-creates annotated tag from version in `main.tsp` and attaches all four schema artifacts (`core-openapi.yaml`, `core-swagger.yaml`, `gcp-openapi.yaml`, `gcp-swagger.yaml`)
 - Bumped `actions/checkout` and `actions/setup-node` to v6
+- Renamed aggregated condition `Available` to `LastKnownReconciled` in cluster and nodepool status conditions (HYPERFLEET-1017)
+- Updated condition examples and descriptions to reflect `LastKnownReconciled` semantics
+- Fixed typo `Avaliable` → `Available` in adapter example constants (HYPERFLEET-971)
+- Improved README.md structure to align with HyperFleet documentation standards
 
 ### Fixed
 
