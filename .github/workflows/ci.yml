@@ -41,7 +41,7 @@ jobs:
 
       - name: Lint OpenAPI schemas
         run: |
-          node_modules/.bin/spectral lint schemas/core/openapi.yaml schemas/gcp/openapi.yaml --format github-actions
+          npx spectral lint schemas/core/openapi.yaml schemas/gcp/openapi.yaml --format github-actions --fail-severity warn
 
       - name: Check version bump
         env:

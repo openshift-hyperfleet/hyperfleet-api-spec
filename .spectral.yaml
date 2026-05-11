@@ -1,1 +1,7 @@
 extends: ["spectral:oas"]
+overrides:
+  - files:
+      - "schemas/core/openapi.yaml#/components/schemas/BearerAuth"
+      - "schemas/gcp/openapi.yaml#/components/schemas/BearerAuth"
+    rules:
+      oas3-unused-component: off
