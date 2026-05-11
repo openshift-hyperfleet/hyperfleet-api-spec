@@ -244,11 +244,11 @@ model ResourceCondition {
   @format("date-time") last_updated_time: string;
 }
 
-    const ExampleLastKnownReconciledReason: string = "All required adapters were reconciled at a common observed generation";
-    const ExampleLastKnownReconciledMessage: string = "All required adapters were reconciled at a common observed generation";
-    const ExampleReadyReason: string = "All adapters reported Available=True for the current generation";
-    const ExampleReadyMessage: string = "All adapters reported Available=True for the current generation";
-    const ExampleReconciledReason: string = "All required adapters reported Available=True or Finalized=True at the current generation";
+    const ExampleLastKnownReconciledReason: string = "AllAdaptersReconciled";
+    const ExampleLastKnownReconciledMessage: string = "All required adapters report Available=True for the tracked generation";
+    const ExampleReadyReason: string = "ReconciledAll";
+    const ExampleReadyMessage: string = "All required adapters reported Available=True or Finalized=True at the current generation";
+    const ExampleReconciledReason: string = "ReconciledAll";
     const ExampleReconciledMessage: string = "All required adapters reported Available=True or Finalized=True at the current generation";
     const ExampleAdapter1: string = "adapter1";
     const ExampleAdapter2: string = "adapter2";
