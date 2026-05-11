@@ -16,7 +16,7 @@ info:
     name: Apache 2.0
     url: 'https://www.apache.org/licenses/LICENSE-2.0'
   title: HyperFleet API
-  version: 1.0.11
+  version: 1.0.12
 host: hyperfleet.redhat.com
 basePath: /
 schemes:
@@ -178,12 +178,10 @@ paths:
                     last_transition_time: '2021-01-01T10:00:00Z'
                     last_updated_time: '2021-01-01T10:00:00Z'
                     message: >-
-                      All adapters reported Available=True for the current
-                      generation
+                      All required adapters reported Available=True or
+                      Finalized=True at the current generation
                     observed_generation: 2
-                    reason: >-
-                      All adapters reported Available=True for the current
-                      generation
+                    reason: ReconciledAll
                     status: 'True'
                     type: Ready
                   - created_time: '2021-01-01T10:00:00Z'
@@ -193,21 +191,17 @@ paths:
                       All required adapters reported Available=True or
                       Finalized=True at the current generation
                     observed_generation: 2
-                    reason: >-
-                      All required adapters reported Available=True or
-                      Finalized=True at the current generation
+                    reason: ReconciledAll
                     status: 'True'
                     type: Reconciled
                   - created_time: '2021-01-01T10:00:00Z'
                     last_transition_time: '2021-01-01T10:00:00Z'
                     last_updated_time: '2021-01-01T10:00:00Z'
                     message: >-
-                      All required adapters were reconciled at a common observed
-                      generation
+                      All required adapters report Available=True for the
+                      tracked generation
                     observed_generation: 2
-                    reason: >-
-                      All required adapters were reconciled at a common observed
-                      generation
+                    reason: AllAdaptersReconciled
                     status: 'True'
                     type: LastKnownReconciled
                   - created_time: '2021-01-01T10:00:00Z'
@@ -494,12 +488,10 @@ paths:
                     last_transition_time: '2021-01-01T10:00:00Z'
                     last_updated_time: '2021-01-01T10:00:00Z'
                     message: >-
-                      All adapters reported Available=True for the current
-                      generation
+                      All required adapters reported Available=True or
+                      Finalized=True at the current generation
                     observed_generation: 2
-                    reason: >-
-                      All adapters reported Available=True for the current
-                      generation
+                    reason: ReconciledAll
                     status: 'True'
                     type: Ready
                   - created_time: '2021-01-01T10:00:00Z'
@@ -509,21 +501,17 @@ paths:
                       All required adapters reported Available=True or
                       Finalized=True at the current generation
                     observed_generation: 2
-                    reason: >-
-                      All required adapters reported Available=True or
-                      Finalized=True at the current generation
+                    reason: ReconciledAll
                     status: 'True'
                     type: Reconciled
                   - created_time: '2021-01-01T10:00:00Z'
                     last_transition_time: '2021-01-01T10:00:00Z'
                     last_updated_time: '2021-01-01T10:00:00Z'
                     message: >-
-                      All required adapters were reconciled at a common observed
-                      generation
+                      All required adapters report Available=True for the
+                      tracked generation
                     observed_generation: 2
-                    reason: >-
-                      All required adapters were reconciled at a common observed
-                      generation
+                    reason: AllAdaptersReconciled
                     status: 'True'
                     type: LastKnownReconciled
                   - created_time: '2021-01-01T10:00:00Z'
@@ -1107,9 +1095,11 @@ definitions:
           - created_time: '2021-01-01T10:00:00Z'
             last_transition_time: '2021-01-01T10:00:00Z'
             last_updated_time: '2021-01-01T10:00:00Z'
-            message: All adapters reported Available=True for the current generation
+            message: >-
+              All required adapters reported Available=True or Finalized=True at
+              the current generation
             observed_generation: 1
-            reason: All adapters reported Available=True for the current generation
+            reason: ReconciledAll
             status: 'True'
             type: Ready
           - created_time: '2021-01-01T10:00:00Z'
@@ -1119,21 +1109,17 @@ definitions:
               All required adapters reported Available=True or Finalized=True at
               the current generation
             observed_generation: 1
-            reason: >-
-              All required adapters reported Available=True or Finalized=True at
-              the current generation
+            reason: ReconciledAll
             status: 'True'
             type: Reconciled
           - created_time: '2021-01-01T10:00:00Z'
             last_transition_time: '2021-01-01T10:00:00Z'
             last_updated_time: '2021-01-01T10:00:00Z'
             message: >-
-              All required adapters were reconciled at a common observed
+              All required adapters report Available=True for the tracked
               generation
             observed_generation: 1
-            reason: >-
-              All required adapters were reconciled at a common observed
-              generation
+            reason: AllAdaptersReconciled
             status: 'True'
             type: LastKnownReconciled
           - created_time: '2021-01-01T10:00:00Z'
@@ -1550,9 +1536,11 @@ definitions:
           - created_time: '2021-01-01T10:00:00Z'
             last_transition_time: '2021-01-01T10:00:00Z'
             last_updated_time: '2021-01-01T10:00:00Z'
-            message: All adapters reported Available=True for the current generation
+            message: >-
+              All required adapters reported Available=True or Finalized=True at
+              the current generation
             observed_generation: 1
-            reason: All adapters reported Available=True for the current generation
+            reason: ReconciledAll
             status: 'True'
             type: Ready
           - created_time: '2021-01-01T10:00:00Z'
@@ -1562,21 +1550,17 @@ definitions:
               All required adapters reported Available=True or Finalized=True at
               the current generation
             observed_generation: 1
-            reason: >-
-              All required adapters reported Available=True or Finalized=True at
-              the current generation
+            reason: ReconciledAll
             status: 'True'
             type: Reconciled
           - created_time: '2021-01-01T10:00:00Z'
             last_transition_time: '2021-01-01T10:00:00Z'
             last_updated_time: '2021-01-01T10:00:00Z'
             message: >-
-              All required adapters were reconciled at a common observed
+              All required adapters report Available=True for the tracked
               generation
             observed_generation: 1
-            reason: >-
-              All required adapters were reconciled at a common observed
-              generation
+            reason: AllAdaptersReconciled
             status: 'True'
             type: LastKnownReconciled
           - created_time: '2021-01-01T10:00:00Z'
