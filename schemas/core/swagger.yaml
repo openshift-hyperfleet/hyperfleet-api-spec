@@ -74,6 +74,9 @@ paths:
             $ref: '#/definitions/Error'
       security:
         - BearerAuth: []
+      tags:
+        - Clusters
+      description: Returns a list of all clusters.
       operationId: getClusters
       summary: List clusters
     post:
@@ -103,6 +106,8 @@ paths:
             $ref: '#/definitions/Error'
       security:
         - BearerAuth: []
+      tags:
+        - Clusters
       description: >-
         Create a new cluster resource.
 
@@ -215,6 +220,8 @@ paths:
             $ref: '#/definitions/Error'
       security:
         - BearerAuth: []
+      tags:
+        - Clusters
       description: >-
         Marks the cluster for deletion by setting deleted_time to the current
         time, cascades to its nodepools.
@@ -255,6 +262,9 @@ paths:
             $ref: '#/definitions/Error'
       security:
         - BearerAuth: []
+      tags:
+        - Clusters
+      description: Returns a single cluster by its ID.
       operationId: getClusterById
       summary: Get cluster by ID
     patch:
@@ -291,6 +301,8 @@ paths:
             $ref: '#/definitions/Error'
       security:
         - BearerAuth: []
+      tags:
+        - Clusters
       description: Patch a specific cluster by ID
       operationId: patchClusterById
       summary: Patch cluster by ID
@@ -351,6 +363,8 @@ paths:
             $ref: '#/definitions/Error'
       security:
         - BearerAuth: []
+      tags:
+        - NodePools
       description: Returns the list of all nodepools for a cluster
       operationId: getNodePoolsByClusterId
       summary: List all nodepools for cluster
@@ -388,6 +402,8 @@ paths:
             $ref: '#/definitions/Error'
       security:
         - BearerAuth: []
+      tags:
+        - NodePools
       description: Create a NodePool for a cluster
       operationId: createNodePool
       summary: Create nodepool
@@ -501,6 +517,8 @@ paths:
             $ref: '#/definitions/Error'
       security:
         - BearerAuth: []
+      tags:
+        - NodePools
       description: >-
         Marks the nodepool for deletion by setting deleted_time and deleted_by.
         Does not affect the parent cluster.
@@ -536,6 +554,8 @@ paths:
             $ref: '#/definitions/Error'
       security:
         - BearerAuth: []
+      tags:
+        - NodePools
       description: Returns specific nodepool
       operationId: getNodePoolById
       summary: Get nodepool by ID
@@ -578,6 +598,8 @@ paths:
             $ref: '#/definitions/Error'
       security:
         - BearerAuth: []
+      tags:
+        - NodePools
       description: Patch a specific nodepool within a cluster
       operationId: patchNodePoolById
       summary: Patch nodepool by ID
@@ -640,6 +662,8 @@ paths:
           description: An unexpected error response.
           schema:
             $ref: '#/definitions/Error'
+      tags:
+        - NodePool statuses
       description: Returns adapter status reports for this nodepool
       operationId: getNodePoolsStatuses
       summary: List all adapter statuses for nodepools
@@ -679,6 +703,8 @@ paths:
           description: The request conflicts with the current state of the server.
       security:
         - BearerAuth: []
+      tags:
+        - NodePool statuses
       description: >-
         Adapter creates or updates its status report for this nodepool.
 
@@ -727,6 +753,11 @@ paths:
           description: The request conflicts with the current state of the server.
       security:
         - BearerAuth: []
+      tags:
+        - NodePool statuses
+      description: >-
+        Idempotent upsert of an adapter status for this nodepool. Use instead of
+        POST when the adapter name is known upfront.
       operationId: putNodePoolStatuses
       summary: Adapter creates or updates resource nodepool status
   '/api/hyperfleet/v1/clusters/{cluster_id}/statuses':
@@ -783,6 +814,8 @@ paths:
           description: The server cannot find the requested resource.
       security:
         - BearerAuth: []
+      tags:
+        - Cluster statuses
       description: Returns adapter status reports for this cluster
       operationId: getClusterStatuses
       summary: List all adapter statuses for cluster
@@ -817,6 +850,8 @@ paths:
           description: The request conflicts with the current state of the server.
       security:
         - BearerAuth: []
+      tags:
+        - Cluster statuses
       description: >-
         Adapter creates or updates its status report for this cluster.
 
@@ -860,6 +895,11 @@ paths:
           description: The request conflicts with the current state of the server.
       security:
         - BearerAuth: []
+      tags:
+        - Cluster statuses
+      description: >-
+        Idempotent upsert of an adapter status for this cluster. Use instead of
+        POST when the adapter name is known upfront.
       operationId: putClusterStatuses
       summary: Adapter creates or updates resource cluster status
   /api/hyperfleet/v1/nodepools:
@@ -914,6 +954,8 @@ paths:
             $ref: '#/definitions/Error'
       security:
         - BearerAuth: []
+      tags:
+        - NodePools
       description: Returns the list of all nodepools
       operationId: getNodePools
       summary: List all nodepools for cluster
@@ -1504,7 +1546,7 @@ definitions:
       instance:
         description: URI reference for this specific occurrence
         example: /api/hyperfleet/v1/clusters
-        format: uri
+        format: uri-reference
         type: string
       status:
         description: HTTP status code
@@ -1973,7 +2015,11 @@ securityDefinitions:
     in: header
     name: Authorization
     type: apiKey
-tags: []
+tags:
+  - name: Clusters
+  - name: Cluster statuses
+  - name: NodePool statuses
+  - name: NodePools
 x-components:
   parameters:
     QueryParams.order:

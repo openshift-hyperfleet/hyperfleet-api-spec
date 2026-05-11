@@ -20,19 +20,13 @@ Thank you for your interest in contributing to the HyperFleet API specification!
    cd hyperfleet-api-spec
    ```
 
-2. Install TypeSpec compiler globally:
-
-   ```bash
-   npm install -g @typespec/compiler
-   ```
-
-3. Install project dependencies:
+2. Install project dependencies (includes the TypeSpec compiler locally):
 
    ```bash
    npm install
    ```
 
-4. Verify your setup by building the schemas:
+3. Verify your setup by building the schemas:
 
    ```bash
    npm run build:core
@@ -84,6 +78,22 @@ npm run build:gcp:swagger
 # Build all variants
 npm run build:all
 ```
+
+### Linting Schemas
+
+CI automatically lints OpenAPI schemas using a pinned version of [Spectral](https://github.com/stoplightio/spectral) installed locally in the workflow. For local linting during development, install Spectral globally:
+
+```bash
+npm install -g @stoplight/spectral-cli
+```
+
+Then lint the generated schemas:
+
+```bash
+spectral lint schemas/core/openapi.yaml schemas/gcp/openapi.yaml
+```
+
+The `.spectral.yaml` config at the repo root applies the `spectral:oas` ruleset.
 
 ### Validating Output
 
@@ -212,15 +222,15 @@ refactor: consolidate common status fields
 
 ## Release Process
 
-See [RELEASING.md](RELEASING.md) for detailed release instructions.
+Releases are **fully automated**. See [RELEASING.md](RELEASING.md) for details.
 
-**Quick summary:**
+When a PR is merged to `main`, the release workflow automatically:
 
-1. Build schemas: `npm run build:all`
-2. Commit changes
-3. Create tag: `git tag -a vX.Y.Z -m "Release vX.Y.Z"`
-4. Push tag: `git push upstream vX.Y.Z`
-5. Create GitHub Release with `core-openapi.yaml` and `gcp-openapi.yaml` assets
+1. Extracts the version from `main.tsp`
+2. Creates an annotated Git tag
+3. Publishes a GitHub Release with all four schema artifacts attached
+
+The CI workflow enforces that the version in `main.tsp` is bumped from the latest release tag before a PR can be merged.
 
 ## Pull Request Process
 

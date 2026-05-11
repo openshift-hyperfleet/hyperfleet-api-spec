@@ -10,7 +10,7 @@ using OpenAPI;
 
 namespace HyperFleet;
 
-//@tag("NodePools")
+@tag("NodePools")
 @useAuth(HyperFleet.BearerAuth)
 interface NodePools {
     /**

@@ -2,50 +2,91 @@ name: Create Release
 
 on:
   push:
-    tags:
-      - 'v*'
+    branches:
+      - main
 
 jobs:
   release:
     runs-on: ubuntu-latest
-
     permissions:
       contents: write
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
 
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
           node-version: '20'
 
       - name: Install dependencies
-        run: npm install
+        run: npm ci
 
-      - name: Install tsp
-        run: npm install -g @typespec/compiler@1.6
+      - name: Extract version
+        id: version
+        run: |
+          VERSION=$(grep -oP '(?<=version: ")[^"]+' main.tsp)
+          if [ -z "$VERSION" ]; then
+            echo "::error::Failed to extract version from main.tsp — check the @info decorator format" >&2
+            exit 1
+          fi
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+          echo "tag=v$VERSION" >> "$GITHUB_OUTPUT"
 
-      - name: Build Core schema
-        run: ./build-schema.sh core
+      - name: Check if release already exists
+        id: check_tag
+        env:
+          TAG: ${{ steps.version.outputs.tag }}
+        run: |
+          git fetch --tags
+          if git rev-parse "$TAG" >/dev/null 2>&1; then
+            echo "Tag $TAG already exists — skipping release"
+            echo "skip=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "skip=false" >> "$GITHUB_OUTPUT"
+          fi
 
-      - name: Build GCP schema
-        run: ./build-schema.sh gcp
+      - name: Build all schemas
+        if: steps.check_tag.outputs.skip == 'false'
+        run: |
+          ./build-schema.sh core
+          ./build-schema.sh core --swagger
+          ./build-schema.sh gcp
+          ./build-schema.sh gcp --swagger
 
       - name: Prepare release assets
+        if: steps.check_tag.outputs.skip == 'false'
         run: |
           cp schemas/core/openapi.yaml core-openapi.yaml
+          cp schemas/core/swagger.yaml core-swagger.yaml
           cp schemas/gcp/openapi.yaml gcp-openapi.yaml
+          cp schemas/gcp/swagger.yaml gcp-swagger.yaml
 
-      - name: Create Release
+      - name: Create release tag
+        if: steps.check_tag.outputs.skip == 'false'
+        env:
+          TAG: ${{ steps.version.outputs.tag }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git tag -a "$TAG" -m "Release $TAG"
+          git push origin "$TAG"
+
+      - name: Create GitHub Release
+        if: steps.check_tag.outputs.skip == 'false'
         uses: softprops/action-gh-release@v2
         with:
-          files: |
-            core-openapi.yaml
-            gcp-openapi.yaml
+          tag_name: ${{ steps.version.outputs.tag }}
+          generate_release_notes: true
           draft: false
           prerelease: false
-          generate_release_notes: true
+          files: |
+            core-openapi.yaml
+            core-swagger.yaml
+            gcp-openapi.yaml
+            gcp-swagger.yaml
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

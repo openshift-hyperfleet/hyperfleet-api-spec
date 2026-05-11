@@ -79,7 +79,7 @@ model Error {
     detail?: string;
 
     /** URI reference for this specific occurrence */
-    @format("uri")
+    @format("uri-reference")
     @example("/api/hyperfleet/v1/clusters")
     instance?: string;
 

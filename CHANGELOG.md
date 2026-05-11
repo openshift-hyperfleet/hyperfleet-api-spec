@@ -7,18 +7,27 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.0.11] - 2026-05-07
+
 ### Added
 
-- CONTRIBUTING.md with development guidelines and workflow
-- CHANGELOG.md following Keep a Changelog format
-- CLAUDE.md with AI agent context and validation workflow
+- CI workflow (`ci.yml`) that runs on every PR and push to main: rebuilds all schemas, checks consistency against committed files, lints with `spectral:oas` ruleset, and enforces version bump against latest release tag
+- Go module (`go.mod` + `schemas/schemas.go`) exposing all four generated schemas via `//go:embed` as `embed.FS`, enabling downstream consumers to import versioned schemas as a Go module dependency
+- `.spectral.yaml` with `spectral:oas` ruleset for OpenAPI 3.0 linting
 
 ### Changed
 
+- Release workflow now triggers automatically on push to main instead of requiring a manual tag push; auto-creates annotated tag from version in `main.tsp` and attaches all four schema artifacts (`core-openapi.yaml`, `core-swagger.yaml`, `gcp-openapi.yaml`, `gcp-swagger.yaml`)
+- Bumped `actions/checkout` and `actions/setup-node` to v6
 - Renamed aggregated condition `Available` to `LastKnownReconciled` in cluster and nodepool status conditions (HYPERFLEET-1017)
 - Updated condition examples and descriptions to reflect `LastKnownReconciled` semantics
 - Fixed typo `Avaliable` → `Available` in adapter example constants (HYPERFLEET-971)
 - Improved README.md structure to align with HyperFleet documentation standards
+
+### Fixed
+
+- `Error.instance` field format changed from `uri` to `uri-reference` per RFC 9457 (instance identifies a specific occurrence and may be a relative URI reference)
+- `build-schema.sh` now resolves `tsp` from `node_modules/.bin/` instead of requiring a global install, eliminating version mismatch between the globally installed compiler and the lockfile-pinned version
 
 ## [1.0.10] - 2026-05-05
 
@@ -99,7 +108,8 @@ First official stable release of the HyperFleet API specification.
 - Interactive API documentation
 
 <!-- Links -->
-[Unreleased]: https://github.com/openshift-hyperfleet/hyperfleet-api-spec/compare/v1.0.10...HEAD
+[Unreleased]: https://github.com/openshift-hyperfleet/hyperfleet-api-spec/compare/v1.0.11...HEAD
+[1.0.11]: https://github.com/openshift-hyperfleet/hyperfleet-api-spec/compare/v1.0.10...v1.0.11
 [1.0.10]: https://github.com/openshift-hyperfleet/hyperfleet-api-spec/compare/v1.0.9...v1.0.10
 [1.0.9]: https://github.com/openshift-hyperfleet/hyperfleet-api-spec/compare/v1.0.8...v1.0.9
 [1.0.8]: https://github.com/openshift-hyperfleet/hyperfleet-api-spec/compare/v1.0.7...v1.0.8

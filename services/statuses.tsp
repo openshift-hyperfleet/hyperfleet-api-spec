@@ -12,7 +12,7 @@ using OpenAPI;
 namespace HyperFleet;
 @route("/clusters/{cluster_id}/statuses")
 @useAuth(HyperFleet.BearerAuth)
-//@tag("Cluster statuses")
+@tag("Cluster statuses")
 interface ClusterStatuses{
   /**
    * Returns adapter status reports for this cluster
@@ -34,7 +34,7 @@ interface ClusterStatuses{
 
 }
 
-//@tag("NodePool statuses")
+@tag("NodePool statuses")
 @route("/clusters/{cluster_id}/nodepools/{nodepool_id}/statuses")
 interface NodePoolStatuses{
   /**

@@ -13,12 +13,13 @@
     "build:all": "./build-schema.sh core --swagger && ./build-schema.sh gcp --swagger"
   },
   "devDependencies": {
+    "@stoplight/spectral-cli": "6.15.1",
     "@typespec/compiler": "^1.6.0",
     "@typespec/http": "^1.6.0",
     "@typespec/openapi": "^1.6.0",
     "@typespec/openapi3": "^1.6.0",
-    "@typespec/rest": "^0.76.0",
-    "@typespec/versioning": "^0.76.0",
+    "@typespec/rest": "^0.81.0",
+    "@typespec/versioning": "^0.81.0",
     "api-spec-converter": "^2.12.0"
   }
 }

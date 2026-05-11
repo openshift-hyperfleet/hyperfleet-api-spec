@@ -13,7 +13,7 @@ namespace HyperFleet;
 
 @route("/clusters/{cluster_id}/statuses")
 @useAuth(HyperFleet.BearerAuth)
-//@tag("Cluster statuses")
+@tag("Cluster statuses")
 interface ClusterStatusesInternal {
   /**
    * Adapter creates or updates its status report for this cluster.
@@ -43,6 +43,7 @@ interface ClusterStatusesInternal {
   @put
   @summary("Adapter creates or updates resource cluster status")
   @operationId("putClusterStatuses")
+  @doc("Idempotent upsert of an adapter status for this cluster. Use instead of POST when the adapter name is known upfront.")
   putClusterStatuses(
     /**
      * Cluster ID
@@ -57,7 +58,7 @@ interface ClusterStatusesInternal {
     | ConflictResponse;
 }
 
-//@tag("NodePool statuses")
+@tag("NodePool statuses")
 @route("/clusters/{cluster_id}/nodepools/{nodepool_id}/statuses")
 @useAuth(HyperFleet.BearerAuth)
 interface NodePoolStatusesInternal {
@@ -94,6 +95,7 @@ interface NodePoolStatusesInternal {
   @put
   @summary("Adapter creates or updates resource nodepool status")
   @operationId("putNodePoolStatuses")
+  @doc("Idempotent upsert of an adapter status for this nodepool. Use instead of POST when the adapter name is known upfront.")
   putNodePoolStatuses(
     /**
      * Cluster ID
