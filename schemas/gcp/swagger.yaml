@@ -170,9 +170,10 @@ paths:
                     zone: us-central1-a
                   type: gcp
                 release:
+                  channelGroup: candidate
                   image: >-
-                    registry.redhat.io/openshift4/ose-cluster-version-operator:v4.14.0
-                  version: 4.14.0
+                    registry.redhat.io/openshift4/ose-cluster-version-operator:v4.22.0-ec.4
+                  version: 4.22.0-ec.4
               status:
                 conditions:
                   - created_time: '2021-01-01T10:00:00Z'
@@ -1069,8 +1070,10 @@ definitions:
             zone: us-central1-a
           type: gcp
         release:
-          image: 'registry.redhat.io/openshift4/ose-cluster-version-operator:v4.14.0'
-          version: 4.14.0
+          channelGroup: candidate
+          image: >-
+            registry.redhat.io/openshift4/ose-cluster-version-operator:v4.22.0-ec.4
+          version: 4.22.0-ec.4
       status:
         conditions:
           - created_time: '2021-01-01T10:00:00Z'
@@ -1204,8 +1207,10 @@ definitions:
             zone: us-central1-a
           type: gcp
         release:
-          image: 'registry.redhat.io/openshift4/ose-cluster-version-operator:v4.14.0'
-          version: 4.14.0
+          channelGroup: candidate
+          image: >-
+            registry.redhat.io/openshift4/ose-cluster-version-operator:v4.22.0-ec.4
+          version: 4.22.0-ec.4
     properties:
       href:
         description: Resource URI
@@ -1287,8 +1292,10 @@ definitions:
             zone: us-central1-a
           type: gcp
         release:
-          image: 'registry.redhat.io/openshift4/ose-cluster-version-operator:v4.14.0'
-          version: 4.14.0
+          channelGroup: candidate
+          image: >-
+            registry.redhat.io/openshift4/ose-cluster-version-operator:v4.22.0-ec.4
+          version: 4.22.0-ec.4
     minProperties: 1
     properties:
       labels:
