@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.0.15] - 2026-05-15
+
+### Added
+
+- `channelGroup` optional field to `ReleaseSpec` in GCP cluster model (GCP-696)
+
 ## [1.0.14] - 2026-05-15
 
 ### Removed
