@@ -7,6 +7,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.0.14] - 2026-05-15
+
+### Removed
+
+- Deprecated `Ready` condition type from `ConditionType`, status model documentation, and all examples (HYPERFLEET-1052)
+- `ExampleReadyReason` and `ExampleReadyMessage` constants
+
+### Changed
+
+- Search example updated from `status.conditions.Ready` to `status.conditions.Reconciled`
+- `postCluster` documentation updated to list only `LastKnownReconciled` and `Reconciled` as mandatory conditions
+
 ## [1.0.13] - 2026-05-13
 
 ### Removed
@@ -126,7 +138,8 @@ First official stable release of the HyperFleet API specification.
 - Interactive API documentation
 
 <!-- Links -->
-[Unreleased]: https://github.com/openshift-hyperfleet/hyperfleet-api-spec/compare/v1.0.13...HEAD
+[Unreleased]: https://github.com/openshift-hyperfleet/hyperfleet-api-spec/compare/v1.0.14...HEAD
+[1.0.14]: https://github.com/openshift-hyperfleet/hyperfleet-api-spec/compare/v1.0.13...v1.0.14
 [1.0.13]: https://github.com/openshift-hyperfleet/hyperfleet-api-spec/compare/v1.0.12...v1.0.13
 [1.0.12]: https://github.com/openshift-hyperfleet/hyperfleet-api-spec/compare/v1.0.11...v1.0.12
 [1.0.11]: https://github.com/openshift-hyperfleet/hyperfleet-api-spec/compare/v1.0.10...v1.0.11
