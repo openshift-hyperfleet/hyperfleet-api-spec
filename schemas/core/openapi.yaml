@@ -1,7 +1,7 @@
 openapi: 3.0.0
 info:
   title: HyperFleet API
-  version: 1.0.13
+  version: 1.0.14
   contact:
     name: HyperFleet Team
     url: https://github.com/openshift-hyperfleet
@@ -58,7 +58,7 @@ paths:
 
         **Note**: The `status` object in the response is read-only and computed by the service.
         It is NOT part of the request body. Initially,
-        status.conditions will include mandatory "LastKnownReconciled", "Ready" and "Reconciled" conditions.
+        status.conditions will include mandatory "LastKnownReconciled" and "Reconciled" conditions.
       parameters: []
       responses:
         '201':
@@ -188,14 +188,6 @@ paths:
                 generation: 2
                 status:
                   conditions:
-                    - type: Ready
-                      status: 'True'
-                      reason: ReconciledAll
-                      message: All required adapters reported Available=True or Finalized=True at the current generation
-                      observed_generation: 2
-                      created_time: '2021-01-01T10:00:00Z'
-                      last_updated_time: '2021-01-01T10:00:00Z'
-                      last_transition_time: '2021-01-01T10:00:00Z'
                     - type: Reconciled
                       status: 'True'
                       reason: ReconciledAll
@@ -401,14 +393,6 @@ paths:
                   href: https://api.hyperfleet.com/v1/clusters/019466a0-8f8e-7abc-9def-0123456789ab
                 status:
                   conditions:
-                    - type: Ready
-                      status: 'True'
-                      reason: ReconciledAll
-                      message: All required adapters reported Available=True or Finalized=True at the current generation
-                      observed_generation: 2
-                      created_time: '2021-01-01T10:00:00Z'
-                      last_updated_time: '2021-01-01T10:00:00Z'
-                      last_transition_time: '2021-01-01T10:00:00Z'
                     - type: Reconciled
                       status: 'True'
                       reason: ReconciledAll
@@ -723,7 +707,7 @@ components:
       required: false
       description: |-
         Filter results using TSL (Tree Search Language) query syntax.
-        Examples: `status.conditions.Ready='True'`, `name in ('c1','c2')`, `labels.region='us-east'`
+        Examples: `status.conditions.Reconciled='True'`, `name in ('c1','c2')`, `labels.region='us-east'`
       schema:
         type: string
       explode: false
@@ -1089,14 +1073,6 @@ components:
         generation: 1
         status:
           conditions:
-            - type: Ready
-              status: 'True'
-              reason: ReconciledAll
-              message: All required adapters reported Available=True or Finalized=True at the current generation
-              observed_generation: 1
-              created_time: '2021-01-01T10:00:00Z'
-              last_updated_time: '2021-01-01T10:00:00Z'
-              last_transition_time: '2021-01-01T10:00:00Z'
             - type: Reconciled
               status: 'True'
               reason: ReconciledAll
@@ -1226,8 +1202,7 @@ components:
           description: |-
             List of status conditions for the cluster.
 
-            **Mandatory conditions**: 
-            - `type: "Ready"` *(deprecated — use Reconciled)*: Whether all adapters report successfully at the current generation.
+            **Mandatory conditions**:
             - `type: "Reconciled"`: Whether the resource's desired state has been fully reconciled by all adapters at the current generation.
             - `type: "LastKnownReconciled"`: Sticky cross-generation condition — stays True as long as all required adapters were reconciled at a common observed generation, even if a newer generation is being processed.
 
@@ -1388,14 +1363,6 @@ components:
           href: https://api.hyperfleet.com/v1/clusters/019466a0-8f8e-7abc-9def-0123456789ab
         status:
           conditions:
-            - type: Ready
-              status: 'True'
-              reason: ReconciledAll
-              message: All required adapters reported Available=True or Finalized=True at the current generation
-              observed_generation: 1
-              created_time: '2021-01-01T10:00:00Z'
-              last_updated_time: '2021-01-01T10:00:00Z'
-              last_transition_time: '2021-01-01T10:00:00Z'
             - type: Reconciled
               status: 'True'
               reason: ReconciledAll
@@ -1592,8 +1559,7 @@ components:
           description: |-
             List of status conditions for the nodepool.
 
-            **Mandatory conditions**: 
-            - `type: "Ready"` *(deprecated — use Reconciled)*: Whether all adapters report successfully at the current generation.
+            **Mandatory conditions**:
             - `type: "Reconciled"`: Whether the resource's desired state has been fully reconciled by all adapters at the current generation.
             - `type: "LastKnownReconciled"`: Sticky cross-generation condition — stays True as long as all required adapters were reconciled at a common observed generation, even if a newer generation is being processed.
 

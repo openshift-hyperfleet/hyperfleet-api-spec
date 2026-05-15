@@ -145,7 +145,7 @@ enum OrderDirection {
 
 model SearchParams {
     /** Filter results using TSL (Tree Search Language) query syntax.
-     * Examples: `status.conditions.Ready='True'`, `name in ('c1','c2')`, `labels.region='us-east'` */
+     * Examples: `status.conditions.Reconciled='True'`, `name in ('c1','c2')`, `labels.region='us-east'` */
     @query
     search?: string;
 }
@@ -176,7 +176,6 @@ model List<T> {
 union ConditionType {
     string,
     Available: "Available",
-    Ready: "Ready",
     Reconciled: "Reconciled",
     LastKnownReconciled: "LastKnownReconciled"
 }
@@ -246,8 +245,6 @@ model ResourceCondition {
 
     const ExampleLastKnownReconciledReason: string = "AllAdaptersReconciled";
     const ExampleLastKnownReconciledMessage: string = "All required adapters report Available=True for the tracked generation";
-    const ExampleReadyReason: string = "ReconciledAll";
-    const ExampleReadyMessage: string = "All required adapters reported Available=True or Finalized=True at the current generation";
     const ExampleReconciledReason: string = "ReconciledAll";
     const ExampleReconciledMessage: string = "All required adapters reported Available=True or Finalized=True at the current generation";
     const ExampleAdapter1: string = "adapter1";

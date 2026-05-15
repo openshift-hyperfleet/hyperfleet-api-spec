@@ -13,16 +13,6 @@ const exampleCluster: Cluster = #{
   status: #{
     conditions: #[
       #{
-        type: ConditionType.Ready,
-        status: ResourceConditionStatus.True,
-        reason: ExampleReadyReason,
-        message: ExampleReadyMessage,
-        observed_generation: 1,
-        created_time: "2021-01-01T10:00:00Z",
-        last_updated_time: "2021-01-01T10:00:00Z",
-        last_transition_time: "2021-01-01T10:00:00Z",
-      },
-      #{
         type: ConditionType.Reconciled,
         status: ResourceConditionStatus.True,
         reason: ExampleReconciledReason,
@@ -80,16 +70,6 @@ const exampleDeletedCluster: Cluster = #{
   generation: 2,
   status: #{
     conditions: #[
-      #{
-        type: ConditionType.Ready,
-        status: ResourceConditionStatus.True,
-        reason: ExampleReadyReason,
-        message: ExampleReadyMessage,
-        observed_generation: 2,
-        created_time: "2021-01-01T10:00:00Z",
-        last_updated_time: "2021-01-01T10:00:00Z",
-        last_transition_time: "2021-01-01T10:00:00Z",
-      },
       #{
         type: ConditionType.Reconciled,
         status: ResourceConditionStatus.True,
