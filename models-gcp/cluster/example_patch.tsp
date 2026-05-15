@@ -14,8 +14,9 @@ const exampleClusterPatchRequest: ClusterPatchRequest = #{
       },
     },
     release: #{
-      image: "registry.redhat.io/openshift4/ose-cluster-version-operator:v4.14.0",
-      version: "4.14.0",
+      image: "registry.redhat.io/openshift4/ose-cluster-version-operator:v4.22.0-ec.4",
+      version: "4.22.0-ec.4",
+      channelGroup: "candidate",
     },
     networking: #{
       clusterNetwork: #[#{ cidr: "10.10.0.0/16", hostPrefix: 24 }],
