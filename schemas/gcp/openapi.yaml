@@ -1,7 +1,7 @@
 openapi: 3.0.0
 info:
   title: HyperFleet API
-  version: 1.0.14
+  version: 1.0.15
   contact:
     name: HyperFleet Team
     url: https://github.com/openshift-hyperfleet
@@ -194,8 +194,9 @@ paths:
                       network: network-123
                       subnet: subnet-123
                   release:
-                    image: registry.redhat.io/openshift4/ose-cluster-version-operator:v4.14.0
-                    version: 4.14.0
+                    image: registry.redhat.io/openshift4/ose-cluster-version-operator:v4.22.0-ec.4
+                    version: 4.22.0-ec.4
+                    channelGroup: candidate
                   networking:
                     clusterNetwork:
                       - cidr: 10.10.0.0/16
@@ -995,8 +996,9 @@ components:
               network: network-123
               subnet: subnet-123
           release:
-            image: registry.redhat.io/openshift4/ose-cluster-version-operator:v4.14.0
-            version: 4.14.0
+            image: registry.redhat.io/openshift4/ose-cluster-version-operator:v4.22.0-ec.4
+            version: 4.22.0-ec.4
+            channelGroup: candidate
           networking:
             clusterNetwork:
               - cidr: 10.10.0.0/16
@@ -1088,8 +1090,9 @@ components:
               network: network-123
               subnet: subnet-123
           release:
-            image: registry.redhat.io/openshift4/ose-cluster-version-operator:v4.14.0
-            version: 4.14.0
+            image: registry.redhat.io/openshift4/ose-cluster-version-operator:v4.22.0-ec.4
+            version: 4.22.0-ec.4
+            channelGroup: candidate
           networking:
             clusterNetwork:
               - cidr: 10.10.0.0/16
@@ -1149,8 +1152,9 @@ components:
               network: network-123
               subnet: subnet-123
           release:
-            image: registry.redhat.io/openshift4/ose-cluster-version-operator:v4.14.0
-            version: 4.14.0
+            image: registry.redhat.io/openshift4/ose-cluster-version-operator:v4.22.0-ec.4
+            version: 4.22.0-ec.4
+            channelGroup: candidate
           networking:
             clusterNetwork:
               - cidr: 10.10.0.0/16
@@ -1752,6 +1756,8 @@ components:
         image:
           type: string
         version:
+          type: string
+        channelGroup:
           type: string
     ResourceCondition:
       type: object

@@ -22,6 +22,7 @@ model ClusterPlatform {
 model ReleaseSpec {
     image?: string;
     version?: string;
+    channelGroup?: string;
 }
 
 model NetworkingSpec {
