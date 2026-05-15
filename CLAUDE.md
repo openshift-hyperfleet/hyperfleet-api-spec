@@ -46,7 +46,7 @@ The `aliases.tsp` symlink determines which provider types are active. The `build
 
 Status endpoints are split:
 - `services/statuses.tsp` - GET operations (external clients)
-- `services/statuses-internal.tsp` - POST operations (internal adapters only)
+- `services/statuses-internal.tsp` - PUT operations (internal adapters only)
 
 The split allows generating different API contracts per audience. Only `statuses.tsp` is imported by default.
 

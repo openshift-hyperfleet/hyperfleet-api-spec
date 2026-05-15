@@ -85,7 +85,7 @@ model AdapterStatus {
 
   /**
    * When this adapter last reported its status (API-managed)
-   * Updated every time the adapter POSTs, even if conditions haven't changed
+   * Updated every time the adapter PUTs, even if conditions haven't changed
    * Used by Sentinel to detect adapter liveness
    */
   @format("date-time") last_report_time: string;

@@ -110,7 +110,7 @@ Contains service definitions that generate the OpenAPI specifications:
 
 - **`services/clusters.tsp`** - Cluster resource endpoints
 - **`services/statuses.tsp`** - Status resource endpoints (GET only - public API)
-- **`services/statuses-internal.tsp`** - Status write endpoints (POST/PUT - internal API, see below)
+- **`services/statuses-internal.tsp`** - Status write endpoints (PUT - internal API, see below)
 - **`services/nodepools.tsp`** - NodePool resource endpoints
 
 #### Public vs Internal API Split
@@ -120,7 +120,6 @@ The status endpoints are split into two files to support different API consumers
 | File | Operations | Audience | Included in Build |
 |------|------------|----------|-------------------|
 | `statuses.tsp` | GET (read) | External clients | ✅ Yes (default) |
-| `statuses-internal.tsp` | POST (write) | Internal adapters | ❌ No (opt-in) |
 | `statuses-internal.tsp` | PUT (write) | Internal adapters | ❌ No (opt-in) |
 
 **Why the split?**

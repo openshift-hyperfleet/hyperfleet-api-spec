@@ -20,7 +20,17 @@ using OpenAPI;
  *
  */
 @service(#{ title: "HyperFleet API" })
-@info(#{ version: "1.0.12", contact: #{ name: "HyperFleet Team" }, license: #{ name: "Apache 2.0" ,url: "https://www.apache.org/licenses/LICENSE-2.0"} })
+@info(#{
+  version: "1.0.13",
+  contact: #{
+    name: "HyperFleet Team",
+    url: "https://github.com/openshift-hyperfleet",
+  },
+  license: #{
+    name: "Apache 2.0",
+    url: "https://www.apache.org/licenses/LICENSE-2.0",
+  },
+})
 @server("https://hyperfleet.redhat.com", "Production")
 @route("/api/hyperfleet/v1")
 namespace HyperFleet;
@@ -30,4 +40,3 @@ model BearerAuth {
   type: AuthType.http;
   scheme: "bearer";
 }
-

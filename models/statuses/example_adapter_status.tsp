@@ -54,7 +54,7 @@ const exampleAdapterStatus: AdapterStatus = (#{
   last_report_time: "2021-01-01T10:02:00Z",
 });
 
-// Example AdapterStatusCreateRequest (for POST /clusters/{id}/statuses)
+// Example AdapterStatusCreateRequest (for PUT /clusters/{id}/statuses)
 const exampleAdapterStatusCreateRequest: AdapterStatusCreateRequest = (#{
   adapter: "validator",
   observed_generation: 1,

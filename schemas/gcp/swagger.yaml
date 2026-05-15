@@ -2,6 +2,7 @@ swagger: '2.0'
 info:
   contact:
     name: HyperFleet Team
+    url: 'https://github.com/openshift-hyperfleet'
   description: >-
     HyperFleet API provides simple CRUD operations for managing cluster
     resources and their status history.
@@ -16,7 +17,7 @@ info:
     name: Apache 2.0
     url: 'https://www.apache.org/licenses/LICENSE-2.0'
   title: HyperFleet API
-  version: 1.0.12
+  version: 1.0.13
 host: hyperfleet.redhat.com
 basePath: /
 schemes:
@@ -930,7 +931,7 @@ definitions:
         description: >-
           When this adapter last reported its status (API-managed)
 
-          Updated every time the adapter POSTs, even if conditions haven't
+          Updated every time the adapter PUTs, even if conditions haven't
           changed
 
           Used by Sentinel to detect adapter liveness
@@ -1993,7 +1994,7 @@ definitions:
         description: >-
           When the corresponding adapter last reported (API-managed)
 
-          Updated every time the adapter POSTs, even if condition status hasn't
+          Updated every time the adapter PUTs, even if condition status hasn't
           changed
 
           Copied from AdapterStatus.last_report_time

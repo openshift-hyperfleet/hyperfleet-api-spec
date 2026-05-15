@@ -2,6 +2,7 @@ swagger: '2.0'
 info:
   contact:
     name: HyperFleet Team
+    url: 'https://github.com/openshift-hyperfleet'
   description: >-
     HyperFleet API provides simple CRUD operations for managing cluster
     resources and their status history.
@@ -16,7 +17,7 @@ info:
     name: Apache 2.0
     url: 'https://www.apache.org/licenses/LICENSE-2.0'
   title: HyperFleet API
-  version: 1.0.12
+  version: 1.0.13
 host: hyperfleet.redhat.com
 basePath: /
 schemes:
@@ -655,56 +656,6 @@ paths:
       description: Returns adapter status reports for this nodepool
       operationId: getNodePoolsStatuses
       summary: List all adapter statuses for nodepools
-    post:
-      consumes:
-        - application/json
-      produces:
-        - application/json
-      parameters:
-        - description: Cluster ID
-          in: path
-          name: cluster_id
-          required: true
-          type: string
-        - description: Nodepool ID
-          in: path
-          name: nodepool_id
-          required: true
-          type: string
-        - in: body
-          name: body
-          required: true
-          schema:
-            $ref: '#/definitions/AdapterStatusCreateRequest'
-      responses:
-        '201':
-          description: >-
-            The request has succeeded and a new resource has been created as a
-            result.
-          schema:
-            $ref: '#/definitions/AdapterStatus'
-        '400':
-          description: The server could not understand the request due to invalid syntax.
-        '404':
-          description: The server cannot find the requested resource.
-        '409':
-          description: The request conflicts with the current state of the server.
-      security:
-        - BearerAuth: []
-      tags:
-        - NodePool statuses
-      description: >-
-        Adapter creates or updates its status report for this nodepool.
-
-        If adapter already has a status, it will be updated (upsert by adapter
-        name).
-
-
-        Response includes the full adapter status with all conditions.
-
-        Adapter should call this endpoint every time it evaluates the nodepool.
-      operationId: postNodePoolStatuses
-      summary: Create or update adapter status
     put:
       consumes:
         - application/json
@@ -716,7 +667,7 @@ paths:
           name: cluster_id
           required: true
           type: string
-        - description: Nodepool ID
+        - description: NodePool ID
           in: path
           name: nodepool_id
           required: true
@@ -744,10 +695,13 @@ paths:
       tags:
         - NodePool statuses
       description: >-
-        Idempotent upsert of an adapter status for this nodepool. Use instead of
-        POST when the adapter name is known upfront.
+        Adapters call this endpoint to report the status for a nodepool after
+        each evaluation. The adapter's status entry is created if it doesn't
+        exist, or updated if it does (upserted by adapter name). This allows
+        HyperFleet to aggregate multiple adapter perspectives into a unified
+        nodepool status.
       operationId: putNodePoolStatuses
-      summary: Adapter creates or updates resource nodepool status
+      summary: Adapter creates or updates nodepool status
   '/api/hyperfleet/v1/clusters/{cluster_id}/statuses':
     get:
       produces:
@@ -807,51 +761,6 @@ paths:
       description: Returns adapter status reports for this cluster
       operationId: getClusterStatuses
       summary: List all adapter statuses for cluster
-    post:
-      consumes:
-        - application/json
-      produces:
-        - application/json
-      parameters:
-        - description: Cluster ID
-          in: path
-          name: cluster_id
-          required: true
-          type: string
-        - in: body
-          name: body
-          required: true
-          schema:
-            $ref: '#/definitions/AdapterStatusCreateRequest'
-      responses:
-        '201':
-          description: >-
-            The request has succeeded and a new resource has been created as a
-            result.
-          schema:
-            $ref: '#/definitions/AdapterStatus'
-        '400':
-          description: The server could not understand the request due to invalid syntax.
-        '404':
-          description: The server cannot find the requested resource.
-        '409':
-          description: The request conflicts with the current state of the server.
-      security:
-        - BearerAuth: []
-      tags:
-        - Cluster statuses
-      description: >-
-        Adapter creates or updates its status report for this cluster.
-
-        If adapter already has a status, it will be updated (upsert by adapter
-        name).
-
-
-        Response includes the full adapter status with all conditions.
-
-        Adapter should call this endpoint every time it evaluates the cluster.
-      operationId: postClusterStatuses
-      summary: Create or update adapter status
     put:
       consumes:
         - application/json
@@ -886,10 +795,13 @@ paths:
       tags:
         - Cluster statuses
       description: >-
-        Idempotent upsert of an adapter status for this cluster. Use instead of
-        POST when the adapter name is known upfront.
+        Adapters call this endpoint to report the status for a cluster after
+        each evaluation. The adapter's status entry is created if it doesn't
+        exist, or updated if it does (upserted by adapter name). This allows
+        HyperFleet to aggregate multiple adapter perspectives into a unified
+        cluster status.
       operationId: putClusterStatuses
-      summary: Adapter creates or updates resource cluster status
+      summary: Adapter creates or updates cluster status
   /api/hyperfleet/v1/nodepools:
     get:
       produces:
@@ -1056,7 +968,7 @@ definitions:
         description: >-
           When this adapter last reported its status (API-managed)
 
-          Updated every time the adapter POSTs, even if conditions haven't
+          Updated every time the adapter PUTs, even if conditions haven't
           changed
 
           Used by Sentinel to detect adapter liveness
@@ -1928,7 +1840,7 @@ definitions:
         description: >-
           When the corresponding adapter last reported (API-managed)
 
-          Updated every time the adapter POSTs, even if condition status hasn't
+          Updated every time the adapter PUTs, even if condition status hasn't
           changed
 
           Copied from AdapterStatus.last_report_time

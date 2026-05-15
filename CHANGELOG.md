@@ -7,6 +7,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.0.13] - 2026-05-13
+
+### Removed
+- POST endpoints from internal status API (`/clusters/{cluster_id}/statuses` and `/clusters/{cluster_id}/nodepools/{nodepool_id}/statuses`)
+
+### Changed
+
+- Internal status API now uses only PUT endpoints with upsert semantics for adapter status updates
+- Improved documentation for PUT endpoints to clarify upsert behavior by adapter name
+
+## [1.0.12] - 2026-05-11
+
+### Fixed
+
+- Aligned condition example reason/message fields with actual aggregation code output (HYPERFLEET-1017)
+- Updated condition reason strings to use CamelCase format (`AllAdaptersReconciled`, `ReconciledAll`) instead of full sentences
+- Updated condition message strings to match actual aggregation logic output
+
 ## [1.0.11] - 2026-05-07
 
 ### Added
@@ -108,7 +126,9 @@ First official stable release of the HyperFleet API specification.
 - Interactive API documentation
 
 <!-- Links -->
-[Unreleased]: https://github.com/openshift-hyperfleet/hyperfleet-api-spec/compare/v1.0.11...HEAD
+[Unreleased]: https://github.com/openshift-hyperfleet/hyperfleet-api-spec/compare/v1.0.13...HEAD
+[1.0.13]: https://github.com/openshift-hyperfleet/hyperfleet-api-spec/compare/v1.0.12...v1.0.13
+[1.0.12]: https://github.com/openshift-hyperfleet/hyperfleet-api-spec/compare/v1.0.11...v1.0.12
 [1.0.11]: https://github.com/openshift-hyperfleet/hyperfleet-api-spec/compare/v1.0.10...v1.0.11
 [1.0.10]: https://github.com/openshift-hyperfleet/hyperfleet-api-spec/compare/v1.0.9...v1.0.10
 [1.0.9]: https://github.com/openshift-hyperfleet/hyperfleet-api-spec/compare/v1.0.8...v1.0.9
