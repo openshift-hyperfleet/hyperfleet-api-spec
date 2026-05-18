@@ -7,6 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.0.15] - 2026-05-18
+
+### Added
+
+- Channel resource model with `ChannelSpec` (`is_default`, `enabled_regex`) and full CRUD service at `/channels` (HYPERFLEET-1083)
+- Version resource model with `VersionSpec` (`raw_version`, `enabled`, `default`, `release_image`, `end_of_life_time`) and full CRUD service nested at `/channels/{channel_id}/versions` (HYPERFLEET-1083)
+- `owner_references` on Version pointing to parent Channel
+- Examples for both Channel and Version resources (create, patch, response)
+
 ## [1.0.14] - 2026-05-15
 
 ### Removed
@@ -138,7 +147,8 @@ First official stable release of the HyperFleet API specification.
 - Interactive API documentation
 
 <!-- Links -->
-[Unreleased]: https://github.com/openshift-hyperfleet/hyperfleet-api-spec/compare/v1.0.14...HEAD
+[Unreleased]: https://github.com/openshift-hyperfleet/hyperfleet-api-spec/compare/v1.0.15...HEAD
+[1.0.15]: https://github.com/openshift-hyperfleet/hyperfleet-api-spec/compare/v1.0.14...v1.0.15
 [1.0.14]: https://github.com/openshift-hyperfleet/hyperfleet-api-spec/compare/v1.0.13...v1.0.14
 [1.0.13]: https://github.com/openshift-hyperfleet/hyperfleet-api-spec/compare/v1.0.12...v1.0.13
 [1.0.12]: https://github.com/openshift-hyperfleet/hyperfleet-api-spec/compare/v1.0.11...v1.0.12

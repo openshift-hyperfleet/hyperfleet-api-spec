@@ -5,6 +5,8 @@ import "@typespec/openapi3";
 import "./services/clusters.tsp";
 import "./services/statuses.tsp";
 import "./services/nodepools.tsp";
+import "./services/channels.tsp";
+import "./services/versions.tsp";
 // Provider-specific security is imported via aliases.tsp
 import "./aliases.tsp";
 
@@ -21,7 +23,7 @@ using OpenAPI;
  */
 @service(#{ title: "HyperFleet API" })
 @info(#{
-  version: "1.0.14",
+  version: "1.0.15",
   contact: #{
     name: "HyperFleet Team",
     url: "https://github.com/openshift-hyperfleet",

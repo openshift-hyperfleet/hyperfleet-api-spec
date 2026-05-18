@@ -212,6 +212,15 @@ Before submitting changes:
 - [ ] Changes committed including schema updates
 - [ ] PR description references related issue
 
+## Node.js Version
+
+CI uses **Node.js 20** (see `.github/workflows/ci.yml`). The `api-spec-converter` (Swagger 2.0 generation) is incompatible with Node.js 25+. If local Swagger builds fail, use Node 20 or build via Docker:
+
+```bash
+docker run --rm -v "$(pwd):/app" -w /app node:20-slim bash -c \
+  "npm install && ./build-schema.sh core --swagger && ./build-schema.sh gcp --swagger"
+```
+
 ## Build System Details
 
 **The build-schema.sh script:**

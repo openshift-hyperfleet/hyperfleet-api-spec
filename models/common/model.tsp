@@ -10,6 +10,8 @@ alias KindCluster = "Cluster";
 alias KindClusterStatus = "ClusterStatus";
 alias KindNodePoolStatus = "NodePoolStatus";
 alias KindNodePool = "NodePool";
+alias KindChannel = "Channel";
+alias KindVersion = "Version";
 
 model ID {
     /** Resource identifier */
@@ -145,7 +147,7 @@ enum OrderDirection {
 
 model SearchParams {
     /** Filter results using TSL (Tree Search Language) query syntax.
-     * Examples: `status.conditions.Reconciled='True'`, `name in ('c1','c2')`, `labels.region='us-east'` */
+     * Examples: `name in ('c1','c2')`, `labels.region='us-east'` */
     @query
     search?: string;
 }
