@@ -17,7 +17,7 @@ info:
     name: Apache 2.0
     url: 'https://www.apache.org/licenses/LICENSE-2.0'
   title: HyperFleet API
-  version: 1.0.14
+  version: 1.0.15
 host: hyperfleet.redhat.com
 basePath: /
 schemes:
@@ -29,11 +29,9 @@ paths:
         - application/json
         - application/problem+json
       parameters:
-        - description: >-
+        - description: |-
             Filter results using TSL (Tree Search Language) query syntax.
-
-            Examples: `status.conditions.Reconciled='True'`, `name in
-            ('c1','c2')`, `labels.region='us-east'`
+            Examples: `name in ('c1','c2')`, `labels.region='us-east'`
           in: query
           name: search
           required: false
@@ -221,11 +219,9 @@ paths:
         - application/json
         - application/problem+json
       parameters:
-        - description: >-
+        - description: |-
             Filter results using TSL (Tree Search Language) query syntax.
-
-            Examples: `status.conditions.Reconciled='True'`, `name in
-            ('c1','c2')`, `labels.region='us-east'`
+            Examples: `name in ('c1','c2')`, `labels.region='us-east'`
           in: query
           name: search
           required: false
@@ -302,11 +298,9 @@ paths:
           name: cluster_id
           required: true
           type: string
-        - description: >-
+        - description: |-
             Filter results using TSL (Tree Search Language) query syntax.
-
-            Examples: `status.conditions.Reconciled='True'`, `name in
-            ('c1','c2')`, `labels.region='us-east'`
+            Examples: `name in ('c1','c2')`, `labels.region='us-east'`
           in: query
           name: search
           required: false
@@ -587,11 +581,9 @@ paths:
           name: nodepool_id
           required: true
           type: string
-        - description: >-
+        - description: |-
             Filter results using TSL (Tree Search Language) query syntax.
-
-            Examples: `status.conditions.Reconciled='True'`, `name in
-            ('c1','c2')`, `labels.region='us-east'`
+            Examples: `name in ('c1','c2')`, `labels.region='us-east'`
           in: query
           name: search
           required: false
@@ -692,11 +684,9 @@ paths:
           name: cluster_id
           required: true
           type: string
-        - description: >-
+        - description: |-
             Filter results using TSL (Tree Search Language) query syntax.
-
-            Examples: `status.conditions.Reconciled='True'`, `name in
-            ('c1','c2')`, `labels.region='us-east'`
+            Examples: `name in ('c1','c2')`, `labels.region='us-east'`
           in: query
           name: search
           required: false
@@ -788,11 +778,9 @@ paths:
         - application/json
         - application/problem+json
       parameters:
-        - description: >-
+        - description: |-
             Filter results using TSL (Tree Search Language) query syntax.
-
-            Examples: `status.conditions.Reconciled='True'`, `name in
-            ('c1','c2')`, `labels.region='us-east'`
+            Examples: `name in ('c1','c2')`, `labels.region='us-east'`
           in: query
           name: search
           required: false
@@ -1901,11 +1889,9 @@ x-components:
       required: false
       type: integer
     SearchParams:
-      description: >-
+      description: |-
         Filter results using TSL (Tree Search Language) query syntax.
-
-        Examples: `status.conditions.Reconciled='True'`, `name in ('c1','c2')`,
-        `labels.region='us-east'`
+        Examples: `name in ('c1','c2')`, `labels.region='us-east'`
       in: query
       name: search
       required: false
