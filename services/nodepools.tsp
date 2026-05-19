@@ -96,27 +96,6 @@ interface NodePools {
       | BadRequestResponse;
 
     /**
-     * Permanently removes the nodepool record from the database for a nodepool stuck in Finalizing state.
-     * This is a database-only operation. Requires a reason for audit purposes.
-     */
-    @route("/clusters/{cluster_id}/nodepools/{nodepool_id}/force-delete")
-    @post
-    @summary("Force-delete a nodepool")
-    @operationId("forceDeleteNodePool")
-    forceDeleteNodePool(
-        /** Cluster ID */
-        @path cluster_id: string,
-        /** NodePool ID */
-        @path nodepool_id: string,
-        @body body: ForceDeleteRequest,
-    ): {
-      @statusCode statusCode: 204;
-    } | NotFoundResponse
-      | Error
-      | BadRequestResponse
-      | ConflictResponse;
-
-    /**
      * Patch a specific nodepool within a cluster
      */
     @route("/clusters/{cluster_id}/nodepools/{nodepool_id}")

@@ -12,8 +12,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - `ForceDeleteRequest` model with required `reason` field (HYPERFLEET-1075)
-- POST `/clusters/{cluster_id}/force-delete` endpoint for force-deleting stuck clusters (HYPERFLEET-1075)
-- POST `/clusters/{cluster_id}/nodepools/{nodepool_id}/force-delete` endpoint for force-deleting stuck nodepools (HYPERFLEET-1075)
+- POST `/clusters/{cluster_id}/force-delete` internal endpoint for force-deleting stuck clusters (HYPERFLEET-1075)
+- POST `/clusters/{cluster_id}/nodepools/{nodepool_id}/force-delete` internal endpoint for force-deleting stuck nodepools (HYPERFLEET-1075)
 
 ## [1.0.14] - 2026-05-15
 
