@@ -7,6 +7,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.0.17] - 2026-05-21
+
+### Added
+
+- Generic `Resource` type with `kind` discriminator and JSONB `spec` field, replacing per-entity model hierarchies for new resource types (HYPERFLEET-1083)
+- `ResourceCreateRequest`, `ResourcePatchRequest`, `ResourceList`, `ResourceStatus` types in core contract
+- Generic `/resources` CRUD routes in core contract (GET list, GET by ID, POST, PATCH, DELETE) per design doc Section 3.2
+- `/channels` and `/channels/{channel_id}/versions` CRUD routes in GCP contract
+- `references` field on Resource for non-ownership associations between entities (Section 9)
+- `ChannelSpec` validation schema in GCP contract (`is_default`, `enabled_regex`)
+- `VersionSpec` validation schema in GCP contract (`raw_version`, `enabled`, `is_default`, `release_image`, `end_of_life_time`)
+- `KindChannel` and `KindVersion` kind aliases in GCP contract
+
+### Changed
+
+- `GET /resources/{id}/statuses` and `POST /resources/{id}/force-delete` moved to core contract
+- `GET /clusters/{id}/statuses` and `GET /nodepools/{id}/statuses` moved to core contract
+
 ## [1.0.16] - 2026-05-20
 
 ### Added
@@ -152,7 +170,8 @@ First official stable release of the HyperFleet API specification.
 - Interactive API documentation
 
 <!-- Links -->
-[Unreleased]: https://github.com/openshift-hyperfleet/hyperfleet-api-spec/compare/v1.0.16...HEAD
+[Unreleased]: https://github.com/openshift-hyperfleet/hyperfleet-api-spec/compare/v1.0.17...HEAD
+[1.0.17]: https://github.com/openshift-hyperfleet/hyperfleet-api-spec/compare/v1.0.16...v1.0.17
 [1.0.16]: https://github.com/openshift-hyperfleet/hyperfleet-api-spec/compare/v1.0.15...v1.0.16
 [1.0.15]: https://github.com/openshift-hyperfleet/hyperfleet-api-spec/compare/v1.0.14...v1.0.15
 [1.0.14]: https://github.com/openshift-hyperfleet/hyperfleet-api-spec/compare/v1.0.13...v1.0.14

@@ -6,5 +6,6 @@ import "./models-core/nodepool/model.tsp";
 import "./models-core/nodepool/example_nodepool.tsp";
 import "./models-core/nodepool/example_post.tsp";
 import "./models-core/nodepool/example_patch.tsp";
+import "./services/statuses.tsp";
 import "./services/statuses-internal.tsp";
 import "./services/force-delete-internal.tsp";

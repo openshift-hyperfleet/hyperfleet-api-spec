@@ -1,7 +1,7 @@
 openapi: 3.0.0
 info:
   title: HyperFleet API
-  version: 1.0.16
+  version: 1.0.17
   contact:
     name: HyperFleet Team
     url: https://github.com/openshift-hyperfleet
@@ -16,10 +16,365 @@ info:
     Adapters handle the specifics of managing spec
 tags:
   - name: Clusters
-  - name: Cluster statuses
-  - name: NodePool statuses
+  - name: Channels
+  - name: Versions
   - name: NodePools
+  - name: Resources
 paths:
+  /api/hyperfleet/v1/channels:
+    get:
+      operationId: getChannels
+      summary: List channels
+      description: Returns a paginated list of channels, optionally filtered by labels or TSL query.
+      parameters:
+        - $ref: '#/components/parameters/SearchParams'
+        - $ref: '#/components/parameters/QueryParams.page'
+        - $ref: '#/components/parameters/QueryParams.pageSize'
+        - $ref: '#/components/parameters/QueryParams.orderBy'
+        - $ref: '#/components/parameters/QueryParams.order'
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChannelList'
+        '400':
+          description: The server could not understand the request due to invalid syntax.
+        default:
+          description: An unexpected error response.
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      tags:
+        - Channels
+      security:
+        - BearerAuth: []
+    post:
+      operationId: postChannel
+      summary: Create channel
+      description: Creates a new channel.
+      parameters: []
+      responses:
+        '201':
+          description: The request has succeeded and a new resource has been created as a result.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Channel'
+        '400':
+          description: The server could not understand the request due to invalid syntax.
+        default:
+          description: An unexpected error response.
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      tags:
+        - Channels
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChannelCreateRequest'
+      security:
+        - BearerAuth: []
+  /api/hyperfleet/v1/channels/{channel_id}:
+    get:
+      operationId: getChannelById
+      summary: Get channel by ID
+      description: Returns a single channel by its ID.
+      parameters:
+        - $ref: '#/components/parameters/SearchParams'
+        - name: channel_id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Channel'
+        '400':
+          description: The server could not understand the request due to invalid syntax.
+        '404':
+          description: The server cannot find the requested resource.
+        default:
+          description: An unexpected error response.
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      tags:
+        - Channels
+      security:
+        - BearerAuth: []
+    patch:
+      operationId: patchChannelById
+      summary: Patch channel by ID
+      description: Patches a channel by ID. Supports partial updates to spec and labels.
+      parameters:
+        - name: channel_id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Channel'
+        '400':
+          description: The server could not understand the request due to invalid syntax.
+        '404':
+          description: The server cannot find the requested resource.
+        '409':
+          description: The request conflicts with the current state of the server.
+        default:
+          description: An unexpected error response.
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      tags:
+        - Channels
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChannelPatchRequest'
+      security:
+        - BearerAuth: []
+    delete:
+      operationId: deleteChannelById
+      summary: Request channel deletion
+      description: Marks the channel for deletion. Returns 409 if versions still exist (RESTRICT policy).
+      parameters:
+        - name: channel_id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '202':
+          description: The request has been accepted for processing, but processing has not yet completed.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Channel'
+        '400':
+          description: The server could not understand the request due to invalid syntax.
+        '404':
+          description: The server cannot find the requested resource.
+        '409':
+          description: The request conflicts with the current state of the server.
+        default:
+          description: An unexpected error response.
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      tags:
+        - Channels
+      security:
+        - BearerAuth: []
+  /api/hyperfleet/v1/channels/{channel_id}/versions:
+    get:
+      operationId: getVersionsByChannelId
+      summary: List versions for channel
+      description: Returns a paginated list of versions for a channel.
+      parameters:
+        - name: channel_id
+          in: path
+          required: true
+          schema:
+            type: string
+        - $ref: '#/components/parameters/SearchParams'
+        - $ref: '#/components/parameters/QueryParams.page'
+        - $ref: '#/components/parameters/QueryParams.pageSize'
+        - $ref: '#/components/parameters/QueryParams.orderBy'
+        - $ref: '#/components/parameters/QueryParams.order'
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VersionList'
+        '400':
+          description: The server could not understand the request due to invalid syntax.
+        default:
+          description: An unexpected error response.
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      tags:
+        - Versions
+      security:
+        - BearerAuth: []
+    post:
+      operationId: postVersion
+      summary: Create version
+      description: Creates a new version under a channel.
+      parameters:
+        - name: channel_id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '201':
+          description: The request has succeeded and a new resource has been created as a result.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Version'
+        '400':
+          description: The server could not understand the request due to invalid syntax.
+        default:
+          description: An unexpected error response.
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      tags:
+        - Versions
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VersionCreateRequest'
+      security:
+        - BearerAuth: []
+  /api/hyperfleet/v1/channels/{channel_id}/versions/{version_id}:
+    get:
+      operationId: getVersionById
+      summary: Get version by ID
+      description: Returns a single version by its ID within a channel.
+      parameters:
+        - name: channel_id
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: version_id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Version'
+        '400':
+          description: The server could not understand the request due to invalid syntax.
+        '404':
+          description: The server cannot find the requested resource.
+        default:
+          description: An unexpected error response.
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      tags:
+        - Versions
+      security:
+        - BearerAuth: []
+    patch:
+      operationId: patchVersionById
+      summary: Patch version by ID
+      description: Patch a version by ID. Supports partial updates to spec and labels.
+      parameters:
+        - name: channel_id
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: version_id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Version'
+        '400':
+          description: The server could not understand the request due to invalid syntax.
+        '404':
+          description: The server cannot find the requested resource.
+        '409':
+          description: The request conflicts with the current state of the server.
+        default:
+          description: An unexpected error response.
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      tags:
+        - Versions
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VersionPatchRequest'
+      security:
+        - BearerAuth: []
+    delete:
+      operationId: deleteVersionById
+      summary: Request version deletion
+      description: Marks a version for deletion.
+      parameters:
+        - name: channel_id
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: version_id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '202':
+          description: The request has been accepted for processing, but processing has not yet completed.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Version'
+        '400':
+          description: The server could not understand the request due to invalid syntax.
+        '404':
+          description: The server cannot find the requested resource.
+        '409':
+          description: The request conflicts with the current state of the server.
+        default:
+          description: An unexpected error response.
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      tags:
+        - Versions
+      security:
+        - BearerAuth: []
   /api/hyperfleet/v1/clusters:
     get:
       operationId: getClusters
@@ -530,77 +885,6 @@ paths:
               $ref: '#/components/schemas/NodePoolPatchRequest'
       security:
         - BearerAuth: []
-  /api/hyperfleet/v1/clusters/{cluster_id}/nodepools/{nodepool_id}/statuses:
-    get:
-      operationId: getNodePoolsStatuses
-      summary: List all adapter statuses for nodepools
-      description: Returns adapter status reports for this nodepool
-      parameters:
-        - name: cluster_id
-          in: path
-          required: true
-          description: Cluster ID
-          schema:
-            type: string
-        - name: nodepool_id
-          in: path
-          required: true
-          schema:
-            type: string
-        - $ref: '#/components/parameters/SearchParams'
-        - $ref: '#/components/parameters/QueryParams.page'
-        - $ref: '#/components/parameters/QueryParams.pageSize'
-        - $ref: '#/components/parameters/QueryParams.orderBy'
-        - $ref: '#/components/parameters/QueryParams.order'
-      responses:
-        '200':
-          description: The request has succeeded.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/AdapterStatusList'
-        '400':
-          description: The server could not understand the request due to invalid syntax.
-        default:
-          description: An unexpected error response.
-          content:
-            application/problem+json:
-              schema:
-                $ref: '#/components/schemas/Error'
-      tags:
-        - NodePool statuses
-  /api/hyperfleet/v1/clusters/{cluster_id}/statuses:
-    get:
-      operationId: getClusterStatuses
-      summary: List all adapter statuses for cluster
-      description: Returns adapter status reports for this cluster
-      parameters:
-        - name: cluster_id
-          in: path
-          required: true
-          description: Cluster ID
-          schema:
-            type: string
-        - $ref: '#/components/parameters/SearchParams'
-        - $ref: '#/components/parameters/QueryParams.page'
-        - $ref: '#/components/parameters/QueryParams.pageSize'
-        - $ref: '#/components/parameters/QueryParams.orderBy'
-        - $ref: '#/components/parameters/QueryParams.order'
-      responses:
-        '200':
-          description: The request has succeeded.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/AdapterStatusList'
-        '400':
-          description: The server could not understand the request due to invalid syntax.
-        '404':
-          description: The server cannot find the requested resource.
-      tags:
-        - Cluster statuses
-      security:
-        - BearerAuth: []
   /api/hyperfleet/v1/nodepools:
     get:
       operationId: getNodePools
@@ -629,6 +913,176 @@ paths:
                 $ref: '#/components/schemas/Error'
       tags:
         - NodePools
+      security:
+        - BearerAuth: []
+  /api/hyperfleet/v1/resources:
+    get:
+      operationId: getResources
+      summary: List resources
+      description: Returns a paginated list of all resources, optionally filtered by kind, labels, or TSL query.
+      parameters:
+        - $ref: '#/components/parameters/SearchParams'
+        - $ref: '#/components/parameters/QueryParams.page'
+        - $ref: '#/components/parameters/QueryParams.pageSize'
+        - $ref: '#/components/parameters/QueryParams.orderBy'
+        - $ref: '#/components/parameters/QueryParams.order'
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResourceList'
+        '400':
+          description: The server could not understand the request due to invalid syntax.
+        default:
+          description: An unexpected error response.
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      tags:
+        - Resources
+      security:
+        - BearerAuth: []
+    post:
+      operationId: postResource
+      summary: Create resource
+      description: |-
+        Create a new resource. Only top-level entity types (no parent) can be created
+        via this endpoint. Child entities must use the nested route under their parent.
+      parameters: []
+      responses:
+        '201':
+          description: The request has succeeded and a new resource has been created as a result.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Resource'
+        '400':
+          description: The server could not understand the request due to invalid syntax.
+        default:
+          description: An unexpected error response.
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      tags:
+        - Resources
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ResourceCreateRequest'
+      security:
+        - BearerAuth: []
+  /api/hyperfleet/v1/resources/{resource_id}:
+    get:
+      operationId: getResourceById
+      summary: Get resource by ID
+      description: Returns a single resource by its ID.
+      parameters:
+        - $ref: '#/components/parameters/SearchParams'
+        - name: resource_id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Resource'
+        '400':
+          description: The server could not understand the request due to invalid syntax.
+        '404':
+          description: The server cannot find the requested resource.
+        default:
+          description: An unexpected error response.
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      tags:
+        - Resources
+      security:
+        - BearerAuth: []
+    patch:
+      operationId: patchResourceById
+      summary: Patch resource by ID
+      description: Patch a resource by ID. Supports partial updates to spec, labels, and references.
+      parameters:
+        - name: resource_id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Resource'
+        '400':
+          description: The server could not understand the request due to invalid syntax.
+        '404':
+          description: The server cannot find the requested resource.
+        '409':
+          description: The request conflicts with the current state of the server.
+        default:
+          description: An unexpected error response.
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      tags:
+        - Resources
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ResourcePatchRequest'
+      security:
+        - BearerAuth: []
+    delete:
+      operationId: deleteResourceById
+      summary: Request resource deletion
+      description: |-
+        Marks the resource for deletion. Child resources are handled per their
+        OnParentDelete policy (cascade or restrict). Returns 409 if a restrict-policy
+        child exists or if another resource holds a reference to this one.
+      parameters:
+        - name: resource_id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '202':
+          description: The request has been accepted for processing, but processing has not yet completed.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Resource'
+        '400':
+          description: The server could not understand the request due to invalid syntax.
+        '404':
+          description: The server cannot find the requested resource.
+        '409':
+          description: The request conflicts with the current state of the server.
+        default:
+          description: An unexpected error response.
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      tags:
+        - Resources
       security:
         - BearerAuth: []
 components:
@@ -688,194 +1142,6 @@ components:
         count:
           type: integer
           minimum: 1
-    AdapterCondition:
-      type: object
-      required:
-        - type
-        - last_transition_time
-        - status
-      properties:
-        type:
-          type: string
-          description: Condition type
-        reason:
-          type: string
-          description: Machine-readable reason code
-        message:
-          type: string
-          description: Human-readable message
-        last_transition_time:
-          type: string
-          format: date-time
-          description: |-
-            When this condition last transitioned status (API-managed)
-            Only updated when status changes (True/False), not when reason/message changes
-        status:
-          $ref: '#/components/schemas/AdapterConditionStatus'
-      description: |-
-        Condition in AdapterStatus
-        Used for standard Kubernetes condition types: "Available", "Applied", "Health", "Finalized"
-        Note: observed_generation is at AdapterStatus level, not per-condition,
-        since all conditions in one AdapterStatus share the same observed generation
-    AdapterConditionStatus:
-      type: string
-      enum:
-        - 'True'
-        - 'False'
-        - Unknown
-      description: Status value for adapter conditions
-    AdapterStatus:
-      type: object
-      required:
-        - adapter
-        - observed_generation
-        - conditions
-        - created_time
-        - last_report_time
-      properties:
-        adapter:
-          type: string
-          description: Adapter name (e.g., "validator", "dns", "provisioner")
-        observed_generation:
-          type: integer
-          format: int32
-          description: Which generation of the resource this status reflects
-        metadata:
-          type: object
-          properties:
-            job_name:
-              type: string
-            job_namespace:
-              type: string
-            attempt:
-              type: integer
-              format: int32
-            started_time:
-              type: string
-              format: date-time
-            completed_time:
-              type: string
-              format: date-time
-            duration:
-              type: string
-          description: Job execution metadata
-        data:
-          type: object
-          additionalProperties: {}
-          description: Adapter-specific data (structure varies by adapter type)
-        conditions:
-          type: array
-          items:
-            $ref: '#/components/schemas/AdapterCondition'
-          description: |-
-            Kubernetes-style conditions tracking adapter state
-            Typically includes: Available, Applied, Health, Finalized
-        created_time:
-          type: string
-          format: date-time
-          description: When this adapter status was first created (API-managed)
-        last_report_time:
-          type: string
-          format: date-time
-          description: |-
-            When this adapter last reported its status (API-managed)
-            Updated every time the adapter PUTs, even if conditions haven't changed
-            Used by Sentinel to detect adapter liveness
-      description: |-
-        AdapterStatus represents the complete status report from an adapter
-        Contains multiple conditions, job metadata, and adapter-specific data
-      example:
-        adapter: adapter1
-        observed_generation: 1
-        conditions:
-          - type: Available
-            status: 'True'
-            reason: This adapter1 is available
-            message: This adapter1 is available
-            last_transition_time: '2021-01-01T10:00:00Z'
-          - type: Applied
-            status: 'True'
-            reason: Validation job applied
-            message: Adapter1 validation job applied successfully
-            last_transition_time: '2021-01-01T10:00:00Z'
-          - type: Health
-            status: 'True'
-            reason: All adapter1 operations completed successfully
-            message: All adapter1 runtime operations completed successfully
-            last_transition_time: '2021-01-01T10:00:00Z'
-          - type: Finalized
-            status: 'True'
-            reason: All resources deleted; cleanup confirmed
-            message: All resources deleted; cleanup confirmed
-            last_transition_time: '2021-01-01T10:00:00Z'
-        metadata:
-          job_name: validator-job-abc123
-          job_namespace: hyperfleet-system
-          attempt: 1
-          started_time: '2021-01-01T10:00:00Z'
-          completed_time: '2021-01-01T10:02:00Z'
-          duration: 2m
-        data:
-          validation_results:
-            total_tests: 30
-            passed: 30
-            failed: 0
-        created_time: '2021-01-01T10:00:00Z'
-        last_report_time: '2021-01-01T10:02:00Z'
-    AdapterStatusList:
-      type: object
-      required:
-        - kind
-        - page
-        - size
-        - total
-        - items
-      properties:
-        kind:
-          type: string
-        page:
-          type: integer
-          format: int32
-        size:
-          type: integer
-          format: int32
-        total:
-          type: integer
-          format: int32
-        items:
-          type: array
-          items:
-            $ref: '#/components/schemas/AdapterStatus'
-      description: List of adapter statuses with pagination metadata
-      example:
-        kind: AdapterStatusList
-        page: 1
-        size: 2
-        total: 2
-        items:
-          - adapter: adapter1
-            observed_generation: 1
-            conditions:
-              - type: Available
-                status: 'True'
-                reason: This adapter1 is available
-                message: This adapter1 is available
-                last_transition_time: '2021-01-01T10:00:00Z'
-            metadata:
-              job_name: validator-job-abc123
-              duration: 2m
-            created_time: '2021-01-01T10:00:00Z'
-            last_report_time: '2021-01-01T10:02:00Z'
-          - adapter: adapter2
-            observed_generation: 1
-            conditions:
-              - type: Available
-                status: 'True'
-                reason: This adapter2 is available
-                message: This adapter2 is available
-                last_transition_time: '2021-01-01T10:01:00Z'
-            created_time: '2021-01-01T10:01:00Z'
-            last_report_time: '2021-01-01T10:01:30Z'
     AutoscalingSpec:
       type: object
       properties:
@@ -913,6 +1179,183 @@ components:
           type: string
           enum:
             - bearer
+    Channel:
+      type: object
+      required:
+        - name
+        - spec
+        - created_time
+        - updated_time
+        - created_by
+        - updated_by
+        - generation
+        - status
+      properties:
+        id:
+          type: string
+          description: Resource identifier
+        kind:
+          type: string
+          description: Resource kind
+        href:
+          type: string
+          description: Resource URI
+        labels:
+          type: object
+          additionalProperties:
+            type: string
+          description: labels for the API resource as pairs of name:value strings
+        name:
+          type: string
+          minLength: 1
+          maxLength: 63
+          pattern: ^[a-z0-9]([-a-z0-9]*[a-z0-9])?$
+        spec:
+          $ref: '#/components/schemas/ChannelSpec'
+        created_time:
+          type: string
+          format: date-time
+          description: Timestamp when the resource was created
+        updated_time:
+          type: string
+          format: date-time
+          description: Timestamp when the resource was last updated
+        created_by:
+          type: string
+          format: email
+          description: Identity that created the resource
+        updated_by:
+          type: string
+          format: email
+          description: Identity that last updated the resource
+        deleted_time:
+          type: string
+          format: date-time
+          description: Timestamp when deletion was requested; omitted if not marked for deletion
+        deleted_by:
+          type: string
+          format: email
+          description: Identity that requested deletion; omitted if not marked for deletion
+        generation:
+          type: integer
+          format: int32
+          minimum: 1
+        status:
+          $ref: '#/components/schemas/ResourceStatus'
+      example:
+        kind: Channel
+        id: 019466a2-1234-7abc-9def-0123456789ab
+        href: /api/hyperfleet/v1/channels/019466a2-1234-7abc-9def-0123456789ab
+        name: stable
+        labels:
+          tier: production
+        spec:
+          is_default: true
+          enabled_regex: ^4\.\d+\.\d+$
+        generation: 1
+        status:
+          conditions: []
+        created_time: '2025-06-01T00:00:00Z'
+        updated_time: '2025-06-01T10:02:00Z'
+        created_by: user-123@example.com
+        updated_by: user-123@example.com
+    ChannelCreateRequest:
+      type: object
+      required:
+        - name
+        - spec
+      properties:
+        id:
+          type: string
+          description: Resource identifier
+        kind:
+          type: string
+          description: Resource kind
+        href:
+          type: string
+          description: Resource URI
+        labels:
+          type: object
+          additionalProperties:
+            type: string
+          description: labels for the API resource as pairs of name:value strings
+        name:
+          type: string
+          minLength: 1
+          maxLength: 63
+          pattern: ^[a-z0-9]([-a-z0-9]*[a-z0-9])?$
+        spec:
+          $ref: '#/components/schemas/ChannelSpec'
+      example:
+        kind: Channel
+        name: stable
+        labels:
+          tier: production
+        spec:
+          is_default: true
+          enabled_regex: ^4\.\d+\.\d+$
+    ChannelList:
+      type: object
+      required:
+        - kind
+        - page
+        - size
+        - total
+        - items
+      properties:
+        kind:
+          type: string
+        page:
+          type: integer
+          format: int32
+        size:
+          type: integer
+          format: int32
+        total:
+          type: integer
+          format: int32
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/Channel'
+    ChannelPatchRequest:
+      type: object
+      properties:
+        spec:
+          $ref: '#/components/schemas/ChannelSpecUpdate'
+        labels:
+          type: object
+          additionalProperties:
+            type: string
+      example:
+        spec:
+          is_default: false
+          enabled_regex: ^4\.17\.\d+$
+        labels:
+          tier: staging
+      additionalProperties: false
+      minProperties: 1
+    ChannelSpec:
+      type: object
+      required:
+        - is_default
+        - enabled_regex
+      properties:
+        is_default:
+          type: boolean
+          description: Whether this is the default channel for new clusters
+        enabled_regex:
+          type: string
+          description: Regex pattern for matching enabled version strings
+    ChannelSpecUpdate:
+      type: object
+      properties:
+        is_default:
+          type: boolean
+          description: Whether this is the default channel for new clusters
+        enabled_regex:
+          type: string
+          description: Regex pattern for matching enabled version strings
     Cluster:
       type: object
       required:
@@ -1759,6 +2202,101 @@ components:
           type: string
         channelGroup:
           type: string
+    Resource:
+      type: object
+      required:
+        - id
+        - kind
+        - name
+        - spec
+        - status
+        - generation
+        - created_time
+        - updated_time
+        - created_by
+        - updated_by
+      properties:
+        id:
+          type: string
+          description: Resource identifier (UUID v7)
+        kind:
+          type: string
+          description: Entity type discriminator
+        name:
+          type: string
+          minLength: 1
+          maxLength: 253
+          description: Resource name (unique per kind, or per kind+owner for child entities)
+        href:
+          type: string
+          description: Resource URI (computed at creation time)
+        spec:
+          type: object
+          additionalProperties: {}
+          description: Entity-specific payload, validated at runtime against the entity's spec schema
+        labels:
+          type: object
+          additionalProperties:
+            type: string
+          description: Key-value pairs for filtering and grouping
+        status:
+          $ref: '#/components/schemas/ResourceStatus'
+        generation:
+          type: integer
+          format: int32
+          minimum: 1
+          description: Incremented on spec or label changes
+        owner_references:
+          allOf:
+            - $ref: '#/components/schemas/ObjectReference'
+          description: Parent resource reference (present only on child entities)
+        references:
+          type: object
+          additionalProperties:
+            type: array
+            items:
+              $ref: '#/components/schemas/ObjectReference'
+          description: Non-ownership associations to other resources, keyed by reference type
+        created_time:
+          type: string
+          format: date-time
+          description: Timestamp when the resource was created
+        updated_time:
+          type: string
+          format: date-time
+          description: Timestamp when the resource was last updated
+        created_by:
+          type: string
+          format: email
+          description: Identity that created the resource
+        updated_by:
+          type: string
+          format: email
+          description: Identity that last updated the resource
+        deleted_time:
+          type: string
+          format: date-time
+          description: Timestamp when deletion was requested; omitted if not marked for deletion
+        deleted_by:
+          type: string
+          format: email
+          description: Identity that requested deletion; omitted if not marked for deletion
+      example:
+        kind: MyResource
+        id: 019466a0-8f8e-7abc-9def-0123456789ab
+        href: /api/hyperfleet/v1/resources/019466a0-8f8e-7abc-9def-0123456789ab
+        name: my-resource-1
+        labels:
+          environment: production
+          team: platform
+        spec: {}
+        generation: 1
+        status:
+          conditions: []
+        created_time: '2025-06-01T00:00:00Z'
+        updated_time: '2025-06-01T10:02:00Z'
+        created_by: user-123@example.com
+        updated_by: user-123@example.com
     ResourceCondition:
       type: object
       required:
@@ -1811,6 +2349,102 @@ components:
         - 'True'
         - 'False'
       description: Status value for resource conditions
+    ResourceCreateRequest:
+      type: object
+      required:
+        - kind
+        - name
+        - spec
+      properties:
+        kind:
+          type: string
+          description: Entity type discriminator
+        name:
+          type: string
+          minLength: 1
+          maxLength: 253
+          description: Resource name
+        spec:
+          type: object
+          additionalProperties: {}
+          description: Entity-specific payload
+        labels:
+          type: object
+          additionalProperties:
+            type: string
+          description: Key-value pairs for filtering and grouping
+        references:
+          type: object
+          additionalProperties:
+            type: array
+            items:
+              $ref: '#/components/schemas/ObjectReference'
+          description: Non-ownership associations to other resources
+      example:
+        kind: MyResource
+        name: my-resource-1
+        spec: {}
+        labels:
+          environment: production
+          team: platform
+    ResourceList:
+      type: object
+      required:
+        - kind
+        - page
+        - size
+        - total
+        - items
+      properties:
+        kind:
+          type: string
+        page:
+          type: integer
+          format: int32
+        size:
+          type: integer
+          format: int32
+        total:
+          type: integer
+          format: int64
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/Resource'
+    ResourcePatchRequest:
+      type: object
+      properties:
+        spec:
+          type: object
+          additionalProperties: {}
+        labels:
+          type: object
+          additionalProperties:
+            type: string
+        references:
+          type: object
+          additionalProperties:
+            type: array
+            items:
+              $ref: '#/components/schemas/ObjectReference'
+      example:
+        spec: {}
+        labels:
+          env: staging
+      additionalProperties: false
+      minProperties: 1
+    ResourceStatus:
+      type: object
+      required:
+        - conditions
+      properties:
+        conditions:
+          type: array
+          items:
+            $ref: '#/components/schemas/ResourceCondition'
+      description: |-
+        Aggregated status of the resource, populated by the status aggregation
+        pipeline from adapter condition reports.
     TaintSpec:
       type: object
       required:
@@ -1858,6 +2492,214 @@ components:
           description: Human-readable error message for this field
           example: Cluster name is required
       description: Field-level validation error detail
+    Version:
+      type: object
+      required:
+        - name
+        - spec
+        - created_time
+        - updated_time
+        - created_by
+        - updated_by
+        - generation
+        - owner_references
+        - status
+      properties:
+        id:
+          type: string
+          description: Resource identifier
+        kind:
+          type: string
+          description: Resource kind
+        href:
+          type: string
+          description: Resource URI
+        labels:
+          type: object
+          additionalProperties:
+            type: string
+          description: labels for the API resource as pairs of name:value strings
+        name:
+          type: string
+          minLength: 1
+          maxLength: 63
+        spec:
+          $ref: '#/components/schemas/VersionSpec'
+        created_time:
+          type: string
+          format: date-time
+          description: Timestamp when the resource was created
+        updated_time:
+          type: string
+          format: date-time
+          description: Timestamp when the resource was last updated
+        created_by:
+          type: string
+          format: email
+          description: Identity that created the resource
+        updated_by:
+          type: string
+          format: email
+          description: Identity that last updated the resource
+        deleted_time:
+          type: string
+          format: date-time
+          description: Timestamp when deletion was requested; omitted if not marked for deletion
+        deleted_by:
+          type: string
+          format: email
+          description: Identity that requested deletion; omitted if not marked for deletion
+        generation:
+          type: integer
+          format: int32
+          minimum: 1
+        owner_references:
+          $ref: '#/components/schemas/ObjectReference'
+        status:
+          $ref: '#/components/schemas/ResourceStatus'
+      example:
+        kind: Version
+        id: 019466a3-5678-7abc-9def-0123456789ab
+        href: /api/hyperfleet/v1/channels/019466a2-1234-7abc-9def-0123456789ab/versions/019466a3-5678-7abc-9def-0123456789ab
+        name: 4.17.12
+        labels: {}
+        spec:
+          raw_version: 4.17.12
+          enabled: true
+          is_default: true
+          release_image: quay.io/openshift-release-dev/ocp-release:4.17.12-multi
+        generation: 1
+        owner_references:
+          id: 019466a2-1234-7abc-9def-0123456789ab
+          kind: Channel
+          href: /api/hyperfleet/v1/channels/019466a2-1234-7abc-9def-0123456789ab
+        status:
+          conditions: []
+        created_time: '2025-06-01T00:00:00Z'
+        updated_time: '2025-06-01T10:02:00Z'
+        created_by: user-123@example.com
+        updated_by: user-123@example.com
+    VersionCreateRequest:
+      type: object
+      required:
+        - name
+        - spec
+      properties:
+        id:
+          type: string
+          description: Resource identifier
+        kind:
+          type: string
+          description: Resource kind
+        href:
+          type: string
+          description: Resource URI
+        labels:
+          type: object
+          additionalProperties:
+            type: string
+          description: labels for the API resource as pairs of name:value strings
+        name:
+          type: string
+          minLength: 1
+          maxLength: 63
+        spec:
+          $ref: '#/components/schemas/VersionSpec'
+      example:
+        kind: Version
+        name: 4.17.12
+        labels: {}
+        spec:
+          raw_version: 4.17.12
+          enabled: true
+          is_default: true
+          release_image: quay.io/openshift-release-dev/ocp-release:4.17.12-multi
+    VersionList:
+      type: object
+      required:
+        - kind
+        - page
+        - size
+        - total
+        - items
+      properties:
+        kind:
+          type: string
+        page:
+          type: integer
+          format: int32
+        size:
+          type: integer
+          format: int32
+        total:
+          type: integer
+          format: int32
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/Version'
+    VersionPatchRequest:
+      type: object
+      properties:
+        spec:
+          $ref: '#/components/schemas/VersionSpecUpdate'
+        labels:
+          type: object
+          additionalProperties:
+            type: string
+      example:
+        spec:
+          raw_version: 4.17.12
+          enabled: false
+          is_default: false
+          release_image: quay.io/openshift-release-dev/ocp-release:4.17.12-multi
+        labels:
+          deprecated: 'true'
+      additionalProperties: false
+      minProperties: 1
+    VersionSpec:
+      type: object
+      required:
+        - raw_version
+        - enabled
+        - is_default
+        - release_image
+      properties:
+        raw_version:
+          type: string
+          description: Raw version string (e.g., "4.17.12")
+        enabled:
+          type: boolean
+          description: Whether this version is enabled for provisioning
+        is_default:
+          type: boolean
+          description: Whether this is the default version for its channel
+        release_image:
+          type: string
+          description: Container image reference for the release
+        end_of_life_time:
+          type: string
+          format: date-time
+          description: When this version reaches end of life
+    VersionSpecUpdate:
+      type: object
+      properties:
+        raw_version:
+          type: string
+          description: Raw version string (e.g., "4.17.12")
+        enabled:
+          type: boolean
+          description: Whether this version is enabled for provisioning
+        is_default:
+          type: boolean
+          description: Whether this is the default version for its channel
+        release_image:
+          type: string
+          description: Container image reference for the release
+        end_of_life_time:
+          type: string
+          format: date-time
+          description: When this version reaches end of life
   securitySchemes:
     BearerAuth:
       type: http

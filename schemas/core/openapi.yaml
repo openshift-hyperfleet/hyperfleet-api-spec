@@ -1,7 +1,7 @@
 openapi: 3.0.0
 info:
   title: HyperFleet API
-  version: 1.0.16
+  version: 1.0.17
   contact:
     name: HyperFleet Team
     url: https://github.com/openshift-hyperfleet
@@ -18,6 +18,8 @@ tags:
   - name: Clusters
   - name: Cluster statuses
   - name: NodePool statuses
+  - name: Resource statuses
+  - name: Resources
   - name: NodePools
 paths:
   /api/hyperfleet/v1/clusters:
@@ -576,6 +578,46 @@ paths:
       security:
         - BearerAuth: []
   /api/hyperfleet/v1/clusters/{cluster_id}/nodepools/{nodepool_id}/statuses:
+    get:
+      operationId: getNodePoolsStatuses
+      summary: List all adapter statuses for nodepools
+      description: Returns adapter status reports for this nodepool
+      parameters:
+        - name: cluster_id
+          in: path
+          required: true
+          description: Cluster ID
+          schema:
+            type: string
+        - name: nodepool_id
+          in: path
+          required: true
+          schema:
+            type: string
+        - $ref: '#/components/parameters/SearchParams'
+        - $ref: '#/components/parameters/QueryParams.page'
+        - $ref: '#/components/parameters/QueryParams.pageSize'
+        - $ref: '#/components/parameters/QueryParams.orderBy'
+        - $ref: '#/components/parameters/QueryParams.order'
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AdapterStatusList'
+        '400':
+          description: The server could not understand the request due to invalid syntax.
+        default:
+          description: An unexpected error response.
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      tags:
+        - NodePool statuses
+      security:
+        - BearerAuth: []
     put:
       operationId: putNodePoolStatuses
       summary: Adapter creates or updates nodepool status
@@ -616,20 +658,16 @@ paths:
               $ref: '#/components/schemas/AdapterStatusCreateRequest'
       security:
         - BearerAuth: []
+  /api/hyperfleet/v1/clusters/{cluster_id}/statuses:
     get:
-      operationId: getNodePoolsStatuses
-      summary: List all adapter statuses for nodepools
-      description: Returns adapter status reports for this nodepool
+      operationId: getClusterStatuses
+      summary: List all adapter statuses for cluster
+      description: Returns adapter status reports for this cluster
       parameters:
         - name: cluster_id
           in: path
           required: true
           description: Cluster ID
-          schema:
-            type: string
-        - name: nodepool_id
-          in: path
-          required: true
           schema:
             type: string
         - $ref: '#/components/parameters/SearchParams'
@@ -646,15 +684,12 @@ paths:
                 $ref: '#/components/schemas/AdapterStatusList'
         '400':
           description: The server could not understand the request due to invalid syntax.
-        default:
-          description: An unexpected error response.
-          content:
-            application/problem+json:
-              schema:
-                $ref: '#/components/schemas/Error'
+        '404':
+          description: The server cannot find the requested resource.
       tags:
-        - NodePool statuses
-  /api/hyperfleet/v1/clusters/{cluster_id}/statuses:
+        - Cluster statuses
+      security:
+        - BearerAuth: []
     put:
       operationId: putClusterStatuses
       summary: Adapter creates or updates cluster status
@@ -689,37 +724,6 @@ paths:
               $ref: '#/components/schemas/AdapterStatusCreateRequest'
       security:
         - BearerAuth: []
-    get:
-      operationId: getClusterStatuses
-      summary: List all adapter statuses for cluster
-      description: Returns adapter status reports for this cluster
-      parameters:
-        - name: cluster_id
-          in: path
-          required: true
-          description: Cluster ID
-          schema:
-            type: string
-        - $ref: '#/components/parameters/SearchParams'
-        - $ref: '#/components/parameters/QueryParams.page'
-        - $ref: '#/components/parameters/QueryParams.pageSize'
-        - $ref: '#/components/parameters/QueryParams.orderBy'
-        - $ref: '#/components/parameters/QueryParams.order'
-      responses:
-        '200':
-          description: The request has succeeded.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/AdapterStatusList'
-        '400':
-          description: The server could not understand the request due to invalid syntax.
-        '404':
-          description: The server cannot find the requested resource.
-      tags:
-        - Cluster statuses
-      security:
-        - BearerAuth: []
   /api/hyperfleet/v1/nodepools:
     get:
       operationId: getNodePools
@@ -748,6 +752,284 @@ paths:
                 $ref: '#/components/schemas/Error'
       tags:
         - NodePools
+      security:
+        - BearerAuth: []
+  /api/hyperfleet/v1/resources:
+    get:
+      operationId: getResources
+      summary: List resources
+      description: Returns a paginated list of all resources, optionally filtered by kind, labels, or TSL query.
+      parameters:
+        - $ref: '#/components/parameters/SearchParams'
+        - $ref: '#/components/parameters/QueryParams.page'
+        - $ref: '#/components/parameters/QueryParams.pageSize'
+        - $ref: '#/components/parameters/QueryParams.orderBy'
+        - $ref: '#/components/parameters/QueryParams.order'
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResourceList'
+        '400':
+          description: The server could not understand the request due to invalid syntax.
+        default:
+          description: An unexpected error response.
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      tags:
+        - Resources
+      security:
+        - BearerAuth: []
+    post:
+      operationId: postResource
+      summary: Create resource
+      description: |-
+        Create a new resource. Only top-level entity types (no parent) can be created
+        via this endpoint. Child entities must use the nested route under their parent.
+      parameters: []
+      responses:
+        '201':
+          description: The request has succeeded and a new resource has been created as a result.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Resource'
+        '400':
+          description: The server could not understand the request due to invalid syntax.
+        default:
+          description: An unexpected error response.
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      tags:
+        - Resources
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ResourceCreateRequest'
+      security:
+        - BearerAuth: []
+  /api/hyperfleet/v1/resources/{resource_id}:
+    get:
+      operationId: getResourceById
+      summary: Get resource by ID
+      description: Returns a single resource by its ID.
+      parameters:
+        - $ref: '#/components/parameters/SearchParams'
+        - name: resource_id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Resource'
+        '400':
+          description: The server could not understand the request due to invalid syntax.
+        '404':
+          description: The server cannot find the requested resource.
+        default:
+          description: An unexpected error response.
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      tags:
+        - Resources
+      security:
+        - BearerAuth: []
+    patch:
+      operationId: patchResourceById
+      summary: Patch resource by ID
+      description: Patch a resource by ID. Supports partial updates to spec, labels, and references.
+      parameters:
+        - name: resource_id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Resource'
+        '400':
+          description: The server could not understand the request due to invalid syntax.
+        '404':
+          description: The server cannot find the requested resource.
+        '409':
+          description: The request conflicts with the current state of the server.
+        default:
+          description: An unexpected error response.
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      tags:
+        - Resources
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ResourcePatchRequest'
+      security:
+        - BearerAuth: []
+    delete:
+      operationId: deleteResourceById
+      summary: Request resource deletion
+      description: |-
+        Marks the resource for deletion. Child resources are handled per their
+        OnParentDelete policy (cascade or restrict). Returns 409 if a restrict-policy
+        child exists or if another resource holds a reference to this one.
+      parameters:
+        - name: resource_id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '202':
+          description: The request has been accepted for processing, but processing has not yet completed.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Resource'
+        '400':
+          description: The server could not understand the request due to invalid syntax.
+        '404':
+          description: The server cannot find the requested resource.
+        '409':
+          description: The request conflicts with the current state of the server.
+        default:
+          description: An unexpected error response.
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      tags:
+        - Resources
+      security:
+        - BearerAuth: []
+  /api/hyperfleet/v1/resources/{resource_id}/force-delete:
+    post:
+      operationId: forceDeleteResource
+      summary: Force-delete a resource
+      description: |-
+        Permanently removes the resource record from the database for a resource stuck in Finalizing state.
+        This is a database-only operation. Requires a reason for audit purposes.
+      parameters:
+        - name: resource_id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: 'There is no content to send for this request, but the headers may be useful. '
+        '400':
+          description: The server could not understand the request due to invalid syntax.
+        '404':
+          description: The server cannot find the requested resource.
+        '409':
+          description: The request conflicts with the current state of the server.
+        default:
+          description: An unexpected error response.
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      tags:
+        - Resources
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ForceDeleteRequest'
+      security:
+        - BearerAuth: []
+  /api/hyperfleet/v1/resources/{resource_id}/statuses:
+    get:
+      operationId: getResourceStatuses
+      summary: List resource statuses
+      description: Returns adapter statuses for a resource.
+      parameters:
+        - name: resource_id
+          in: path
+          required: true
+          schema:
+            type: string
+        - $ref: '#/components/parameters/SearchParams'
+        - $ref: '#/components/parameters/QueryParams.page'
+        - $ref: '#/components/parameters/QueryParams.pageSize'
+        - $ref: '#/components/parameters/QueryParams.orderBy'
+        - $ref: '#/components/parameters/QueryParams.order'
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AdapterStatusList'
+        '400':
+          description: The server could not understand the request due to invalid syntax.
+        '404':
+          description: The server cannot find the requested resource.
+        default:
+          description: An unexpected error response.
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      tags:
+        - Resource statuses
+      security:
+        - BearerAuth: []
+    put:
+      operationId: putResourceStatuses
+      summary: Adapter creates or updates resource status
+      description: Adapters call this endpoint to report status for a resource after each evaluation. The adapter's status entry is created if it doesn't exist, or updated if it does (upserted by adapter name).
+      parameters:
+        - name: resource_id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '201':
+          description: The request has succeeded and a new resource has been created as a result.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AdapterStatus'
+        '400':
+          description: The server could not understand the request due to invalid syntax.
+        '404':
+          description: The server cannot find the requested resource.
+        '409':
+          description: The request conflicts with the current state of the server.
+      tags:
+        - Resource statuses
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AdapterStatusCreateRequest'
       security:
         - BearerAuth: []
 components:
@@ -1680,6 +1962,101 @@ components:
       enum:
         - asc
         - desc
+    Resource:
+      type: object
+      required:
+        - id
+        - kind
+        - name
+        - spec
+        - status
+        - generation
+        - created_time
+        - updated_time
+        - created_by
+        - updated_by
+      properties:
+        id:
+          type: string
+          description: Resource identifier (UUID v7)
+        kind:
+          type: string
+          description: Entity type discriminator
+        name:
+          type: string
+          minLength: 1
+          maxLength: 253
+          description: Resource name (unique per kind, or per kind+owner for child entities)
+        href:
+          type: string
+          description: Resource URI (computed at creation time)
+        spec:
+          type: object
+          additionalProperties: {}
+          description: Entity-specific payload, validated at runtime against the entity's spec schema
+        labels:
+          type: object
+          additionalProperties:
+            type: string
+          description: Key-value pairs for filtering and grouping
+        status:
+          $ref: '#/components/schemas/ResourceStatus'
+        generation:
+          type: integer
+          format: int32
+          minimum: 1
+          description: Incremented on spec or label changes
+        owner_references:
+          allOf:
+            - $ref: '#/components/schemas/ObjectReference'
+          description: Parent resource reference (present only on child entities)
+        references:
+          type: object
+          additionalProperties:
+            type: array
+            items:
+              $ref: '#/components/schemas/ObjectReference'
+          description: Non-ownership associations to other resources, keyed by reference type
+        created_time:
+          type: string
+          format: date-time
+          description: Timestamp when the resource was created
+        updated_time:
+          type: string
+          format: date-time
+          description: Timestamp when the resource was last updated
+        created_by:
+          type: string
+          format: email
+          description: Identity that created the resource
+        updated_by:
+          type: string
+          format: email
+          description: Identity that last updated the resource
+        deleted_time:
+          type: string
+          format: date-time
+          description: Timestamp when deletion was requested; omitted if not marked for deletion
+        deleted_by:
+          type: string
+          format: email
+          description: Identity that requested deletion; omitted if not marked for deletion
+      example:
+        kind: MyResource
+        id: 019466a0-8f8e-7abc-9def-0123456789ab
+        href: /api/hyperfleet/v1/resources/019466a0-8f8e-7abc-9def-0123456789ab
+        name: my-resource-1
+        labels:
+          environment: production
+          team: platform
+        spec: {}
+        generation: 1
+        status:
+          conditions: []
+        created_time: '2025-06-01T00:00:00Z'
+        updated_time: '2025-06-01T10:02:00Z'
+        created_by: user-123@example.com
+        updated_by: user-123@example.com
     ResourceCondition:
       type: object
       required:
@@ -1732,6 +2109,102 @@ components:
         - 'True'
         - 'False'
       description: Status value for resource conditions
+    ResourceCreateRequest:
+      type: object
+      required:
+        - kind
+        - name
+        - spec
+      properties:
+        kind:
+          type: string
+          description: Entity type discriminator
+        name:
+          type: string
+          minLength: 1
+          maxLength: 253
+          description: Resource name
+        spec:
+          type: object
+          additionalProperties: {}
+          description: Entity-specific payload
+        labels:
+          type: object
+          additionalProperties:
+            type: string
+          description: Key-value pairs for filtering and grouping
+        references:
+          type: object
+          additionalProperties:
+            type: array
+            items:
+              $ref: '#/components/schemas/ObjectReference'
+          description: Non-ownership associations to other resources
+      example:
+        kind: MyResource
+        name: my-resource-1
+        spec: {}
+        labels:
+          environment: production
+          team: platform
+    ResourceList:
+      type: object
+      required:
+        - kind
+        - page
+        - size
+        - total
+        - items
+      properties:
+        kind:
+          type: string
+        page:
+          type: integer
+          format: int32
+        size:
+          type: integer
+          format: int32
+        total:
+          type: integer
+          format: int64
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/Resource'
+    ResourcePatchRequest:
+      type: object
+      properties:
+        spec:
+          type: object
+          additionalProperties: {}
+        labels:
+          type: object
+          additionalProperties:
+            type: string
+        references:
+          type: object
+          additionalProperties:
+            type: array
+            items:
+              $ref: '#/components/schemas/ObjectReference'
+      example:
+        spec: {}
+        labels:
+          env: staging
+      additionalProperties: false
+      minProperties: 1
+    ResourceStatus:
+      type: object
+      required:
+        - conditions
+      properties:
+        conditions:
+          type: array
+          items:
+            $ref: '#/components/schemas/ResourceCondition'
+      description: |-
+        Aggregated status of the resource, populated by the status aggregation
+        pipeline from adapter condition reports.
     ValidationError:
       type: object
       required:

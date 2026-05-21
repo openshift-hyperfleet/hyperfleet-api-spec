@@ -36,6 +36,7 @@ interface ClusterStatuses{
 
 @tag("NodePool statuses")
 @route("/clusters/{cluster_id}/nodepools/{nodepool_id}/statuses")
+@useAuth(HyperFleet.BearerAuth)
 interface NodePoolStatuses{
   /**
    * Returns adapter status reports for this nodepool
