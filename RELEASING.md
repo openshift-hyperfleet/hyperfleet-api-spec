@@ -24,8 +24,8 @@ Examples:
 
 1. Bump the version in `main.tsp` (the `@info` decorator's `version` field)
 2. Update `CHANGELOG.md` with the new version and changes
-3. Build all schemas: `npm run build:all`
-4. Commit the version bump, changelog, and regenerated schemas
+3. Build the schema: `npm run build` — this also syncs `package.json` version automatically
+4. Commit the version bump, changelog, regenerated schema, and updated `package.json`
 5. Open a PR and merge to `main`
 
 The CI workflow enforces that the version in `main.tsp` has been bumped from the latest release tag. If the version is unchanged, CI will fail and block the merge.
@@ -36,13 +36,10 @@ On every push to `main`, the release workflow:
 
 1. **Extracts** the version from `main.tsp`
 2. **Skips** if a Git tag for that version already exists (idempotent)
-3. **Builds** all four schema variants from TypeSpec sources
+3. **Builds** the core schema from TypeSpec sources
 4. **Creates** an annotated Git tag (`vX.Y.Z`)
-5. **Publishes** a GitHub Release with auto-generated release notes and four artifacts:
+5. **Publishes** a GitHub Release with auto-generated release notes and one artifact:
    - `core-openapi.yaml` (OpenAPI 3.0)
-   - `core-swagger.yaml` (OpenAPI 2.0)
-   - `gcp-openapi.yaml` (OpenAPI 3.0)
-   - `gcp-swagger.yaml` (OpenAPI 2.0)
 
 ## CI Validation
 
@@ -61,18 +58,16 @@ Downstream Go consumers can import schemas directly:
 ```go
 import specschemas "github.com/openshift-hyperfleet/hyperfleet-api-spec/schemas"
 
-data, err := specschemas.FS.ReadFile("gcp/openapi.yaml")
+data, err := specschemas.FS.ReadFile("core/openapi.yaml")
 ```
 
 ### Download URLs
 
 **Latest release (always points to newest):**
 - Core: `https://github.com/openshift-hyperfleet/hyperfleet-api-spec/releases/latest/download/core-openapi.yaml`
-- GCP: `https://github.com/openshift-hyperfleet/hyperfleet-api-spec/releases/latest/download/gcp-openapi.yaml`
 
 **Specific version:**
 - Core: `https://github.com/openshift-hyperfleet/hyperfleet-api-spec/releases/download/vX.Y.Z/core-openapi.yaml`
-- GCP: `https://github.com/openshift-hyperfleet/hyperfleet-api-spec/releases/download/vX.Y.Z/gcp-openapi.yaml`
 
 ## Troubleshooting
 

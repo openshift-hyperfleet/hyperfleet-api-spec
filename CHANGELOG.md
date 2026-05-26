@@ -7,6 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.0.18] - 2026-05-26
+
+### Changed
+
+- Restructured TypeSpec sources into `core/` and `shared/` directories (HYPERFLEET-1103)
+- Removed GCP provider from core repository; GCP contracts now live in a dedicated `hyperfleet-api-spec-gcp` repository (HYPERFLEET-1103)
+- `build-schema.sh` simplified: no provider argument required, generates core OpenAPI only
+- CI/CD workflows updated to reflect new `main.tsp` location at repository root
+
 ## [1.0.17] - 2026-05-21
 
 ### Added
@@ -170,7 +179,8 @@ First official stable release of the HyperFleet API specification.
 - Interactive API documentation
 
 <!-- Links -->
-[Unreleased]: https://github.com/openshift-hyperfleet/hyperfleet-api-spec/compare/v1.0.17...HEAD
+[Unreleased]: https://github.com/openshift-hyperfleet/hyperfleet-api-spec/compare/v1.0.18...HEAD
+[1.0.18]: https://github.com/openshift-hyperfleet/hyperfleet-api-spec/compare/v1.0.17...v1.0.18
 [1.0.17]: https://github.com/openshift-hyperfleet/hyperfleet-api-spec/compare/v1.0.16...v1.0.17
 [1.0.16]: https://github.com/openshift-hyperfleet/hyperfleet-api-spec/compare/v1.0.15...v1.0.16
 [1.0.15]: https://github.com/openshift-hyperfleet/hyperfleet-api-spec/compare/v1.0.14...v1.0.15

@@ -26,11 +26,10 @@ Thank you for your interest in contributing to the HyperFleet API specification!
    npm install
    ```
 
-3. Verify your setup by building the schemas:
+3. Verify your setup by building the schema:
 
    ```bash
-   npm run build:core
-   npm run build:gcp
+   npm run build
    ```
 
 ## Repository Structure
@@ -38,74 +37,59 @@ Thank you for your interest in contributing to the HyperFleet API specification!
 ```
 hyperfleet-api-spec/
 ├── main.tsp                  # Main TypeSpec entry point
-├── aliases.tsp              # Active provider aliases (symlink)
-├── aliases-core.tsp         # Core provider aliases
-├── aliases-gcp.tsp          # GCP provider aliases
-├── tspconfig.yaml           # TypeSpec compiler configuration
-├── build-schema.sh          # Build script for OpenAPI generation
-├── models/                  # Shared models for all providers
-│   ├── clusters/           # Cluster resource definitions
-│   ├── nodepools/          # NodePool resource definitions
-│   ├── statuses/           # Status resource definitions
-│   └── common/             # Common types and models
-├── models-core/            # Core provider-specific models
-├── models-gcp/             # GCP provider-specific models
-├── services/               # Service definitions
-│   ├── clusters.tsp        # Cluster endpoints
-│   ├── nodepools.tsp       # NodePool endpoints
-│   ├── statuses.tsp        # Status read endpoints (public)
-│   └── statuses-internal.tsp  # Status write endpoints (internal)
-└── schemas/                # Generated OpenAPI outputs
-    ├── core/
-    └── gcp/
+├── tspconfig.yaml            # TypeSpec compiler configuration
+├── build-schema.sh           # Build script for OpenAPI generation
+├── shared/                   # Models and services shared across providers
+│   ├── models/
+│   │   ├── clusters/        # Cluster resource definitions
+│   │   ├── nodepools/       # NodePool resource definitions
+│   │   ├── statuses/        # Status resource definitions
+│   │   ├── resource/        # Generic Resource type
+│   │   └── common/          # Common types and models
+│   └── services/            # Shared service endpoints
+├── core/                     # Core-specific models and internal services
+│   ├── models/
+│   │   └── cluster/         # CoreClusterSpec (Record<unknown>)
+│   └── services/
+│       ├── statuses-internal.tsp      # Status write endpoints (internal)
+│       └── force-delete-internal.tsp  # Force-delete endpoints (internal)
+└── schemas/                  # Generated OpenAPI output
+    └── core/
+        └── openapi.yaml
 ```
 
 ## Testing
 
-### Building Schemas
+### Building Schema
 
-Test your changes by building the OpenAPI schemas:
+Test your changes by building the OpenAPI schema:
 
 ```bash
-# Build individual variants
-npm run build:core
-npm run build:gcp
-
-# Build with Swagger (OpenAPI 2.0) output
-npm run build:core:swagger
-npm run build:gcp:swagger
-
-# Build all variants
-npm run build:all
+npm run build
 ```
 
-### Linting Schemas
+### Linting Schema
 
-CI automatically lints OpenAPI schemas using a pinned version of [Spectral](https://github.com/stoplightio/spectral) installed locally in the workflow. For local linting during development, install Spectral globally:
+CI automatically lints the OpenAPI schema using a pinned version of [Spectral](https://github.com/stoplightio/spectral) installed locally in the workflow. For local linting during development, install Spectral globally:
 
 ```bash
 npm install -g @stoplight/spectral-cli
 ```
 
-Then lint the generated schemas:
+Then lint the generated schema:
 
 ```bash
-spectral lint schemas/core/openapi.yaml schemas/gcp/openapi.yaml
+spectral lint schemas/core/openapi.yaml
 ```
 
 The `.spectral.yaml` config at the repo root applies the `spectral:oas` ruleset.
 
 ### Validating Output
 
-After building, verify the generated schemas:
+After building, verify the generated schema:
 
 ```bash
-# Check that files were generated
 ls -l schemas/core/openapi.yaml
-ls -l schemas/gcp/openapi.yaml
-
-# Review the generated OpenAPI for your changes
-cat schemas/core/openapi.yaml
 ```
 
 ### Visual Studio Code Extension
@@ -136,14 +120,14 @@ The VSCode extension has a nice feature when doing right click on the main.tsp a
    ```
 
 2. Import in `main.tsp` if needed
-3. Build and verify: `npm run build:core`
+3. Build and verify: `npm run build`
 
 ### Adding a New Service Endpoint
 
-1. Create or edit a service file in `services/`:
+1. Create or edit a service file in `shared/services/` (for shared endpoints) or `core/services/` (for internal-only endpoints):
 
    ```typescript
-   // services/newservice.tsp
+   // shared/services/newservice.tsp
    import "@typespec/http";
    import "@typespec/openapi";
    import "../models/common/model.tsp";
@@ -159,53 +143,14 @@ The VSCode extension has a nice feature when doing right click on the main.tsp a
 2. Import in `main.tsp`:
 
    ```typescript
-   import "./services/newservice.tsp";
+   import "./shared/services/newservice.tsp";
    ```
 
-3. Build and verify: `npm run build:all`
+3. Build and verify: `npm run build`
 
 ### Adding a New Provider
 
-1. Create provider model directory:
-
-   ```bash
-   mkdir -p models-aws/cluster
-   ```
-
-2. Define provider-specific models:
-
-   ```typescript
-   // models-aws/cluster/model.tsp
-   model AWSClusterSpec {
-     awsProperty1: string;
-     awsProperty2: string;
-   }
-   ```
-
-3. Create provider aliases file:
-
-   ```typescript
-   // aliases-aws.tsp
-   import "./models-aws/cluster/model.tsp";
-   alias ClusterSpec = AWSClusterSpec;
-   ```
-
-4. Update `build-schema.sh` to support the new provider (it auto-detects)
-5. Build: `./build-schema.sh aws`
-
-### Switching Between Providers in VS Code
-
-The `aliases.tsp` symlink controls which provider is active:
-
-```bash
-# Work on Core API
-ln -sf aliases-core.tsp aliases.tsp
-
-# Work on GCP API
-ln -sf aliases-gcp.tsp aliases.tsp
-```
-
-The VS Code extension uses whichever provider `aliases.tsp` points to.
+Provider-specific contracts live in their own repository and import `shared/` models via the `hyperfleet` npm package. See [hyperfleet-api-spec-gcp](https://github.com/openshift-hyperfleet/hyperfleet-api-spec-gcp) for a reference implementation.
 
 ## Commit Standards
 
@@ -228,7 +173,7 @@ When a PR is merged to `main`, the release workflow automatically:
 
 1. Extracts the version from `main.tsp`
 2. Creates an annotated Git tag
-3. Publishes a GitHub Release with all four schema artifacts attached
+3. Publishes a GitHub Release with `core-openapi.yaml` attached
 
 The CI workflow enforces that the version in `main.tsp` is bumped from the latest release tag before a PR can be merged.
 
@@ -236,7 +181,7 @@ The CI workflow enforces that the version in `main.tsp` is bumped from the lates
 
 1. Create a feature branch: `git checkout -b feature/my-feature`
 2. Make your changes
-3. Build and test: `npm run build:all`
+3. Build and test: `npm run build`
 4. Commit with conventional commit message
 5. Push to your fork
 6. Create a Pull Request

@@ -49,21 +49,14 @@ jobs:
             echo "skip=false" >> "$GITHUB_OUTPUT"
           fi
 
-      - name: Build all schemas
+      - name: Build core schema
         if: steps.check_tag.outputs.skip == 'false'
-        run: |
-          ./build-schema.sh core
-          ./build-schema.sh core --swagger
-          ./build-schema.sh gcp
-          ./build-schema.sh gcp --swagger
+        run: ./build-schema.sh
 
       - name: Prepare release assets
         if: steps.check_tag.outputs.skip == 'false'
         run: |
           cp schemas/core/openapi.yaml core-openapi.yaml
-          cp schemas/core/swagger.yaml core-swagger.yaml
-          cp schemas/gcp/openapi.yaml gcp-openapi.yaml
-          cp schemas/gcp/swagger.yaml gcp-swagger.yaml
 
       - name: Create release tag
         if: steps.check_tag.outputs.skip == 'false'
@@ -85,8 +78,5 @@ jobs:
           prerelease: false
           files: |
             core-openapi.yaml
-            core-swagger.yaml
-            gcp-openapi.yaml
-            gcp-swagger.yaml
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

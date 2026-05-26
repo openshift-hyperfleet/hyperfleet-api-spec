@@ -2,11 +2,21 @@ import "@typespec/http";
 import "@typespec/openapi";
 import "@typespec/openapi3";
 
-import "./services/clusters.tsp";
-import "./services/nodepools.tsp";
-import "./services/resources.tsp";
-// Provider-specific security is imported via aliases.tsp
-import "./aliases.tsp";
+import "./core/models/cluster/model.tsp";
+import "./core/models/cluster/example_cluster.tsp";
+import "./core/models/cluster/example_post.tsp";
+import "./core/models/cluster/example_patch.tsp";
+import "./core/models/nodepool/model.tsp";
+import "./core/models/nodepool/example_nodepool.tsp";
+import "./core/models/nodepool/example_post.tsp";
+import "./core/models/nodepool/example_patch.tsp";
+import "./core/services/statuses-internal.tsp";
+
+import "./shared/services/clusters.tsp";
+import "./shared/services/statuses.tsp";
+import "./shared/services/nodepools.tsp";
+import "./shared/services/resources.tsp";
+import "./core/services/force-delete-internal.tsp";
 
 using Http;
 using OpenAPI;
@@ -21,7 +31,7 @@ using OpenAPI;
  */
 @service(#{ title: "HyperFleet API" })
 @info(#{
-  version: "1.0.17",
+  version: "1.0.18",
   contact: #{
     name: "HyperFleet Team",
     url: "https://github.com/openshift-hyperfleet",

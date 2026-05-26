@@ -2,7 +2,7 @@
 
 This repository supports the development of the Hyperfleet OpenAPI contract, but is not the source-of-truth for the OpenAPI contract.
 
-This project hosts the TypeSpec files to generate the HyperFleet OpenAPI specifications. Typescpec is an implementation detail providing better ergonomics than writing contracts in plain YAML, specially when dealing with contract variants that we need to keep aligned. The repository is organized to support multiple service variants (core, GCP, etc.) while sharing common models and interfaces.
+This project hosts the TypeSpec files to generate the HyperFleet core OpenAPI specification. TypeSpec is an implementation detail providing better ergonomics than writing contracts in plain YAML. The repository generates the core provider contract; the GCP-specific contract lives in [hyperfleet-api-spec-gcp](https://github.com/openshift-hyperfleet/hyperfleet-api-spec-gcp).
 
 Access to the OpenAPI contract source of truth in hyperfleet-api repository:
 
@@ -11,7 +11,6 @@ Access to the OpenAPI contract source of truth in hyperfleet-api repository:
 Access directly to the latest generated contract in this repository:
 
 - core: <https://openshift-hyperfleet.github.io/hyperfleet-api-spec/core.html>
-- GCP: <https://openshift-hyperfleet.github.io/hyperfleet-api-spec/gcp.html>
 
 ## Consuming the API Specifications
 
@@ -32,29 +31,20 @@ curl -L -O https://github.com/openshift-hyperfleet/hyperfleet-api/releases/lates
 
 Download the latest stable OpenAPI specifications directly from GitHub Releases:
 
-**Direct URLs** (always get the latest stable version):
+**Direct URL** (always gets the latest stable version):
 
 - Core: `https://github.com/openshift-hyperfleet/hyperfleet-api-spec/releases/latest/download/core-openapi.yaml`
-- GCP: `https://github.com/openshift-hyperfleet/hyperfleet-api-spec/releases/latest/download/gcp-openapi.yaml`
 
-**Download examples**:
+**Download example**:
 
 ```bash
-# Core API
 curl -L -O https://github.com/openshift-hyperfleet/hyperfleet-api-spec/releases/latest/download/core-openapi.yaml
-
-# GCP API
-curl -L -O https://github.com/openshift-hyperfleet/hyperfleet-api-spec/releases/latest/download/gcp-openapi.yaml
 ```
 
 **Use in code generation** (always uses latest stable version):
 
 ```bash
-# Generate Go client from Core API
 openapi-generator generate -i https://github.com/openshift-hyperfleet/hyperfleet-api-spec/releases/latest/download/core-openapi.yaml -g go -o ./client
-
-# Generate Python client from GCP API
-openapi-generator generate -i https://github.com/openshift-hyperfleet/hyperfleet-api-spec/releases/latest/download/gcp-openapi.yaml -g python -o ./client
 ```
 
 ### Version-Specific Downloads
@@ -62,56 +52,38 @@ openapi-generator generate -i https://github.com/openshift-hyperfleet/hyperfleet
 To download a specific version (e.g., v1.0.0):
 
 ```bash
-# Core API
 curl -L -O https://github.com/openshift-hyperfleet/hyperfleet-api-spec/releases/download/v1.0.0/core-openapi.yaml
-
-# GCP API
-curl -L -O https://github.com/openshift-hyperfleet/hyperfleet-api-spec/releases/download/v1.0.0/gcp-openapi.yaml
 ```
 
 **See all releases**: <https://github.com/openshift-hyperfleet/hyperfleet-api-spec/releases>
 
 ## Repository Structure
 
-The repository is organized with root-level configuration files and three main directories:
+The repository is organized with root-level configuration files and two main directories:
 
 ### Root-Level Files
 
 - **`main.tsp`** - Main TypeSpec entry point that imports all service definitions
-- **`aliases.tsp`** - Provider alias configuration file (re-linked to switch between providers)
-- **`aliases-core.tsp`** - Core provider aliases (defines `ClusterSpec` as `CoreClusterSpec` which is `Record<unknown>`)
-- **`aliases-gcp.tsp`** - GCP provider aliases (defines `ClusterSpec` as `GCPClusterSpec`)
 - **`tspconfig.yaml`** - TypeSpec compiler configuration
 
-### `/models`
+### `/shared`
 
-Contains shared models used by all service variants:
+Contains models and services shared across providers (also published as an npm package for consumption by provider-specific repos like `hyperfleet-api-spec-gcp`):
 
-- **`models/clusters/`** - Cluster resource definitions (interfaces and base models)
-- **`models/statuses/`** - Status resource definitions for clusters and nodepools
-- **`models/nodepools/`** - NodePool resource definitions
-- **`models/common/`** - Common models and types (APIResource, Error, QueryParams, etc.)
+- **`shared/models/clusters/`** - Cluster resource definitions (interfaces and base models)
+- **`shared/models/statuses/`** - Status resource definitions for clusters and nodepools
+- **`shared/models/nodepools/`** - NodePool resource definitions
+- **`shared/models/resource/`** - Generic Resource type for non-cluster entity types
+- **`shared/models/common/`** - Common models and types (APIMetadata, Error, QueryParams, etc.)
+- **`shared/services/`** - Shared service endpoints (clusters, nodepools, statuses, resources)
 
-### `/models-core`
+### `/core`
 
-Contains core provider-specific model definitions:
+Contains core-specific models and internal services:
 
-- **`models-core/cluster/model.tsp`** - Defines `CoreClusterSpec` as `Record<unknown>` (generic)
-
-### `/models-gcp`
-
-Contains GCP provider-specific model definitions:
-
-- **`models-gcp/cluster/model.tsp`** - Defines `GCPClusterSpec` with GCP-specific properties
-
-### `/services`
-
-Contains service definitions that generate the OpenAPI specifications:
-
-- **`services/clusters.tsp`** - Cluster resource endpoints
-- **`services/statuses.tsp`** - Status resource endpoints (GET only - public API)
-- **`services/statuses-internal.tsp`** - Status write endpoints (PUT - internal API, see below)
-- **`services/nodepools.tsp`** - NodePool resource endpoints
+- **`core/models/cluster/`** - Core cluster spec (`CoreClusterSpec` as `Record<unknown>`)
+- **`core/services/statuses-internal.tsp`** - Status write endpoints (PUT - internal adapters only)
+- **`core/services/force-delete-internal.tsp`** - Force-delete endpoints (internal only)
 
 #### Public vs Internal API Split
 
@@ -119,8 +91,8 @@ The status endpoints are split into two files to support different API consumers
 
 | File | Operations | Audience | Included in Build |
 |------|------------|----------|-------------------|
-| `statuses.tsp` | GET (read) | External clients | ✅ Yes (default) |
-| `statuses-internal.tsp` | PUT (write) | Internal adapters | ❌ No (opt-in) |
+| `shared/services/statuses.tsp` | GET (read) | External clients | ✅ Yes (default) |
+| `core/services/statuses-internal.tsp` | PUT (write) | Internal adapters | ❌ No (opt-in) |
 
 **Why the split?**
 
@@ -140,111 +112,33 @@ This installs the TypeSpec compiler and all required libraries into `node_module
 
 ## Building OpenAPI Specifications
 
-The repository uses a single `main.tsp` entry point. To generate either the core API or GCP API, you need to re-link the `aliases.tsp` file to point to the desired provider aliases file.
-
-### Output Formats
-
-The build system supports two OpenAPI formats:
-
-- **OpenAPI 3.0** (default) - Modern format with full feature support
-- **OpenAPI 2.0 (Swagger)** - Legacy format for compatibility with older tools
+The repository uses a single `main.tsp` entry point.
 
 ### Using npm Scripts (Recommended)
 
-The easiest way to build the OpenAPI schema is using the provided npm scripts:
-
 ```bash
-# Build OpenAPI 3.0 only
-npm run build:core       # Build Core API (OpenAPI 3.0)
-npm run build:gcp        # Build GCP API (OpenAPI 3.0)
-
-# Build both OpenAPI 3.0 and OpenAPI 2.0 (Swagger)
-npm run build:core:swagger   # Build Core API with Swagger
-npm run build:gcp:swagger    # Build GCP API with Swagger
-
-# Build all providers with both formats
-npm run build:all
+npm run build
 ```
 
 ### Using the Build Script Directly
 
-You can also use the `build-schema.sh` script directly:
-
 ```bash
-# Build OpenAPI 3.0 only
-./build-schema.sh core
-./build-schema.sh gcp
-
-# Build with OpenAPI 2.0 (Swagger) output
-./build-schema.sh core --swagger
-./build-schema.sh gcp --swagger
-# or use the alias:
-./build-schema.sh gcp --openapi2
+./build-schema.sh
 ```
 
-The script automatically:
+The script:
 
-1. Validates the provider parameter
-2. Re-links `aliases.tsp` to the appropriate provider aliases file
-3. Compiles the TypeSpec to generate the OpenAPI 3.0 schema
-4. (If `--swagger` flag is used) Converts OpenAPI 3.0 to OpenAPI 2.0 (Swagger)
-5. Outputs the results to `schemas/{provider}/`:
-   - `openapi.yaml` - OpenAPI 3.0 specification
-   - `swagger.yaml` - OpenAPI 2.0 (Swagger) specification (if `--swagger` flag is used)
-
-**Extending to new providers**: Simply create `aliases-{provider}.tsp` and the script will automatically detect and support it.
+1. Syncs `package.json` version from `main.tsp`
+2. Compiles the TypeSpec from `main.tsp`
+3. Outputs `schemas/core/openapi.yaml`
 
 ### Manual Build (Alternative)
 
-If you prefer to build manually:
+```bash
+node_modules/.bin/tsp compile main.tsp
+```
 
-#### Build Core API
-
-1. Re-link `aliases.tsp` to `aliases-core.tsp`:
-
-   ```bash
-   ln -sf aliases-core.tsp aliases.tsp
-   ```
-
-2. Compile the TypeSpec:
-
-   ```bash
-   tsp compile main.tsp
-   ```
-
-   Output: `tsp-output/schema/openapi.yaml`
-
-3. (Optional) Convert to OpenAPI 2.0 (Swagger):
-
-   ```bash
-   npx api-spec-converter --from=openapi_3 --to=swagger_2 --syntax=yaml \
-     tsp-output/schema/openapi.yaml > tsp-output/schema/swagger.yaml
-   ```
-
-#### Build GCP API
-
-1. Re-link `aliases.tsp` to `aliases-gcp.tsp`:
-
-   ```bash
-   ln -sf aliases-gcp.tsp aliases.tsp
-   ```
-
-2. Compile the TypeSpec:
-
-   ```bash
-   tsp compile main.tsp
-   ```
-
-   Output: `tsp-output/schema/openapi.yaml`
-
-3. (Optional) Convert to OpenAPI 2.0 (Swagger):
-
-   ```bash
-   npx api-spec-converter --from=openapi_3 --to=swagger_2 --syntax=yaml \
-     tsp-output/schema/openapi.yaml > tsp-output/schema/swagger.yaml
-   ```
-
-**Note**: The `aliases.tsp` file controls which provider-specific `ClusterSpec` definition is used throughout the service definitions. By re-linking it to either `aliases-core.tsp` or `aliases-gcp.tsp`, you switch between the generic `Record<unknown>` spec and the GCP-specific `GCPClusterSpec`.
+Output: `tsp-output-core/schema/openapi.yaml`
 
 ## Architecture
 
@@ -255,30 +149,7 @@ The HyperFleet API provides simple CRUD operations for managing cluster resource
 
 ## Adding a New Provider
 
-To add a new provider (e.g., AWS):
-
-1. Create provider model directory: `models-aws/cluster/model.tsp`
-
-   ```typescript
-   model AWSClusterSpec {
-     awsProperty1: string;
-     awsProperty2: string;
-   }
-   ```
-
-2. Create provider aliases file: `aliases-aws.tsp`
-
-   ```typescript
-   import "./models-aws/cluster/model.tsp";
-   alias ClusterSpec = AWSClusterSpec;
-   ```
-
-3. To generate the AWS API, re-link `aliases.tsp`:
-
-   ```bash
-   ln -sf aliases-aws.tsp aliases.tsp
-   tsp compile main.tsp
-   ```
+Provider-specific contracts live in their own repository and consume this repo as an npm package (the `hyperfleet` package). See [hyperfleet-api-spec-gcp](https://github.com/openshift-hyperfleet/hyperfleet-api-spec-gcp) for a reference implementation.
 
 ## Adding a New Service
 
@@ -311,37 +182,35 @@ To add a new service (e.g., with additional endpoints):
 - `@typespec/http` - HTTP protocol support
 - `@typespec/openapi` - OpenAPI decorators
 - `@typespec/openapi3` - OpenAPI 3.0 emitter
-- `api-spec-converter` - Converts OpenAPI 3.0 to OpenAPI 2.0 (Swagger)
 
 ## Updating the Specification
 
 ### Making an API change
 
-1. **Edit the TypeSpec sources** in `models/`, `models-gcp/`, or `services/`.
+1. **Edit the TypeSpec sources** in `shared/` or `core/`.
 
 2. **Bump the version** in `main.tsp`:
 
    ```typescript
-   @info(#{ version: "1.0.12", ... })
+   @info(#{ version: "1.0.19", ... })
    ```
 
-3. **Rebuild all four schemas**:
+3. **Rebuild the schema**:
 
    ```bash
-   ./build-schema.sh core
-   ./build-schema.sh core --swagger
-   ./build-schema.sh gcp
-   ./build-schema.sh gcp --swagger
+   ./build-schema.sh
    ```
+
+   This also updates `package.json` version automatically — no need to edit it manually.
 
 4. **Update [CHANGELOG.md](CHANGELOG.md)** — move your changes from `[Unreleased]` into a new versioned entry.
 
 5. **Open a PR.** CI enforces three things automatically:
-   - Committed schemas match freshly generated output (catches manual edits or forgotten rebuilds).
-   - OpenAPI 3.0 schemas pass `spectral:oas` linting.
+   - Committed schema and `package.json` match freshly generated output (catches manual edits or forgotten rebuilds).
+   - OpenAPI 3.0 schema passes `spectral:oas` linting.
    - Version in `main.tsp` is higher than the latest GitHub release tag.
 
-6. **Merge to main.** The release workflow runs automatically: it creates an annotated tag (`vX.Y.Z`), builds all four schemas from scratch, and publishes a GitHub release with the artifacts attached.
+6. **Merge to main.** The release workflow runs automatically: it creates an annotated tag (`vX.Y.Z`), builds the schema from scratch, and publishes a GitHub release with `core-openapi.yaml` attached.
 
 ### Consuming schemas as a Go module
 
@@ -350,13 +219,13 @@ Each release tag is a valid Go module version. Import the embedded schemas:
 ```go
 import specschemas "github.com/openshift-hyperfleet/hyperfleet-api-spec/schemas"
 
-data, err := specschemas.FS.ReadFile("gcp/openapi.yaml")
+data, err := specschemas.FS.ReadFile("core/openapi.yaml")
 ```
 
 To update a consumer after a new release:
 
 ```bash
-go get github.com/openshift-hyperfleet/hyperfleet-api-spec@v1.0.12
+go get github.com/openshift-hyperfleet/hyperfleet-api-spec@v1.0.18
 ```
 
 To test locally against an unreleased branch, use a `replace` directive in your `go.mod`:
@@ -377,17 +246,6 @@ We welcome contributions! Please see [CONTRIBUTING.md](CONTRIBUTING.md) for:
 - Commit standards
 - Pull request process
 
-## Developing with the Visual Studio Typespec extension
+## Developing with the Visual Studio TypeSpec extension
 
-The repository works with different contracts (core and GCP) but a single Typespec `main.tsp`.
-This is accomplished by maintaining an `aliases.tsp` file that holds the "active" concrete types to use (core or GCP).
-
-- When working on the core API, the `aliases.tsp` points to `aliases-core.tsp`
-- When working on the GCP API, the `aliases.tsp` points to `aliases-gcp.tsp`
-
-The downside of this is that it confuses the Typespec extension:
-
-- For the "non-active" type files, the plugin may show errors as not defined types
-- Since we duplicate aliases, the plugin may display an error of a type being duplicated
-
-But, both the `build-schema.sh` script using the `tsp` CLI command as the plugin option to "Emit from Typespec" work fine.
+This repository compiles a single `main.tsp` entry point for the core contract. The TypeSpec extension may show false errors for models in `shared/` that are only resolved at compile time, but both `build-schema.sh` and the "Emit from TypeSpec" command work correctly.
