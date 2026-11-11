@@ -104,4 +104,3 @@ interface NodePoolStatuses {
     | UnauthorizedResponse
     | NotFoundResponse;
 }
-

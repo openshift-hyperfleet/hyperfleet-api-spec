@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.0.28] - 2026-11-11
+
+### Added
+
+- `.pre-commit-config.yaml` with LeakTK secret scanning, HyperFleet commitlint, schema build and Spectral lint, and whitespace and end-of-file fixers (HYPERFLEET-1810)
+
 ## [1.0.27] - 2026-08-11
 
 ### Added
@@ -246,7 +252,8 @@ First official stable release of the HyperFleet API specification.
 - Interactive API documentation
 
 <!-- Links -->
-[Unreleased]: https://github.com/openshift-hyperfleet/hyperfleet-api-spec/compare/v1.0.27...HEAD
+[Unreleased]: https://github.com/openshift-hyperfleet/hyperfleet-api-spec/compare/v1.0.28...HEAD
+[1.0.28]: https://github.com/openshift-hyperfleet/hyperfleet-api-spec/compare/v1.0.27...v1.0.28
 [1.0.27]: https://github.com/openshift-hyperfleet/hyperfleet-api-spec/compare/v1.0.26...v1.0.27
 [1.0.26]: https://github.com/openshift-hyperfleet/hyperfleet-api-spec/compare/v1.0.25...v1.0.26
 [1.0.25]: https://github.com/openshift-hyperfleet/hyperfleet-api-spec/compare/v1.0.24...v1.0.25

@@ -1,0 +1,35 @@
+# Installs both pre-commit and commit-msg hooks with a `pre-commit install`
+default_install_hook_types: [pre-commit, commit-msg]
+
+repos:
+  # Secret scanning
+  - repo: https://github.com/leaktk/leaktk
+    rev: 398b9d71573e1bf99b4eed0271729c4796df57ff  # frozen: v0.3.13
+    hooks:
+      - id: leaktk.git.pre-commit
+
+  # HyperFleet commit message standard
+  - repo: https://github.com/openshift-hyperfleet/hyperfleet-hooks
+    rev: 0c42dbf10d4087ac8c788b19b9d29afd7bccdd4a  # frozen: v0.3.0
+    hooks:
+      - id: hyperfleet-commitlint
+        stages: [commit-msg]
+
+  # Schema build + Spectral lint. Needs `npm install` first; rewrites schemas/ when
+  # the TypeSpec sources changed, so commit the regenerated files with the change.
+  - repo: local
+    hooks:
+      - id: build-and-lint-schema
+        name: Build and lint OpenAPI schema
+        entry: bash -c './build-schema.sh && npx spectral lint schemas/core/openapi.yaml --fail-severity warn'
+        language: system
+        files: \.tsp$
+        pass_filenames: false
+
+  # File hygiene
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: 3e8a8703264a2f4a69428a0aa4dcb512790b2c8c  # frozen: v6.0.0
+    hooks:
+      - id: trailing-whitespace
+        args: [--markdown-linebreak-ext=md]
+      - id: end-of-file-fixer
